@@ -7,13 +7,6 @@ ezs.use(require('../lib'));
 describe('test', () => {
     it('count', (done) => {
         const res = [];
-        // from([
-        //     { a: 'x', b: 'z' },
-        //     { a: 't', b: 'z' },
-        //     { a: 't', b: 'z' },
-        //     { c: 'x', b: 'z' },
-        //     { a: 'x', b: 'z' },
-        // ])
         from([
             { a: 'x' },
             { a: 't' },
