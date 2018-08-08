@@ -18,7 +18,8 @@
     "url": "https://github.com/parmentf/node-ezs-teeftfr/issues"
   },
   "homepage": "https://github.com/parmentf/node-ezs-teeftfr#readme",
-  "dependencies": {},
+  "dependencies": {
+  },
   "main": "./lib/index.js",
   "scripts": {
     "test": "istanbul test ./node_modules/.bin/_mocha -- -R spec",
@@ -37,9 +38,10 @@
     "babel-preset-env": "1.7.0",
     "babel-preset-stage-3": "6.24.1",
     "documentation": "8.1.0",
-    "eslint": "5.3.0",
     "eslint-config-airbnb-base": "13.0.0",
+    "eslint-config-airbnb": "17.0.0",
     "eslint-plugin-import": "2.13.0",
+    "eslint": "5.3.0",
     "ezs": "5.5.1",
     "from": "0.1.7",
     "istanbul": "0.4.5",
