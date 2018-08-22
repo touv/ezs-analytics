@@ -19,7 +19,8 @@
   },
   "homepage": "https://github.com/parmentf/node-ezs-teeftfr#readme",
   "dependencies": {
-    "lodash.get": "4.4.2"
+    "lodash.get": "4.4.2",
+    "talisman": "0.20.0"
   },
   "main": "./lib/index.js",
   "scripts": {
