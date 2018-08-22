@@ -20,6 +20,7 @@
   "homepage": "https://github.com/parmentf/node-ezs-teeftfr#readme",
   "dependencies": {
     "lodash.get": "4.4.2",
+    "nlp-js-tools-french": "1.0.9",
     "talisman": "0.20.0"
   },
   "main": "./lib/index.js",

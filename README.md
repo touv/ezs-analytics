@@ -21,20 +21,56 @@ process.stdin
 
 #### Table of Contents
 
--   [count](#count)
+-   [TEEFTFrToTagLem](#teeftfrtotaglem)
     -   [Parameters](#parameters)
+    -   [Examples](#examples)
+-   [TEEFTTokenize](#teefttokenize)
+    -   [Parameters](#parameters-1)
 
-### count
+### TEEFTFrToTagLem
 
-Take `Object` object getting some fields with json path, and do ...
+Tokenize, tag, and lemmatize a French text
 
 #### Parameters
 
--   `data`  
--   `feed`  
--   `path` **[String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+-   `data` **[Stream](https://nodejs.org/api/stream.html)** 
+-   `feed` **[Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)>** 
+-   `tagTypes` **[Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)>** tag types (optional, default `['adj','adv','art','con','nom','ono','pre','ver','pro']`)
+-   `strictness` **[Boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** When false, non-accentuated character are the same as accentuated ones (optional, default `true`)
+-   `minimumLength` **[Number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)** Ignore words shorter than this (optional, default `1`)
+-   `doTag` **[Boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** return tags if true (optional, default `true`)
+-   `doLemmatize` **[Boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** return lems if true (optional, default `true`)
 
-Returns **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
+#### Examples
+
+```javascript
+from(['Elle semble se nourrir essentiellement de plancton, et de hotdog.'])
+.pipe(ezs('TEEFTFrToTagLem', { doLemmatize: false }))
+```
+
+```javascript
+[ { id: 0, word: 'elle', pos: [ 'PRO:per' ] },
+{ id: 1, word: 'semble', pos: [ 'VER' ] },
+{ id: 2, word: 'se', pos: [ 'PRO:per' ] },
+{ id: 3, word: 'nourrir', pos: [ 'VER' ] },
+{ id: 4, word: 'essentiellement', pos: [ 'ADV' ] },
+{ id: 5, word: 'de', pos: [ 'PRE', 'NOM', 'ART:def' ] },
+{ id: 6, word: 'plancton', pos: [ 'NOM' ] },
+{ id: 7, word: 'et', pos: [ 'CON' ] },
+{ id: 8, word: 'de', pos: [ 'PRE', 'NOM', 'ART:def' ] },
+{ id: 9, word: 'hotdog', pos: [ 'UNK' ] } ]
+```
+
+### TEEFTTokenize
+
+-   **See: <http://yomguithereal.github.io/talisman/tokenizers/words>**
+
+Extract tokens from a text
+
+#### Parameters
+
+-   `data` **[Stream](https://nodejs.org/api/stream.html)** 
+-   `feed` **[Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)>** 
 
 ## count
 
