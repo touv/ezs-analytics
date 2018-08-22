@@ -19,8 +19,8 @@
   },
   "homepage": "https://github.com/parmentf/node-ezs-teeftfr#readme",
   "dependencies": {
-    "lodash.get": "4.4.2",
     "nlp-js-tools-french": "1.0.9",
+    "ramda": "0.25.0",
     "talisman": "0.20.0"
   },
   "main": "./lib/index.js",
@@ -35,14 +35,14 @@
     "postversion": "git push && git push --tags"
   },
   "devDependencies": {
-    "babel-cli": "6.24.1",
+    "babel-cli": "6.26.0",
     "babel-core": "6.26.3",
     "babel-eslint": "8.2.6",
     "babel-preset-env": "1.7.0",
     "babel-preset-stage-3": "6.24.1",
-    "documentation": "8.1.0",
-    "eslint": "5.3.0",
-    "eslint-config-airbnb": "17.0.0",
+    "documentation": "8.1.1",
+    "eslint": "5.4.0",
+    "eslint-config-airbnb": "17.1.0",
     "eslint-config-airbnb-base": "13.1.0",
     "eslint-plugin-import": "2.14.0",
     "eslint-plugin-jsx-a11y": "6.1.1",
