@@ -8,7 +8,7 @@ function getResource(fileName) {
 }
 
 /**
- * Sanitize the text in input, by removing stopwords
+ * Filter the text in input, by removing stopwords
  *
  * @export
  * @param {Stream} data

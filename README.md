@@ -21,13 +21,25 @@ process.stdin
 
 #### Table of Contents
 
--   [TEEFTFrToTagLem](#teeftfrtotaglem)
+-   [TEEFTFilterTags](#teeftfiltertags)
     -   [Parameters](#parameters)
+-   [TEEFTFrToTagLem](#teeftfrtotaglem)
+    -   [Parameters](#parameters-1)
     -   [Examples](#examples)
 -   [TEEFTStopWords](#teeftstopwords)
-    -   [Parameters](#parameters-1)
--   [TEEFTTokenize](#teefttokenize)
     -   [Parameters](#parameters-2)
+-   [TEEFTTokenize](#teefttokenize)
+    -   [Parameters](#parameters-3)
+
+### TEEFTFilterTags
+
+Filter the text in input, by keeping only adjectives and names
+
+#### Parameters
+
+-   `data` **[Stream](https://nodejs.org/api/stream.html)** 
+-   `feed` **[Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)>** 
+-   `tags` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Tags to keep (optional, default `['ADJ','NOM']`)
 
 ### TEEFTFrToTagLem
 
@@ -65,7 +77,7 @@ from(['Elle semble se nourrir essentiellement de plancton, et de hotdog.'])
 
 ### TEEFTStopWords
 
-Sanitize the text in input, by removing stopwords
+Filter the text in input, by removing stopwords
 
 #### Parameters
 
