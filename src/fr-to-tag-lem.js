@@ -61,7 +61,7 @@ export default function TEEFTFrToTagLem(data, feed) {
     // Merge lems into tagged words
     const result = posTaggedWords
         .map((taggedWord) => {
-            const lemma = lemmatizedWords.find(lemWord => lemWord.id === taggedWord.id) || '';
+            const lemma = lemmatizedWords.find(lemWord => lemWord.id === taggedWord.id) || { lemma: null };
             return {
                 ...taggedWord,
                 lemma: lemma.lemma,
