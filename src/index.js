@@ -1,12 +1,11 @@
 import TEEFTTokenize from './tokenize';
 import TEEFTFrToTagLem from './fr-to-tag-lem';
-import TEEFTSanitize from './sanitize';
+import TEEFTStopWords from './stop-words';
+// import TEEFTFilterTags from './filter-tags';
 
 export default {
     TEEFTTokenize,
     TEEFTFrToTagLem,
-    TEEFTSanitize,
-    // TEEFTTag,
-    // TEEFTSanitize,
-    // TEEFTExtract,
+    TEEFTStopWords,
+    // TEEFTFilterTags,
 };

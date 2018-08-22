@@ -24,8 +24,10 @@ process.stdin
 -   [TEEFTFrToTagLem](#teeftfrtotaglem)
     -   [Parameters](#parameters)
     -   [Examples](#examples)
--   [TEEFTTokenize](#teefttokenize)
+-   [TEEFTStopWords](#teeftstopwords)
     -   [Parameters](#parameters-1)
+-   [TEEFTTokenize](#teefttokenize)
+    -   [Parameters](#parameters-2)
 
 ### TEEFTFrToTagLem
 
@@ -60,6 +62,16 @@ from(['Elle semble se nourrir essentiellement de plancton, et de hotdog.'])
 { id: 8, word: 'de', pos: [ 'PRE', 'NOM', 'ART:def' ] },
 { id: 9, word: 'hotdog', pos: [ 'UNK' ] } ]
 ```
+
+### TEEFTStopWords
+
+Sanitize the text in input, by removing stopwords
+
+#### Parameters
+
+-   `data` **[Stream](https://nodejs.org/api/stream.html)** 
+-   `feed` **[Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)>** 
+-   `stopwords` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** name of the stopwords file to use (optional, default `'StopwFrench'`)
 
 ### TEEFTTokenize
 

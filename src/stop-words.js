@@ -1,6 +1,5 @@
 import fs from 'fs';
 import path from 'path';
-import { AssertionError } from 'assert';
 
 function getResource(fileName) {
     const filePath = path.resolve('__dirname__', `../resources/${fileName}.txt`);
@@ -9,7 +8,7 @@ function getResource(fileName) {
 }
 
 /**
- * Sanitize the text in input, by remove stopwords
+ * Sanitize the text in input, by removing stopwords
  *
  * @export
  * @param {Stream} data
@@ -17,7 +16,7 @@ function getResource(fileName) {
  * @param {string} [stopwords='StopwFrench']    name of the stopwords file to use
  * @returns
  */
-export default function TEEFTSanitize(data, feed) {
+export default function TEEFTStopWords(data, feed) {
     if (this.isLast()) {
         return feed.close();
     }
