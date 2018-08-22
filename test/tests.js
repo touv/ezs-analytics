@@ -262,4 +262,61 @@ describe('filter tags', () => {
             });
     });
 
+    it('should keep only passed tag (based on the beginning)', (done) => {
+        let res = [];
+        /* eslint-disable object-curly-newline */
+        from([[{ id: 0, word: 'elle', pos: ['PRO:per'], lemma: 'elle' },
+            { id: 1, word: 'semble', pos: ['VER'], lemma: 'sembler' },
+            { id: 2, word: 'se', pos: ['PRO:per'], lemma: 'se' },
+            { id: 3, word: 'nourrir', pos: ['VER'], lemma: 'nourrir' },
+            { id: 4,
+                word: 'essentiellement',
+                pos: ['ADV'],
+                lemma: 'essentiellement',
+            },
+            { id: 5, word: 'de', pos: ['PRE', 'ART:def'], lemma: 'de' },
+            { id: 6, word: 'plancton', pos: ['NOM'], lemma: 'plancton' },
+            { id: 7, word: 'frais', pos: ['ADJ'], lemma: 'frais' }]])
+        /* eslint-enable object-curly-newline */
+            .pipe(ezs('TEEFTFilterTags', { tags: ['PRO'] }))
+            // .pipe(ezs('debug'))
+            .on('data', (chunk) => {
+                assert(Array.isArray(chunk));
+                res = res.concat(chunk);
+            })
+            .on('end', () => {
+                assert.equal(2, res.length);
+                assert.equal('PRO:per', res[0].pos[0]);
+                done();
+            });
+    });
+
+    it('should keep only passed tag, even if not the first', (done) => {
+        let res = [];
+        /* eslint-disable object-curly-newline */
+        from([[{ id: 0, word: 'elle', pos: ['PRO:per'], lemma: 'elle' },
+            { id: 1, word: 'semble', pos: ['VER'], lemma: 'sembler' },
+            { id: 2, word: 'se', pos: ['PRO:per'], lemma: 'se' },
+            { id: 3, word: 'nourrir', pos: ['VER'], lemma: 'nourrir' },
+            { id: 4,
+                word: 'essentiellement',
+                pos: ['ADV'],
+                lemma: 'essentiellement',
+            },
+            { id: 5, word: 'de', pos: ['PRE', 'ART:def'], lemma: 'de' },
+            { id: 6, word: 'plancton', pos: ['NOM'], lemma: 'plancton' },
+            { id: 7, word: 'frais', pos: ['ADJ'], lemma: 'frais' }]])
+        /* eslint-enable object-curly-newline */
+            .pipe(ezs('TEEFTFilterTags', { tags: ['ART'] }))
+            // .pipe(ezs('debug'))
+            .on('data', (chunk) => {
+                assert(Array.isArray(chunk));
+                res = res.concat(chunk);
+            })
+            .on('end', () => {
+                assert.equal(1, res.length);
+                assert.equal('ART:def', res[0].pos[1]);
+                done();
+            });
+    });
 });

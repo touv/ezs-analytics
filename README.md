@@ -21,15 +21,41 @@ process.stdin
 
 #### Table of Contents
 
--   [TEEFTFilterTags](#teeftfiltertags)
+-   [beginsWith](#beginswith)
     -   [Parameters](#parameters)
--   [TEEFTFrToTagLem](#teeftfrtotaglem)
+-   [someBeginsWith](#somebeginswith)
     -   [Parameters](#parameters-1)
+-   [TEEFTFilterTags](#teeftfiltertags)
+    -   [Parameters](#parameters-2)
+-   [TEEFTFrToTagLem](#teeftfrtotaglem)
+    -   [Parameters](#parameters-3)
     -   [Examples](#examples)
 -   [TEEFTStopWords](#teeftstopwords)
-    -   [Parameters](#parameters-2)
+    -   [Parameters](#parameters-4)
 -   [TEEFTTokenize](#teefttokenize)
-    -   [Parameters](#parameters-3)
+    -   [Parameters](#parameters-5)
+
+### beginsWith
+
+Check that a `text` begins with any of the `tags`.
+
+#### Parameters
+
+-   `tags` **[Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)>** 
+-   `text` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
+
+Returns **[Boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** 
+
+### someBeginsWith
+
+Check if some of the `texts` begins with any of the `tags`
+
+#### Parameters
+
+-   `tags` **[Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)>** 
+-   `texts` **[Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)>** 
+
+Returns **[Boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** 
 
 ### TEEFTFilterTags
 
