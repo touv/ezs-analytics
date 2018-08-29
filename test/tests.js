@@ -368,7 +368,7 @@ describe('extract terms', () => {
             });
     });
 
-    it.skip('should return three terms', (done) => {
+    it('should compute correct frequencies', (done) => {
         const res = [];
         /* eslint-disable object-curly-newline */
         from([[{ id: 0, word: 'elle', pos: ['PRO:per'], lemma: 'elle' },
@@ -388,7 +388,7 @@ describe('extract terms', () => {
             { id: 10, word: 'hotdog', pos: ['UNK'], lemma: 'hotdog' }]])
         /* eslint-enable object-curly-newline */
             .pipe(ezs('TEEFTExtractTerms', { nounTag: '', adjTag: '' }))
-            .pipe(ezs('debug'))
+            // .pipe(ezs('debug'))
             .on('data', (chunk) => {
                 assert(typeof chunk, 'object');
                 res.push(chunk);
@@ -401,8 +401,8 @@ describe('extract terms', () => {
                 assert.equal(1, res[0].frequency);
                 assert.equal(2, res[5].frequency);
                 assert.equal(11, res[10].length);
+                assert.strictEqual(1, res[1].frequency); // no undefined
                 done();
             });
     });
-
 });

@@ -34,18 +34,18 @@ export default function TEEFTExtractTerms(data, feed) {
             if (state === SEARCH && (isNoun(tags) || isAdj(tags))) {
                 state = NOUN;
                 multiterm.push(norm);
-                termSequence.push(taggedTerm.word);
-                termFrequency[norm] = termFrequency[norm] || 0 + 1;
+                termSequence.push(taggedTerm.lemma);
+                termFrequency[norm] = (termFrequency[norm] || 0) + 1;
             } else if (state === NOUN && (isNoun(tags) || isAdj(tags))) {
                 multiterm.push(norm);
-                termSequence.push(taggedTerm.word);
-                termFrequency[norm] = termFrequency[norm] || 0 + 1;
+                termSequence.push(taggedTerm.lemma);
+                termFrequency[norm] = (termFrequency[norm] || 0) + 1;
             } else if (state === NOUN && !isNoun(tags) && !isAdj(tags)) {
                 state = SEARCH;
                 if (multiterm.length > 1) {
                     const word = multiterm.join(' ');
                     termSequence.push(word);
-                    termFrequency[word] = termFrequency[word] || 0 + 1;
+                    termFrequency[word] = (termFrequency[word] || 0) + 1;
                 }
                 multiterm = [];
             }
@@ -54,7 +54,7 @@ export default function TEEFTExtractTerms(data, feed) {
     if (multiterm.length > 1) {
         const word = multiterm.join(' ');
         termSequence.push(word);
-        termFrequency[word] = termFrequency[word] || 0 + 1;
+        termFrequency[word] = (termFrequency[word] || 0) + 1;
     }
 
     // Compute `length` (number of words) and frequency
@@ -69,9 +69,9 @@ export default function TEEFTExtractTerms(data, feed) {
 
     // Merge taggedTerms and value (length and frequency) of words (output of
     // computeLengthFrequency)
-    const mergeTagsAndFrequency = (lengthFreq, word) => R.merge(
-        { ...lengthFreq, word },
-        R.find(taggedTerm => taggedTerm.word === word, taggedTerms),
+    const mergeTagsAndFrequency = (lengthFreq, lemma) => R.merge(
+        { ...lengthFreq, word: lemma },
+        R.find(taggedTerm => taggedTerm.lemma === lemma, taggedTerms),
     );
 
     // Add tags to terms
