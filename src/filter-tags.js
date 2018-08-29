@@ -5,7 +5,7 @@
  * @param {string} text
  * @returns {Boolean}
  */
-function beginsWith(tags, text) {
+export function beginsWith(tags, text) {
     return tags.some(tag => text.startsWith(tag));
 }
 
@@ -16,7 +16,7 @@ function beginsWith(tags, text) {
  * @param {Array<string>} texts
  * @returns {Boolean}
  */
-function someBeginsWith(tags, texts) {
+export function someBeginsWith(tags, texts) {
     return texts.some(text => beginsWith(tags, text));
 }
 

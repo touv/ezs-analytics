@@ -320,3 +320,89 @@ describe('filter tags', () => {
             });
     });
 });
+
+describe('extract terms', () => {
+    it('should return three terms', (done) => {
+        const res = [];
+        /* eslint-disable object-curly-newline */
+        from([[{ id: 0, word: 'elle', pos: ['PRO:per'], lemma: 'elle' },
+            { id: 1, word: 'semble', pos: ['VER'], lemma: 'sembler' },
+            { id: 2, word: 'se', pos: ['PRO:per'], lemma: 'se' },
+            { id: 3, word: 'nourrir', pos: ['VER'], lemma: 'nourrir' },
+            { id: 4,
+                word: 'essentiellement',
+                pos: ['ADV'],
+                lemma: 'essentiellement',
+            },
+            { id: 5, word: 'de', pos: ['PRE', 'ART:def'], lemma: 'de' },
+            { id: 6, word: 'plancton', pos: ['NOM'], lemma: 'plancton' },
+            { id: 7, word: 'frais', pos: ['ADJ'], lemma: 'frais' },
+            { id: 8, word: 'et', pos: ['CON'], lemma: 'et' },
+            { id: 9, word: 'de', pos: ['PRE', 'ART:def'], lemma: 'de' },
+            { id: 10, word: 'hotdog', pos: ['UNK'], lemma: 'hotdog' }]])
+        /* eslint-enable object-curly-newline */
+            .pipe(ezs('TEEFTExtractTerms'))
+            // .pipe(ezs('debug'))
+            .on('data', (chunk) => {
+                assert(typeof chunk, 'object');
+                res.push(chunk);
+            })
+            .on('end', () => {
+                assert.equal(3, res.length);
+                assert.equal('plancton', res[0].word);
+                assert.equal('frais', res[1].word);
+                assert.equal('plancton frais', res[2].word);
+                assert.equal('plancton', res[0].lemma);
+                assert.equal('frais', res[1].lemma);
+                assert.strictEqual(undefined, res[2].lemma);
+                assert.equal('NOM', res[0].pos[0]);
+                assert.equal('ADJ', res[1].pos[0]);
+                assert.strictEqual(undefined, res[2].pos);
+                assert.equal(1, res[0].frequency);
+                assert.equal(1, res[1].frequency);
+                assert.equal(1, res[2].frequency);
+                assert.equal(1, res[0].length);
+                assert.equal(1, res[1].length);
+                assert.equal(2, res[2].length);
+                done();
+            });
+    });
+
+    it.skip('should return three terms', (done) => {
+        const res = [];
+        /* eslint-disable object-curly-newline */
+        from([[{ id: 0, word: 'elle', pos: ['PRO:per'], lemma: 'elle' },
+            { id: 1, word: 'semble', pos: ['VER'], lemma: 'sembler' },
+            { id: 2, word: 'se', pos: ['PRO:per'], lemma: 'se' },
+            { id: 3, word: 'nourrir', pos: ['VER'], lemma: 'nourrir' },
+            { id: 4,
+                word: 'essentiellement',
+                pos: ['ADV'],
+                lemma: 'essentiellement',
+            },
+            { id: 5, word: 'de', pos: ['PRE', 'ART:def'], lemma: 'de' },
+            { id: 6, word: 'plancton', pos: ['NOM'], lemma: 'plancton' },
+            { id: 7, word: 'frais', pos: ['ADJ'], lemma: 'frais' },
+            { id: 8, word: 'et', pos: ['CON'], lemma: 'et' },
+            { id: 9, word: 'de', pos: ['PRE', 'ART:def'], lemma: 'de' },
+            { id: 10, word: 'hotdog', pos: ['UNK'], lemma: 'hotdog' }]])
+        /* eslint-enable object-curly-newline */
+            .pipe(ezs('TEEFTExtractTerms', { nounTag: '', adjTag: '' }))
+            .pipe(ezs('debug'))
+            .on('data', (chunk) => {
+                assert(typeof chunk, 'object');
+                res.push(chunk);
+            })
+            .on('end', () => {
+                assert.equal(11, res.length);
+                assert.equal('elle', res[0].word);
+                assert.equal('elle', res[0].lemma);
+                assert.equal('PRO:per', res[0].pos[0]);
+                assert.equal(1, res[0].frequency);
+                assert.equal(2, res[5].frequency);
+                assert.equal(11, res[10].length);
+                done();
+            });
+    });
+
+});

@@ -28,8 +28,10 @@ process.stdin
     -   [Examples](#examples)
 -   [TEEFTStopWords](#teeftstopwords)
     -   [Parameters](#parameters-2)
--   [TEEFTTokenize](#teefttokenize)
+-   [TEEFTExtractTerms](#teeftextractterms)
     -   [Parameters](#parameters-3)
+-   [TEEFTTokenize](#teefttokenize)
+    -   [Parameters](#parameters-4)
 
 ### TEEFTFilterTags
 
@@ -85,6 +87,20 @@ Filter the text in input, by removing stopwords
 -   `feed` **[Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)>** 
 -   `stopwords` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** name of the stopwords file to use (optional, default `'StopwFrench'`)
 
+### TEEFTExtractTerms
+
+-   **See: <https://github.com/istex/sisyphe/blob/master/src/worker/teeft/lib/termextractor.js>**
+
+Regroup multi-terms when possible (noun + noun, adjective + noun, _etc_.),
+and computes statistics (frequency, _etc_.).
+
+#### Parameters
+
+-   `data` **[Stream](https://nodejs.org/api/stream.html)** tagged terms
+-   `feed` **[Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)>** 
+-   `nounTag` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** noun tag (optional, default `'NOM'`)
+-   `adjTag` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** adjective tag (optional, default `'ADJ'`)
+
 ### TEEFTTokenize
 
 -   **See: <http://yomguithereal.github.io/talisman/tokenizers/words>**
@@ -95,15 +111,3 @@ Extract tokens from a text
 
 -   `data` **[Stream](https://nodejs.org/api/stream.html)** 
 -   `feed` **[Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)>** 
-
-## count
-
-Take `Object` object getting some fields with json path, and do ...
-
-### Parameters
-
--   `data`
--   `feed`
--   `path` **[String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**
-
-Returns **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**
