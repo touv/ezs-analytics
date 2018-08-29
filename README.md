@@ -21,19 +21,32 @@ process.stdin
 
 #### Table of Contents
 
--   [TEEFTFilterTags](#teeftfiltertags)
+-   [TEEFTFilterMultiFreq](#teeftfiltermultifreq)
     -   [Parameters](#parameters)
--   [TEEFTFrToTagLem](#teeftfrtotaglem)
+-   [TEEFTFilterTags](#teeftfiltertags)
     -   [Parameters](#parameters-1)
+-   [TEEFTFrToTagLem](#teeftfrtotaglem)
+    -   [Parameters](#parameters-2)
     -   [Examples](#examples)
 -   [TEEFTStopWords](#teeftstopwords)
-    -   [Parameters](#parameters-2)
--   [TEEFTSumUpFrequencies](#teeftsumupfrequencies)
     -   [Parameters](#parameters-3)
--   [TEEFTExtractTerms](#teeftextractterms)
+-   [TEEFTSumUpFrequencies](#teeftsumupfrequencies)
     -   [Parameters](#parameters-4)
--   [TEEFTTokenize](#teefttokenize)
+-   [TEEFTExtractTerms](#teeftextractterms)
     -   [Parameters](#parameters-5)
+-   [TEEFTTokenize](#teefttokenize)
+    -   [Parameters](#parameters-6)
+
+### TEEFTFilterMultiFreq
+
+Filter the `data`, keeping only multiterms and frequent monoterms.
+
+#### Parameters
+
+-   `data` **[Stream](https://nodejs.org/api/stream.html)** 
+-   `feed` **[Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)>** 
+-   `multiLimit` **[Number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)** threshold for being a multiterm (in tokens number) (optional, default `2`)
+-   `minFrequency` **[Number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)** minimal frequency to be taken as a frequent term (optional, default `7`)
 
 ### TEEFTFilterTags
 
