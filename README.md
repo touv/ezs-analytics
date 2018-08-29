@@ -28,10 +28,12 @@ process.stdin
     -   [Examples](#examples)
 -   [TEEFTStopWords](#teeftstopwords)
     -   [Parameters](#parameters-2)
--   [TEEFTExtractTerms](#teeftextractterms)
+-   [TEEFTSumUpFrequencies](#teeftsumupfrequencies)
     -   [Parameters](#parameters-3)
--   [TEEFTTokenize](#teefttokenize)
+-   [TEEFTExtractTerms](#teeftextractterms)
     -   [Parameters](#parameters-4)
+-   [TEEFTTokenize](#teefttokenize)
+    -   [Parameters](#parameters-5)
 
 ### TEEFTFilterTags
 
@@ -86,6 +88,15 @@ Filter the text in input, by removing stopwords
 -   `data` **[Stream](https://nodejs.org/api/stream.html)** 
 -   `feed` **[Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)>** 
 -   `stopwords` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** name of the stopwords file to use (optional, default `'StopwFrench'`)
+
+### TEEFTSumUpFrequencies
+
+Sums up the frequencies of identical lemmas from different chunks
+
+#### Parameters
+
+-   `data` **[Stream](https://nodejs.org/api/stream.html)** 
+-   `feed` **[Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)>** 
 
 ### TEEFTExtractTerms
 

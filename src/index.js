@@ -3,6 +3,7 @@ import TEEFTFrToTagLem from './fr-to-tag-lem';
 import TEEFTStopWords from './stop-words';
 import TEEFTFilterTags from './filter-tags';
 import TEEFTExtractTerms from './term-extractor';
+import TEEFTSumUpFrequencies from './sum-up-freq';
 
 export default {
     TEEFTTokenize,
@@ -10,4 +11,5 @@ export default {
     TEEFTStopWords,
     TEEFTFilterTags,
     TEEFTExtractTerms,
+    TEEFTSumUpFrequencies,
 };

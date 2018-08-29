@@ -405,4 +405,77 @@ describe('extract terms', () => {
                 done();
             });
     });
+
+    it('should decompose frequencies when in several chunks', (done) => {
+        const res = [];
+        /* eslint-disable object-curly-newline */
+        from([[{ id: 0, word: 'elle', pos: ['PRO:per'], lemma: 'elle' },
+            { id: 1, word: 'semble', pos: ['VER'], lemma: 'sembler' },
+            { id: 2, word: 'se', pos: ['PRO:per'], lemma: 'se' },
+            { id: 3, word: 'nourrir', pos: ['VER'], lemma: 'nourrir' },
+            { id: 4,
+                word: 'essentiellement',
+                pos: ['ADV'],
+                lemma: 'essentiellement',
+            },
+            { id: 5, word: 'de', pos: ['PRE', 'ART:def'], lemma: 'de' },
+        ], [
+            { id: 6, word: 'plancton', pos: ['NOM'], lemma: 'plancton' },
+            { id: 7, word: 'frais', pos: ['ADJ'], lemma: 'frais' },
+            { id: 8, word: 'et', pos: ['CON'], lemma: 'et' },
+            { id: 9, word: 'de', pos: ['PRE', 'ART:def'], lemma: 'de' },
+            { id: 10, word: 'hotdog', pos: ['UNK'], lemma: 'hotdog' }]])
+        /* eslint-enable object-curly-newline */
+            .pipe(ezs('TEEFTExtractTerms', { nounTag: '', adjTag: '' }))
+            // .pipe(ezs('debug'))
+            .on('data', (chunk) => {
+                assert(typeof chunk, 'object');
+                res.push(chunk);
+            })
+            .on('end', () => {
+                assert.equal(13, res.length);
+                assert.equal('de', res[5].lemma);
+                assert.equal('de', res[10].lemma);
+                assert.equal(1, res[5].frequency);
+                assert.equal(1, res[10].frequency);
+                done();
+            });
+    });
+});
+
+describe('sum up frequencies', () => {
+    it('should sum up frequencies when in several chunks', (done) => {
+        const res = [];
+        /* eslint-disable object-curly-newline */
+        from([[{ id: 0, word: 'elle', pos: ['PRO:per'], lemma: 'elle' },
+            { id: 1, word: 'semble', pos: ['VER'], lemma: 'sembler' },
+            { id: 2, word: 'se', pos: ['PRO:per'], lemma: 'se' },
+            { id: 3, word: 'nourrir', pos: ['VER'], lemma: 'nourrir' },
+            { id: 4,
+                word: 'essentiellement',
+                pos: ['ADV'],
+                lemma: 'essentiellement',
+            },
+            { id: 5, word: 'de', pos: ['PRE', 'ART:def'], lemma: 'de' },
+        ], [
+            { id: 6, word: 'plancton', pos: ['NOM'], lemma: 'plancton' },
+            { id: 7, word: 'frais', pos: ['ADJ'], lemma: 'frais' },
+            { id: 8, word: 'et', pos: ['CON'], lemma: 'et' },
+            { id: 9, word: 'de', pos: ['PRE', 'ART:def'], lemma: 'de' },
+            { id: 10, word: 'hotdog', pos: ['UNK'], lemma: 'hotdog' }]])
+        /* eslint-enable object-curly-newline */
+            .pipe(ezs('TEEFTExtractTerms', { nounTag: '', adjTag: '' }))
+            .pipe(ezs('TEEFTSumUpFrequencies'))
+            // .pipe(ezs('debug'))
+            .on('data', (chunk) => {
+                assert(typeof chunk, 'object');
+                res.push(chunk);
+            })
+            .on('end', () => {
+                assert.equal(12, res.length);
+                assert.equal('de', res[5].lemma);
+                assert.equal(2, res[5].frequency);
+                done();
+            });
+    });
 });
