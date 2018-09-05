@@ -49,9 +49,9 @@ const addNormalizedSpecificity = pipe(
 );
 
 /**
- * Process objects containing frequency (and last object containing
- * totalFrequencies), add a specificity to each object, and remove all object
- * with a specifity below average specificity (except when `filter` is `false`).
+ * Process objects containing frequency, add a specificity to each object, and
+ * remove all object with a specificity below average specificity (except when
+ * `filter` is `false`).
  *
  * @export
  * @param {*} data
