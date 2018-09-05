@@ -28,7 +28,6 @@ function addSpecificity(term) {
     const specificity = computeSpecificity(frequency);
 
     maxSpecificity = max(maxSpecificity, specificity);
-    specificitySum += specificity;
     return {
         ...term,
         specificity,
@@ -36,9 +35,11 @@ function addSpecificity(term) {
 }
 
 function normalizeSpecificity(term) {
+    const specificity = term.specificity / maxSpecificity;
+    specificitySum += specificity;
     return {
         ...term,
-        specificity: term.specificity / maxSpecificity,
+        specificity,
     };
 }
 
@@ -49,18 +50,29 @@ const addNormalizedSpecificity = pipe(
 
 /**
  * Process objects containing frequency (and last object containing
- * totalFrequencies), and add a specificity to each object.
+ * totalFrequencies), add a specificity to each object, and remove all object
+ * with a specifity below average specificity (except when `filter` is `false`).
  *
  * @export
  * @param {*} data
  * @param {*} feed
- * @param {string} [weightedDictionary="weightsFrench"]    name of the weigthed dictionary
+ * @param {string} [weightedDictionary="weightsFrench"]    name of the weigthed
+ * dictionary
+ * @param {Boolean} [filter=true]   filter below average specificity
  * @returns
  */
 export default function TEEFTSpecificity(data, feed) {
     const weightedDictionary = this.getParam('weightedDictionary', 'weightsFrench');
+    const filter = this.getParam('filter', true);
     if (this.isLast()) {
-        feed.write(map(addNormalizedSpecificity, terms));
+        let result = map(addNormalizedSpecificity, terms);
+
+        if (filter) {
+            const averageSpecificity = specificitySum / terms.length;
+            result = result.filter(term => term.specificity >= averageSpecificity);
+        }
+
+        feed.write(result);
         return feed.close();
     }
     if (this.isFirst()) {

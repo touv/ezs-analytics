@@ -28,14 +28,16 @@ process.stdin
 -   [TEEFTFrToTagLem](#teeftfrtotaglem)
     -   [Parameters](#parameters-2)
     -   [Examples](#examples)
--   [TEEFTStopWords](#teeftstopwords)
+-   [TEEFTSpecificity](#teeftspecificity)
     -   [Parameters](#parameters-3)
--   [TEEFTSumUpFrequencies](#teeftsumupfrequencies)
+-   [TEEFTStopWords](#teeftstopwords)
     -   [Parameters](#parameters-4)
--   [TEEFTExtractTerms](#teeftextractterms)
+-   [TEEFTSumUpFrequencies](#teeftsumupfrequencies)
     -   [Parameters](#parameters-5)
--   [TEEFTTokenize](#teefttokenize)
+-   [TEEFTExtractTerms](#teeftextractterms)
     -   [Parameters](#parameters-6)
+-   [TEEFTTokenize](#teefttokenize)
+    -   [Parameters](#parameters-7)
 
 ### TEEFTFilterMultiFreq
 
@@ -92,6 +94,20 @@ from(['Elle semble se nourrir essentiellement de plancton, et de hotdog.'])
 { id: 9, word: 'hotdog', pos: [ 'UNK' ] } ]
 ```
 
+### TEEFTSpecificity
+
+Process objects containing frequency (and last object containing
+totalFrequencies), add a specificity to each object, and remove all object
+with a specifity below average specificity (except when `filter` is `false`).
+
+#### Parameters
+
+-   `data` **any** 
+-   `feed` **any** 
+-   `weightedDictionary` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** name of the weigthed
+    dictionary (optional, default `"weightsFrench"`)
+-   `filter` **[Boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** filter below average specificity (optional, default `true`)
+
 ### TEEFTStopWords
 
 Filter the text in input, by removing stopwords
@@ -104,7 +120,8 @@ Filter the text in input, by removing stopwords
 
 ### TEEFTSumUpFrequencies
 
-Sums up the frequencies of identical lemmas from different chunks
+Sums up the frequencies of identical lemmas from different chunks,
+and yield as last object { totalFrequencies }.
 
 #### Parameters
 
