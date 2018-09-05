@@ -484,8 +484,8 @@ describe('sum up frequencies', () => {
 describe('compute specificity', () => {
     it('should work without weights', (done) => {
         let res = [];
-        /* eslint-disable object-curly-newline */
         from([[
+            /* eslint-disable object-curly-newline */
             { frequency: 8, length: 1, word: 'elle', id: 0, pos: ['PRO:per'], lemma: 'elle' },
             { frequency: 1, length: 1, word: 'semble', id: 1, pos: ['VER'], lemma: 'sembler' },
             { frequency: 1, length: 1, word: 'se', id: 2, pos: ['PRO:per'], lemma: 'se' },
@@ -496,8 +496,8 @@ describe('compute specificity', () => {
             { frequency: 1, length: 1, word: 'frais', id: 7, pos: ['ADJ'], lemma: 'frais' },
             { frequency: 1, length: 1, word: 'et', id: 8, pos: ['CON'], lemma: 'et' },
             { frequency: 1, length: 1, word: 'hotdog', id: 10, pos: ['UNK'], lemma: 'hotdog' },
+            /* eslint-enable object-curly-newline */
         ]])
-        /* eslint-enable object-curly-newline */
             .pipe(ezs('TEEFTSpecificity', { weightedDictionary: null }))
             // .pipe(ezs('debug'))
             .on('data', (chunk) => {
@@ -515,8 +515,8 @@ describe('compute specificity', () => {
 
     it('should work with weights', (done) => {
         let res = [];
-        /* eslint-disable object-curly-newline */
         from([[
+            /* eslint-disable object-curly-newline */
             { frequency: 8, length: 1, word: 'elle', id: 0, pos: ['PRO:per'], lemma: 'elle' },
             { frequency: 1, length: 1, word: 'semble', id: 1, pos: ['VER'], lemma: 'sembler' },
             { frequency: 1, length: 1, word: 'se', id: 2, pos: ['PRO:per'], lemma: 'se' },
@@ -527,8 +527,8 @@ describe('compute specificity', () => {
             { frequency: 1, length: 1, word: 'frais', id: 7, pos: ['ADJ'], lemma: 'frais' },
             { frequency: 1, length: 1, word: 'et', id: 8, pos: ['CON'], lemma: 'et' },
             { frequency: 1, length: 1, word: 'hotdog', id: 10, pos: ['UNK'], lemma: 'hotdog' },
+            /* eslint-enable object-curly-newline */
         ]])
-        /* eslint-enable object-curly-newline */
             .pipe(ezs('TEEFTSpecificity'))
             // .pipe(ezs('debug'))
             .on('data', (chunk) => {
@@ -548,8 +548,8 @@ describe('compute specificity', () => {
 describe('filter multiterms and frequent monoterms', () => {
     it('should keep frequent monoterms', (done) => {
         let res = [];
-        /* eslint-disable object-curly-newline */
         from([[
+            /* eslint-disable object-curly-newline */
             { frequency: 8, length: 1, word: 'elle', id: 0, pos: ['PRO:per'], lemma: 'elle' },
             { frequency: 1, length: 1, word: 'semble', id: 1, pos: ['VER'], lemma: 'sembler' },
             { frequency: 1, length: 1, word: 'se', id: 2, pos: ['PRO:per'], lemma: 'se' },
@@ -561,8 +561,8 @@ describe('filter multiterms and frequent monoterms', () => {
             { frequency: 1, length: 1, word: 'et', id: 8, pos: ['CON'], lemma: 'et' },
             { frequency: 1, length: 1, word: 'hotdog', id: 10, pos: ['UNK'], lemma: 'hotdog' },
             { totalFrequencies: 18 },
+            /* eslint-enable object-curly-newline */
         ]])
-        /* eslint-enable object-curly-newline */
             .pipe(ezs('TEEFTFilterMultiFreq'))
             // .pipe(ezs('debug'))
             .on('data', (chunk) => {
