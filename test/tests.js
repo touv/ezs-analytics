@@ -472,7 +472,7 @@ describe('sum up frequencies', () => {
                 res.push(chunk);
             })
             .on('end', () => {
-                assert.equal(12, res.length);
+                assert.equal(13, res.length);
                 assert.equal('de', res[5].lemma);
                 assert.equal(2, res[5].frequency);
                 done();

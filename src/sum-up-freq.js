@@ -2,8 +2,10 @@ import { mapObjIndexed, merge } from 'ramda';
 
 let lemmaFrequency = {};
 let terms = {};
+let totalFrequencies = 0;
 /**
- * Sums up the frequencies of identical lemmas from different chunks
+ * Sums up the frequencies of identical lemmas from different chunks,
+ * and yield as last object { totalFrequencies }.
  *
  * @export
  * @param {Stream} data
@@ -15,10 +17,12 @@ export default function TEEFTSumUpFrequencies(data, feed) {
             const term = terms[lemma];
             const newTerm = merge(term, { frequency });
             feed.write(newTerm);
+            totalFrequencies += frequency;
             return newTerm;
         }, lemmaFrequency);
         lemmaFrequency = {};
         terms = {};
+        feed.write({ totalFrequencies });
         return feed.close();
     }
     const key = data.lemma || data.word;
