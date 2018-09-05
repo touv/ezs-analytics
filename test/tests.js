@@ -475,6 +475,7 @@ describe('sum up frequencies', () => {
                 assert.equal(13, res.length);
                 assert.equal('de', res[5].lemma);
                 assert.equal(2, res[5].frequency);
+                assert.equal(13, res[12].totalFrequencies);
                 done();
             });
     });
