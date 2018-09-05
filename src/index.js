@@ -5,6 +5,7 @@ import TEEFTFilterTags from './filter-tags';
 import TEEFTExtractTerms from './term-extractor';
 import TEEFTSumUpFrequencies from './sum-up-freq';
 import TEEFTFilterMultiFreq from './filter-multi-freq';
+import TEEFTSpecificity from './specificity';
 
 export default {
     TEEFTTokenize,
@@ -14,4 +15,5 @@ export default {
     TEEFTExtractTerms,
     TEEFTSumUpFrequencies,
     TEEFTFilterMultiFreq,
+    TEEFTSpecificity,
 };

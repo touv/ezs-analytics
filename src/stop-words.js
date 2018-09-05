@@ -1,7 +1,8 @@
 import fs from 'fs';
 import path from 'path';
 
-function getResource(fileName) {
+export function getResource(fileName) {
+    if (!fileName) return [];
     const filePath = path.resolve('__dirname__', `../resources/${fileName}.txt`);
     const text = fs.readFileSync(filePath, { encoding: 'utf-8' });
     return text.split('\n');

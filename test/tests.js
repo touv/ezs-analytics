@@ -481,6 +481,70 @@ describe('sum up frequencies', () => {
     });
 });
 
+describe('compute specificity', () => {
+    it('should work without weights', (done) => {
+        let res = [];
+        /* eslint-disable object-curly-newline */
+        from([[
+            { frequency: 8, length: 1, word: 'elle', id: 0, pos: ['PRO:per'], lemma: 'elle' },
+            { frequency: 1, length: 1, word: 'semble', id: 1, pos: ['VER'], lemma: 'sembler' },
+            { frequency: 1, length: 1, word: 'se', id: 2, pos: ['PRO:per'], lemma: 'se' },
+            { frequency: 1, length: 1, word: 'nourrir', id: 3, pos: ['VER'], lemma: 'nourrir' },
+            { frequency: 1, length: 1, word: 'essentiellement', id: 4, pos: ['ADV'], lemma: 'essentiellement' },
+            { frequency: 2, length: 1, word: 'de', id: 9, pos: ['PRE', 'ART:def'], lemma: 'de' },
+            { frequency: 1, length: 1, word: 'plancton', id: 6, pos: ['NOM'], lemma: 'plancton' },
+            { frequency: 1, length: 1, word: 'frais', id: 7, pos: ['ADJ'], lemma: 'frais' },
+            { frequency: 1, length: 1, word: 'et', id: 8, pos: ['CON'], lemma: 'et' },
+            { frequency: 1, length: 1, word: 'hotdog', id: 10, pos: ['UNK'], lemma: 'hotdog' },
+        ]])
+        /* eslint-enable object-curly-newline */
+            .pipe(ezs('TEEFTSpecificity', { weightedDictionary: null }))
+            // .pipe(ezs('debug'))
+            .on('data', (chunk) => {
+                assert(Array.isArray(chunk));
+                res = res.concat(chunk);
+            })
+            .on('end', () => {
+                assert.equal(10, res.length);
+                assert.equal('elle', res[0].lemma);
+                assert.equal(8, res[0].frequency);
+                assert.equal(1, res[0].specificity);
+                done();
+            });
+    });
+
+    it('should work with weights', (done) => {
+        let res = [];
+        /* eslint-disable object-curly-newline */
+        from([[
+            { frequency: 8, length: 1, word: 'elle', id: 0, pos: ['PRO:per'], lemma: 'elle' },
+            { frequency: 1, length: 1, word: 'semble', id: 1, pos: ['VER'], lemma: 'sembler' },
+            { frequency: 1, length: 1, word: 'se', id: 2, pos: ['PRO:per'], lemma: 'se' },
+            { frequency: 1, length: 1, word: 'nourrir', id: 3, pos: ['VER'], lemma: 'nourrir' },
+            { frequency: 1, length: 1, word: 'essentiellement', id: 4, pos: ['ADV'], lemma: 'essentiellement' },
+            { frequency: 2, length: 1, word: 'de', id: 9, pos: ['PRE', 'ART:def'], lemma: 'de' },
+            { frequency: 1, length: 1, word: 'plancton', id: 6, pos: ['NOM'], lemma: 'plancton' },
+            { frequency: 1, length: 1, word: 'frais', id: 7, pos: ['ADJ'], lemma: 'frais' },
+            { frequency: 1, length: 1, word: 'et', id: 8, pos: ['CON'], lemma: 'et' },
+            { frequency: 1, length: 1, word: 'hotdog', id: 10, pos: ['UNK'], lemma: 'hotdog' },
+        ]])
+        /* eslint-enable object-curly-newline */
+            .pipe(ezs('TEEFTSpecificity'))
+            // .pipe(ezs('debug'))
+            .on('data', (chunk) => {
+                assert(Array.isArray(chunk));
+                res = res.concat(chunk);
+            })
+            .on('end', () => {
+                assert.equal(10, res.length);
+                assert.equal('elle', res[0].lemma);
+                assert.equal(8, res[0].frequency);
+                assert.equal(1, res[0].specificity);
+                done();
+            });
+    });
+});
+
 describe('filter multiterms and frequent monoterms', () => {
     it('should keep frequent monoterms', (done) => {
         let res = [];
