@@ -472,10 +472,9 @@ describe('sum up frequencies', () => {
                 res.push(chunk);
             })
             .on('end', () => {
-                assert.equal(13, res.length);
+                assert.equal(12, res.length);
                 assert.equal('de', res[5].lemma);
                 assert.equal(2, res[5].frequency);
-                assert.equal(13, res[12].totalFrequencies);
                 done();
             });
     });
@@ -560,7 +559,6 @@ describe('filter multiterms and frequent monoterms', () => {
             { frequency: 1, length: 1, word: 'frais', id: 7, pos: ['ADJ'], lemma: 'frais' },
             { frequency: 1, length: 1, word: 'et', id: 8, pos: ['CON'], lemma: 'et' },
             { frequency: 1, length: 1, word: 'hotdog', id: 10, pos: ['UNK'], lemma: 'hotdog' },
-            { totalFrequencies: 18 },
             /* eslint-enable object-curly-newline */
         ]])
             .pipe(ezs('TEEFTFilterMultiFreq'))
@@ -593,8 +591,8 @@ describe('filter multiterms and frequent monoterms', () => {
             { frequency: 1, length: 1, word: 'et', id: 8, pos: ['CON'], lemma: 'et' },
             { frequency: 1, length: 1, word: 'hotdog', id: 10, pos: ['UNK'], lemma: 'hotdog' },
             { frequency: 1, length: 5, word: 'plancton frais et de hotdog' },
-            { totalFrequencies: 13 }]])
             /* eslint-enable object-curly-newline */
+        ]])
             .pipe(ezs('TEEFTFilterMultiFreq'))
             // .pipe(ezs('debug'))
             .on('data', (chunk) => {
