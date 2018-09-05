@@ -573,7 +573,6 @@ describe('compute specificity', () => {
                 done();
             });
     });
-
 });
 
 describe('filter multiterms and frequent monoterms', () => {
