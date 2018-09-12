@@ -607,6 +607,35 @@ describe('compute specificity', () => {
                 done();
             });
     });
+
+    it('should keep multiterms (terms without tags)', (done) => {
+        let res = [];
+        from([[
+            /* eslint-disable object-curly-newline */
+            { frequency: 3, length: 1, word: 'logiciel', id: 2703, pos: ['ADJ', 'NOM'], lemma: 'logiciel' },
+            { frequency: 1, length: 1, word: 'content', id: 2704, pos: ['NOM', 'ADJ', 'VER'], lemma: 'content' },
+            { frequency: 1, length: 2, word: 'logiciel content' },
+            { frequency: 1, length: 1, word: 'management', id: 2706, pos: ['NOM'], lemma: 'management' },
+            /* eslint-enable object-curly-newline */
+        ]])
+            .pipe(ezs('TEEFTSpecificity', { sort: true, filter: true }))
+            // .pipe(ezs('debug'))
+            .on('data', (chunk) => {
+                assert(Array.isArray(chunk));
+                res = res.concat(chunk);
+            })
+            .on('end', () => {
+                assert.equal(2, res.length);
+                assert.equal('logiciel', res[0].lemma);
+                assert.equal(3, res[0].frequency);
+                assert.equal(1, res[0].specificity);
+                assert.equal('logiciel content', res[1].word);
+                assert.equal(1, res[1].frequency);
+                assert.equal(2, res[1].length);
+                assert.equal(1 / 3, res[1].specificity);
+                done();
+            });
+    });
 });
 
 describe('filter multiterms and frequent monoterms', () => {

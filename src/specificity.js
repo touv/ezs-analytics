@@ -74,7 +74,8 @@ export default function TEEFTSpecificity(data, feed) {
 
         if (filter) {
             const averageSpecificity = specificitySum / terms.length;
-            result = result.filter(term => term.specificity >= averageSpecificity);
+            const isMulti = term => !term.pos;
+            result = result.filter(term => term.specificity >= averageSpecificity || isMulti(term));
         }
         if (sort) {
             result = result.sort((a, b) => b.specificity - a.specificity);
