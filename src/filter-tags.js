@@ -10,13 +10,15 @@ export function beginsWith(tags, text) {
 }
 
 /*
- * Check if some of the `texts` begins with any of the `tags`
+ * Check if some of the `texts` begins with any of the `tags`.
  *
- * @param {Array<string>} tags
- * @param {Array<string>} texts
- * @returns {Boolean}
+ * Returns true if texts is not defined (when a term is not tagged, for example
+ * a multiterm)
+ *
+ * @param {Array<string>} tags @param {Array<string>} texts @returns {Boolean}
  */
 export function someBeginsWith(tags, texts) {
+    if (!texts) return true;
     return texts.some(text => beginsWith(tags, text));
 }
 
@@ -33,7 +35,8 @@ export default function TEEFTFilterTags(data, feed) {
         return feed.close();
     }
     const tagsToKeep = this.getParam('tags', ['ADJ', 'NOM']);
-    const res = data
+    const dataArray = Array.isArray(data) ? data : [data];
+    const res = dataArray
         .filter(w => someBeginsWith(tagsToKeep, w.pos));
     feed.write(res);
     feed.end();
