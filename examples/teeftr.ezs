@@ -1,0 +1,39 @@
+#!/usr/bin/env ezs
+
+# Use teeft on one document
+
+# ezs -v ./examples/teeftfr.ezs < ./examples/data/artificial.txt
+
+# > Note: ezs-basics has to be installed if you want to use JSONString
+
+[use]
+plugin = basics
+plugin = teeftfr
+
+[TEEFTFrToTagLem]
+; [debug]
+; text = tags
+
+[TEEFTExtractTerms]
+; [debug]
+; text = multiterms
+
+[TEEFTFilterTags]
+; [debug]
+; text = filter-tags
+
+[TEEFTStopWords]
+; [debug]
+; text = stop-words
+
+[TEEFTSumUpFrequencies]
+; [debug]
+; text = sum
+
+[TEEFTSpecificity]
+; [debug]
+; text = spec
+
+[JSONString]
+wrap = false
+indent = true
