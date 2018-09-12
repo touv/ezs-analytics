@@ -89,7 +89,8 @@ export default function TEEFTSpecificity(data, feed) {
             .map(line => line.split('\t'))
             .forEach(([term, weight]) => { weights[term] = weight; });
     }
-    forEach(({ frequency }) => { totalFrequencies += frequency || 0; }, data);
-    terms = concat(terms, data);
+    const dataArray = Array.isArray(data) ? data : [data];
+    forEach(({ frequency }) => { totalFrequencies += frequency || 0; }, dataArray);
+    terms = concat(terms, dataArray);
     feed.end();
 }
