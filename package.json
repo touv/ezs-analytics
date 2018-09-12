@@ -10,7 +10,11 @@
     "url": "git+https://github.com/Inist-CNRS/node-ezs-teeftfr.git"
   },
   "keywords": [
-    "ezs", "terms", "indexation", "keywords", "text"
+    "ezs",
+    "terms",
+    "indexation",
+    "keywords",
+    "text"
   ],
   "author": "François Parmentier <francois.parmentier@gmail.com>",
   "license": "MIT",
