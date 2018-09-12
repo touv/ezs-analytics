@@ -22,8 +22,12 @@ export default function TEEFTSumUpFrequencies(data, feed) {
         terms = {};
         return feed.close();
     }
-    const key = data.lemma || data.word;
-    lemmaFrequency[key] = (lemmaFrequency[key] || 0) + data.frequency;
-    terms[key] = data;
+    const dataArray = Array.isArray(data) ? data : [data];
+    dataArray
+        .forEach((term) => {
+            const key = term.lemma || term.word;
+            lemmaFrequency[key] = (lemmaFrequency[key] || 0) + term.frequency;
+            terms[key] = term;
+        });
     feed.end();
 }
