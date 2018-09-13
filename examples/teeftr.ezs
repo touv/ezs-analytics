@@ -34,6 +34,8 @@ plugin = teeftfr
 ; [debug]
 ; text = spec
 
+[TEEFTFilterMultiFreq]
+
 [JSONString]
 wrap = false
 indent = true
