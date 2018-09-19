@@ -7,7 +7,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Inist-CNRS/node-ezs-teeftfr.git"
+    "url": "git+https://github.com/istex/node-ezs-teeftfr.git"
   },
   "keywords": [
     "ezs",
@@ -19,9 +19,9 @@
   "author": "François Parmentier <francois.parmentier@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Inist-CNRS/node-ezs-teeftfr/issues"
+    "url": "https://github.com/istex/node-ezs-teeftfr/issues"
   },
-  "homepage": "https://github.com/Inist-CNRS/node-ezs-teeftfr#readme",
+  "homepage": "https://github.com/istex/node-ezs-teeftfr#readme",
   "dependencies": {
     "nlp-js-tools-french": "1.0.9",
     "ramda": "0.25.0",
