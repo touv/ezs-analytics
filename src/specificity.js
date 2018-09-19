@@ -19,8 +19,8 @@ function initialize() {
 }
 
 function addSpecificity(term) {
-    const { frequency, key } = term;
-    const weight = weights[key] || 10 ** -5;
+    const { frequency, word } = term;
+    const weight = weights[word] || 10 ** -5;
     const computeSpecificity = pipe(
         divide(__, totalFrequencies),
         divide(__, weight),
@@ -44,8 +44,8 @@ function normalizeSpecificity(term) {
 }
 
 const addNormalizedSpecificity = pipe(
-    addSpecificity,
-    normalizeSpecificity,
+    map(addSpecificity),
+    map(normalizeSpecificity),
 );
 
 /**
@@ -70,9 +70,10 @@ export default function TEEFTSpecificity(data, feed) {
     const filter = this.getParam('filter', true);
     const sort = this.getParam('sort', false);
     if (this.isLast()) {
-        let result = map(addNormalizedSpecificity, terms);
+        let result = addNormalizedSpecificity(terms);
 
         if (filter) {
+            // TODO: compute averageSpecificity only on monoTerms
             const averageSpecificity = specificitySum / terms.length;
             const isMulti = term => !term.pos;
             result = result.filter(term => term.specificity >= averageSpecificity || isMulti(term));
@@ -91,7 +92,7 @@ export default function TEEFTSpecificity(data, feed) {
             .forEach(([term, weight]) => { weights[term] = weight; });
     }
     const dataArray = Array.isArray(data) ? data : [data];
-    forEach(({ frequency }) => { totalFrequencies += frequency || 0; }, dataArray);
+    totalFrequencies = dataArray.reduce((total, { frequency }) => total + (frequency || 0), totalFrequencies);
     terms = concat(terms, dataArray);
     feed.end();
 }
