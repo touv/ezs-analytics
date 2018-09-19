@@ -538,7 +538,7 @@ describe('compute specificity', () => {
                 assert.equal(10, res.length);
                 assert.equal('elle', res[0].lemma);
                 assert.equal(8, res[0].frequency);
-                assert.equal(1, res[0].specificity);
+                assert.equal(1.6221455307862945e-8, res[0].specificity);
                 done();
             });
     });
@@ -566,9 +566,9 @@ describe('compute specificity', () => {
                 res = res.concat(chunk);
             })
             .on('end', () => {
-                assert.equal(2, res.length);
-                assert.equal('elle', res[0].lemma);
-                assert.equal(8, res[0].frequency);
+                assert.equal(1, res.length);
+                assert.equal('hotdog', res[0].lemma);
+                assert.equal(1, res[0].frequency);
                 assert.equal(1, res[0].specificity);
                 done();
             });
@@ -591,7 +591,7 @@ describe('compute specificity', () => {
             /* eslint-enable object-curly-newline */
         ]])
             .pipe(ezs('TEEFTSpecificity', { sort: true, weightedDictionary: '', filter: false }))
-            .pipe(ezs('debug'))
+            // .pipe(ezs('debug'))
             .on('data', (chunk) => {
                 assert(Array.isArray(chunk));
                 res = res.concat(chunk);
@@ -623,7 +623,7 @@ describe('compute specificity', () => {
 
         ]])
             .pipe(ezs('TEEFTSpecificity', { sort: true, weightedDictionary: '', filter: false }))
-            .pipe(ezs('debug'))
+            // .pipe(ezs('debug'))
             .on('data', (chunk) => {
                 assert(Array.isArray(chunk));
                 res = res.concat(chunk);
@@ -647,7 +647,7 @@ describe('compute specificity', () => {
             { frequency: 1, length: 1, word: 'management', id: 2706, pos: ['NOM'], lemma: 'management' },
             /* eslint-enable object-curly-newline */
         ]])
-            .pipe(ezs('TEEFTSpecificity', { sort: true, filter: true }))
+            .pipe(ezs('TEEFTSpecificity', { sort: true, weightedDictionary: '', filter: true }))
             // .pipe(ezs('debug'))
             .on('data', (chunk) => {
                 assert(Array.isArray(chunk));
