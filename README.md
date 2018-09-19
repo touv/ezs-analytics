@@ -28,16 +28,18 @@ process.stdin
 -   [TEEFTFrToTagLem](#teeftfrtotaglem)
     -   [Parameters](#parameters-2)
     -   [Examples](#examples)
--   [TEEFTSpecificity](#teeftspecificity)
+-   [profile](#profile)
     -   [Parameters](#parameters-3)
--   [TEEFTStopWords](#teeftstopwords)
+-   [TEEFTSpecificity](#teeftspecificity)
     -   [Parameters](#parameters-4)
--   [TEEFTSumUpFrequencies](#teeftsumupfrequencies)
+-   [TEEFTStopWords](#teeftstopwords)
     -   [Parameters](#parameters-5)
--   [TEEFTExtractTerms](#teeftextractterms)
+-   [TEEFTSumUpFrequencies](#teeftsumupfrequencies)
     -   [Parameters](#parameters-6)
--   [TEEFTTokenize](#teefttokenize)
+-   [TEEFTExtractTerms](#teeftextractterms)
     -   [Parameters](#parameters-7)
+-   [TEEFTTokenize](#teefttokenize)
+    -   [Parameters](#parameters-8)
 
 ### TEEFTFilterMultiFreq
 
@@ -93,6 +95,18 @@ from(['Elle semble se nourrir essentiellement de plancton, et de hotdog.'])
 { id: 8, word: 'de', pos: [ 'PRE', 'NOM', 'ART:def' ] },
 { id: 9, word: 'hotdog', pos: [ 'UNK' ] } ]
 ```
+
+### profile
+
+Profile the time a statement takes to execute.
+
+You have to place one to initialize, and a second to display the time it
+takes.
+
+#### Parameters
+
+-   `data` **any** 
+-   `feed` **any** 
 
 ### TEEFTSpecificity
 

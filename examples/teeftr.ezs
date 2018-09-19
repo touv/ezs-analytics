@@ -10,32 +10,33 @@
 plugin = basics
 plugin = teeftfr
 
+[profile]
 [TEEFTFrToTagLem]
 ; [debug]
 ; text = tags
-
+[profile]
 [TEEFTExtractTerms]
 ; [debug]
 ; text = multiterms
-
+[profile]
 [TEEFTFilterTags]
 ; [debug]
 ; text = filter-tags
-
+[profile]
 [TEEFTStopWords]
 ; [debug]
 ; text = stop-words
-
+[profile]
 [TEEFTSumUpFrequencies]
 ; [debug]
 ; text = sum
-
+[profile]
 [TEEFTSpecificity]
 ; [debug]
 ; text = spec
-
+[profile]
 [TEEFTFilterMultiFreq]
-
+[profile]
 [JSONString]
 wrap = false
 indent = true
