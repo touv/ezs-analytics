@@ -59,14 +59,14 @@ const addNormalizedSpecificity = pipe(
  * @export
  * @param {*} data
  * @param {*} feed
- * @param {string} [weightedDictionary="weightsFrench"]    name of the weigthed
+ * @param {string} [weightedDictionary="Ress_Frantext"] name of the weigthed
  * dictionary
  * @param {Boolean} [filter=true]   filter below average specificity
  * @param {Boolean} [sort=false]    sort objects according to their specificity
  * @returns
  */
 export default function TEEFTSpecificity(data, feed) {
-    const weightedDictionary = this.getParam('weightedDictionary', 'weightsFrench');
+    const weightedDictionary = this.getParam('weightedDictionary', 'Ress_Frantext');
     const filter = this.getParam('filter', true);
     const sort = this.getParam('sort', false);
     if (this.isLast()) {
