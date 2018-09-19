@@ -656,6 +656,31 @@ describe('compute specificity', () => {
                 done();
             });
     });
+
+    it('should compute average specificity only on monoterms', (done) => {
+        let res = [];
+        from([[
+            /* eslint-disable object-curly-newline */
+            { frequency: 1, length: 1, word: 'logiciel', id: 2703, pos: ['ADJ', 'NOM'], lemma: 'logiciel' },
+            { frequency: 1, length: 1, word: 'content', id: 2704, pos: ['NOM', 'ADJ', 'VER'], lemma: 'content' },
+            { frequency: 10, length: 2, word: 'logiciel content' },
+            { frequency: 1, length: 1, word: 'management', id: 2706, pos: ['NOM'], lemma: 'management' },
+            /* eslint-enable object-curly-newline */
+        ]])
+            .pipe(ezs('TEEFTSpecificity', { sort: true, filter: true }))
+            // .pipe(ezs('debug'))
+            .on('data', (chunk) => {
+                assert(Array.isArray(chunk));
+                res = res.concat(chunk);
+            })
+            .on('end', () => {
+                assert.equal(res.length, 2);
+                assert.equal(res[0].pos, undefined); // multiterm
+                assert.equal(res[0].specificity, 1);
+                assert(res[1].pos); // monoterm
+                done();
+            });
+    });
 });
 
 describe('filter multiterms and frequent monoterms', () => {

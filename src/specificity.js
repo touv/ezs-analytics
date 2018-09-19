@@ -1,5 +1,5 @@
 import {
-    __, concat, divide, forEach, map, max, pipe,
+    __, concat, divide, map, max, pipe,
 } from 'ramda';
 import { getResource } from './stop-words';
 
@@ -17,6 +17,9 @@ function initialize() {
     maxSpecificity = 0;
     specificitySum = 0;
 }
+
+const isMulti = term => !term.pos;
+const isMono = term => term.pos;
 
 function addSpecificity(term) {
     const { frequency, word } = term;
@@ -36,7 +39,7 @@ function addSpecificity(term) {
 
 function normalizeSpecificity(term) {
     const specificity = term.specificity / maxSpecificity;
-    specificitySum += specificity;
+    specificitySum += isMono(term) ? specificity : 0;
     return {
         ...term,
         specificity,
@@ -73,9 +76,8 @@ export default function TEEFTSpecificity(data, feed) {
         let result = addNormalizedSpecificity(terms);
 
         if (filter) {
-            // TODO: compute averageSpecificity only on monoTerms
-            const averageSpecificity = specificitySum / terms.length;
-            const isMulti = term => !term.pos;
+            // compute averageSpecificity only on monoTerms
+            const averageSpecificity = specificitySum / terms.filter(isMono).length;
             result = result.filter(term => term.specificity >= averageSpecificity || isMulti(term));
         }
         if (sort) {
