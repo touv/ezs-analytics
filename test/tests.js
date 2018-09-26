@@ -746,3 +746,24 @@ describe('filter multiterms and frequent monoterms', () => {
             });
     });
 });
+
+describe.only('natural', () => {
+    describe('tag', () => {
+        it('should correctly tag a sentence in French', (done) => {
+            let res = [];
+            from(['Elle', 'semble', 'se', 'nourrir', 'essentiellement', 'de', 'plancton', 'et', 'de', 'hotdog'])
+                .pipe(ezs('TEEFTNaturalTag'))
+                .pipe(ezs('debug'))
+                .on('data', (chunk) => {
+                    assert(Array.isArray(chunk));
+                    res = res.concat(chunk);
+                })
+                .on('end', () => {
+                    assert.equal(10, res.length);
+                    assert.equal('semble', res[1].word);
+                    assert.equal('VER', res[1].pos[0]);
+                    done();
+                });
+        });
+    });
+});
