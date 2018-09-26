@@ -7,6 +7,7 @@ import TEEFTSumUpFrequencies from './sum-up-freq';
 import TEEFTFilterMultiFreq from './filter-multi-freq';
 import TEEFTSpecificity from './specificity';
 import profile from './profile';
+import TEEFTNaturalTag from './natural-tag';
 
 export default {
     TEEFTTokenize,
@@ -18,4 +19,5 @@ export default {
     TEEFTFilterMultiFreq,
     TEEFTSpecificity,
     profile,
+    TEEFTNaturalTag,
 };
