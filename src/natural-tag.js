@@ -1,8 +1,8 @@
 import { Lexicon, RuleSet, BrillPOSTagger } from 'natural';
 
 const baseFolder = `${__dirname}/..`;
-const rulesFilename = `${baseFolder}/data/French/tr_from_posjs.txt`;
-const lexiconFilename = `${baseFolder}/data/French/lexicon_from_posjs.json`;
+const rulesFilename = `${baseFolder}/resources/tr_from_posjs.txt`;
+const lexiconFilename = `${baseFolder}/resources/lexicon_from_posjs.json`;
 const defaultCategory = 'UNK';
 
 const lexicon = new Lexicon(lexiconFilename, defaultCategory);
