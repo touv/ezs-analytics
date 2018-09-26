@@ -6,7 +6,7 @@ const lexiconFilename = `${baseFolder}/data/French/lexicon_from_posjs.json`;
 const defaultCategory = 'UNK';
 
 const lexicon = new Lexicon(lexiconFilename, defaultCategory);
-const rules = new RuleSet(rulesFilename);
+const rules = new RuleSet();
 const tagger = new BrillPOSTagger(lexicon, rules);
 
 let tokens;
