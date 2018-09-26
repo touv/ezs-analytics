@@ -1,13 +1,15 @@
 import { Lexicon, RuleSet, BrillPOSTagger } from 'natural';
 
 const baseFolder = `${__dirname}/..`;
-// const rulesFilename = `${baseFolder}/data/French/tr_from_posjs.txt`;
+const rulesFilename = `${baseFolder}/data/French/tr_from_posjs.txt`;
 const lexiconFilename = `${baseFolder}/data/French/lexicon_from_posjs.json`;
-const defaultCategory = 'N';
+const defaultCategory = 'UNK';
 
 const lexicon = new Lexicon(lexiconFilename, defaultCategory);
-// const rules = new RuleSet(rulesFilename);
-const tagger = BrillPOSTagger(lexicon);
+const rules = new RuleSet(rulesFilename);
+const tagger = new BrillPOSTagger(lexicon, rules);
+
+let tokens;
 
 /**
  * POS Tagger from natural
@@ -19,10 +21,13 @@ const tagger = BrillPOSTagger(lexicon);
  */
 export default function TEEFTNaturalTag(data, feed) {
     if (this.isLast()) {
+        const res = tagger.tag(tokens);
+        feed.write(res.taggedWords);
         return feed.close();
     }
-    const tokens = Array.isArray(data) ? data : [data];
-    const res = tagger.tag(tokens);
-    feed.write(res);
+    if (this.isFirst()) {
+        tokens = [];
+    }
+    tokens.push(data);
     feed.end();
 }

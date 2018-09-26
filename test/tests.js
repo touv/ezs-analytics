@@ -753,15 +753,18 @@ describe.only('natural', () => {
             let res = [];
             from(['Elle', 'semble', 'se', 'nourrir', 'essentiellement', 'de', 'plancton', 'et', 'de', 'hotdog'])
                 .pipe(ezs('TEEFTNaturalTag'))
-                .pipe(ezs('debug'))
+                // .pipe(ezs('debug'))
                 .on('data', (chunk) => {
+                    assert(chunk);
                     assert(Array.isArray(chunk));
                     res = res.concat(chunk);
                 })
                 .on('end', () => {
-                    assert.equal(10, res.length);
-                    assert.equal('semble', res[1].word);
-                    assert.equal('VER', res[1].pos[0]);
+                    assert.equal(res.length, 10);
+                    assert.equal(res[1].token, 'semble');
+                    assert.equal(res[1].tag, 'v');
+                    assert.equal(res[4].token, 'essentiellement');
+                    assert.equal(res[4].tag, 'adv');
                     done();
                 });
         });
