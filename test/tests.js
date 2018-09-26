@@ -768,5 +768,25 @@ describe.only('natural', () => {
                     done();
                 });
         });
+
+        it('should correctly tag a sentence in French with accented words', (done) => {
+            let res = [];
+            from(['Ça', 'veut', 'sûrement', 'dire', 'qu\'', 'il', 'fut', 'assassiné'])
+                .pipe(ezs('TEEFTNaturalTag'))
+                // .pipe(ezs('debug'))
+                .on('data', (chunk) => {
+                    assert(chunk);
+                    assert(Array.isArray(chunk));
+                    res = res.concat(chunk);
+                })
+                .on('end', () => {
+                    assert.equal(res.length, 8);
+                    assert.equal(res[1].token, 'veut');
+                    assert.equal(res[1].tag, 'v');
+                    assert.equal(res[2].token, 'sûrement');
+                    assert.equal(res[2].tag, 'adv');
+                    done();
+                });
+        });
     });
 });
