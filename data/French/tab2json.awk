@@ -1,6 +1,6 @@
 # awk -f tab2json.awk lefff-word-tag.txt
 BEGIN	{
-  print "["
+  print "{"
 }
 {
   pos = "\"" $2 "\""
@@ -10,5 +10,5 @@ BEGIN	{
   print "  \"" $1 "\": [" pos "],"
 }
 END	{
-  print "]"
+  print "}"
 }
