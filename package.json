@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/istex/node-ezs-teeftfr#readme",
   "dependencies": {
+    "natural": "0.6.1",
     "nlp-js-tools-french": "1.0.9",
     "ramda": "0.25.0",
     "talisman": "0.21.0"
