@@ -32,12 +32,12 @@ tags = adj
 ; text = filter-tags
 ; [profile]
 [TEEFTStopWords]
-[debug]
-text = stop-words
+; [debug]
+; text = stop-words
 ; [profile]
-; [TEEFTSumUpFrequencies]
-; ; [debug]
-; ; text = sum
+[TEEFTSumUpFrequencies]
+[debug]
+text = sum
 ; [profile]
 ; [TEEFTSpecificity]
 ; ; [debug]

@@ -472,8 +472,43 @@ describe('sum up frequencies', () => {
                 res.push(chunk);
             })
             .on('end', () => {
-                assert.equal(res.length, 11);
+                assert.equal(res.length, 12);
                 assert.equal(res[5].lemma, 'de');
+                assert.equal(res[5].frequency, 2);
+                done();
+            });
+    });
+
+    it('should sum up frequencies when in several chunks, and no lemma', (done) => {
+        const res = [];
+        /* eslint-disable object-curly-newline */
+        from([[{ id: 0, token: 'elle', tag: ['PRO:per'], lemma: 'elle' },
+            { id: 1, token: 'semble', tag: ['VER'], lemma: 'sembler' },
+            { id: 2, token: 'se', tag: ['PRO:per'], lemma: 'se' },
+            { id: 3, token: 'nourrir', tag: ['VER'], lemma: 'nourrir' },
+            { id: 4,
+                token: 'essentiellement',
+                tag: ['ADV'],
+                lemma: 'essentiellement',
+            },
+            { id: 5, token: 'de', tag: ['PRE', 'ART:def']},
+        ], [
+            { id: 6, token: 'plancton', tag: ['NOM'], lemma: 'plancton' },
+            { id: 7, token: 'frais', tag: ['ADJ'], lemma: 'frais' },
+            { id: 8, token: 'et', tag: ['CON'], lemma: 'et' },
+            { id: 9, token: 'de', tag: ['PRE', 'ART:def']},
+            { id: 10, token: 'hotdog', tag: ['UNK'], lemma: 'hotdog' }]])
+        /* eslint-enable object-curly-newline */
+            .pipe(ezs('TEEFTExtractTerms', { nounTag: '', adjTag: '' }))
+            .pipe(ezs('TEEFTSumUpFrequencies'))
+            // .pipe(ezs('debug'))
+            .on('data', (chunk) => {
+                assert(typeof chunk, 'object');
+                res.push(chunk);
+            })
+            .on('end', () => {
+                assert.equal(res.length, 12);
+                assert.equal(res[5].token, 'de');
                 assert.equal(res[5].frequency, 2);
                 done();
             });
