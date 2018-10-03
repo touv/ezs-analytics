@@ -19,10 +19,12 @@ export default function TEEFTExtractTerms(data, feed) {
     }
     const nounTag = this.getParam('nounTag', 'NOM');
     const adjTag = this.getParam('adjTag', 'ADJ');
-    const keys = this.getParam('keys', { lemma: 'lemma', token: 'word', tag: 'pos' });
+    const keysParam = JSON.parse(this.getParam('keys', '{ "lemma": "lemma", "token": "word", "tag": "pos" }'));
+    const keys = Object.assign({ lemma: 'lemma', token: 'word', tag: 'pos' }, keysParam);
     const isNoun = R.curry(someBeginsWith)([nounTag]);
     const isAdj = R.curry(someBeginsWith)([adjTag]);
-    const taggedTerms = R.clone(data);
+    const taggedTerms = R.clone(data)
+        .map(term => ({ ...term, [keys.tag]: Array.isArray(term[keys.tag]) ? term[keys.tag] : [term[keys.tag]] }));
     const termFrequency = {};
     let multiterm = [];
     const termSequence = [];
@@ -32,15 +34,15 @@ export default function TEEFTExtractTerms(data, feed) {
     taggedTerms
         .forEach((taggedTerm) => {
             const tags = taggedTerm[keys.tag];
-            const norm = taggedTerm[keys.lemma];
+            const norm = taggedTerm[keys.token];
             if (state === SEARCH && (isNoun(tags) || isAdj(tags))) {
                 state = NOUN;
                 multiterm.push(norm);
-                termSequence.push(taggedTerm[keys.lemma]);
+                termSequence.push(taggedTerm[keys.token]);
                 termFrequency[norm] = (termFrequency[norm] || 0) + 1;
             } else if (state === NOUN && (isNoun(tags) || isAdj(tags))) {
                 multiterm.push(norm);
-                termSequence.push(taggedTerm[keys.lemma]);
+                termSequence.push(taggedTerm[keys.token]);
                 termFrequency[norm] = (termFrequency[norm] || 0) + 1;
             } else if (state === NOUN && !isNoun(tags) && !isAdj(tags)) {
                 state = SEARCH;
@@ -72,7 +74,7 @@ export default function TEEFTExtractTerms(data, feed) {
     // Merge taggedTerms and value (length and frequency) of words (output of
     // computeLengthFrequency)
     const mergeTagsAndFrequency = (lengthFreq, lemma) => R.merge(
-        { ...lengthFreq, word: lemma },
+        { ...lengthFreq, [keys.token]: lemma },
         R.find(taggedTerm => taggedTerm[keys.lemma] === lemma, taggedTerms),
     );
 
