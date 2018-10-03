@@ -903,9 +903,9 @@ describe('natural', () => {
                 .on('end', () => {
                     assert.equal(res.length, 10);
                     assert.equal(res[1].token, 'semble');
-                    assert.equal(res[1].tag, 'v');
+                    assert.equal(res[1].tag[0], 'v');
                     assert.equal(res[4].token, 'essentiellement');
-                    assert.equal(res[4].tag, 'adv');
+                    assert.equal(res[4].tag[0], 'adv');
                     done();
                 });
         });
@@ -923,9 +923,9 @@ describe('natural', () => {
                 .on('end', () => {
                     assert.equal(res.length, 8);
                     assert.equal(res[1].token, 'veut');
-                    assert.equal(res[1].tag, 'v');
+                    assert.equal(res[1].tag[0], 'v');
                     assert.equal(res[2].token, 'sûrement');
-                    assert.equal(res[2].tag, 'adv');
+                    assert.equal(res[2].tag[0], 'adv');
                     done();
                 });
         });

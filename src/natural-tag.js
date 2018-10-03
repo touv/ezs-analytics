@@ -10,17 +10,22 @@ const tagger = new BrillPOSTagger(lexicon, rules);
 
 let tokens;
 
+const toCommonStruct = taggedWord => ({
+    token: taggedWord.token,
+    tag: [taggedWord.tag],
+});
+
 /**
  * POS Tagger from natural
  *
  * French pos tagging using natural (and LEFFF resources)
  *
  * @example
- *  { "token": "dans",      "tag": "prep" },
-    { "token": "le",        "tag": "det"  },
-    { "token": "cadre",     "tag": "nc" },
-    { "token": "du",        "tag": "det" },
-    { "token": "programme", "tag": "nc" }
+ *  { "token": "dans",      "tag": ["prep"] },
+    { "token": "le",        "tag": ["det"]  },
+    { "token": "cadre",     "tag": ["nc"] },
+    { "token": "du",        "tag": ["det"] },
+    { "token": "programme", "tag": ["nc"] }
     },
  *
  * @export
@@ -31,7 +36,7 @@ let tokens;
 export default function TEEFTNaturalTag(data, feed) {
     if (this.isLast()) {
         const res = tagger.tag(tokens);
-        feed.write(res.taggedWords);
+        feed.write(res.taggedWords.map(toCommonStruct));
         return feed.close();
     }
     if (this.isFirst()) {
