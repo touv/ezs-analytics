@@ -491,12 +491,12 @@ describe('sum up frequencies', () => {
                 tag: ['ADV'],
                 lemma: 'essentiellement',
             },
-            { id: 5, token: 'de', tag: ['PRE', 'ART:def']},
+            { id: 5, token: 'de', tag: ['PRE', 'ART:def'] },
         ], [
             { id: 6, token: 'plancton', tag: ['NOM'], lemma: 'plancton' },
             { id: 7, token: 'frais', tag: ['ADJ'], lemma: 'frais' },
             { id: 8, token: 'et', tag: ['CON'], lemma: 'et' },
-            { id: 9, token: 'de', tag: ['PRE', 'ART:def']},
+            { id: 9, token: 'de', tag: ['PRE', 'ART:def'] },
             { id: 10, token: 'hotdog', tag: ['UNK'], lemma: 'hotdog' }]])
         /* eslint-enable object-curly-newline */
             .pipe(ezs('TEEFTExtractTerms', { nounTag: '', adjTag: '' }))
