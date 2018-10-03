@@ -9,7 +9,7 @@ export function getResource(fileName) {
 }
 
 /**
- * Filter the text in input, by removing stopwords
+ * Filter the text in input, by removing stopwords in lemma
  *
  * @export
  * @param {Stream} data

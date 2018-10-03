@@ -170,24 +170,24 @@ describe('fr-to-tag-lem', () => {
     });
 });
 
-describe('stopwords', () => {
+describe.only('stopwords', () => {
     it('should remove stopwords', (done) => {
         let res = [];
         /* eslint-disable object-curly-newline */
-        from([[{ id: 0, word: 'elle', pos: ['PRO:per'], lemma: 'elle' },
-            { id: 1, word: 'semble', pos: ['VER'], lemma: 'sembler' },
-            { id: 2, word: 'se', pos: ['PRO:per'], lemma: 'se' },
-            { id: 3, word: 'nourrir', pos: ['VER'], lemma: 'nourrir' },
+        from([[{ id: 0, token: 'elle', tag: ['PRO:per'], lemma: 'elle' },
+            { id: 1, token: 'semble', tag: ['VER'], lemma: 'sembler' },
+            { id: 2, token: 'se', tag: ['PRO:per'], lemma: 'se' },
+            { id: 3, token: 'nourrir', tag: ['VER'], lemma: 'nourrir' },
             { id: 4,
-                word: 'essentiellement',
-                pos: ['ADV'],
+                token: 'essentiellement',
+                tag: ['ADV'],
                 lemma: 'essentiellement',
             },
-            { id: 5, word: 'de', pos: ['PRE', 'ART:def'], lemma: 'de' },
-            { id: 6, word: 'plancton', pos: ['NOM'], lemma: 'plancton' },
-            { id: 7, word: 'et', pos: ['CON'], lemma: 'et' },
-            { id: 8, word: 'de', pos: ['PRE', 'ART:def'], lemma: 'de' },
-            { id: 9, word: 'hotdog', pos: ['UNK'], lemma: 'hotdog' }]])
+            { id: 5, token: 'de', tag: ['PRE', 'ART:def'], lemma: 'de' },
+            { id: 6, token: 'plancton', tag: ['NOM'], lemma: 'plancton' },
+            { id: 7, token: 'et', tag: ['CON'], lemma: 'et' },
+            { id: 8, token: 'de', tag: ['PRE', 'ART:def'], lemma: 'de' },
+            { id: 9, token: 'hotdog', tag: ['UNK'], lemma: 'hotdog' }]])
         /* eslint-enable object-curly-newline */
             .pipe(ezs('TEEFTStopWords'))
             // .pipe(ezs('debug'))
