@@ -170,7 +170,7 @@ describe('fr-to-tag-lem', () => {
     });
 });
 
-describe.only('stopwords', () => {
+describe('stopwords', () => {
     it('should remove stopwords', (done) => {
         let res = [];
         /* eslint-disable object-curly-newline */
@@ -206,18 +206,18 @@ describe('filter tags', () => {
     it('should keep only adjectives and names, by default', (done) => {
         let res = [];
         /* eslint-disable object-curly-newline */
-        from([[{ id: 0, word: 'elle', pos: ['PRO:per'], lemma: 'elle' },
-            { id: 1, word: 'semble', pos: ['VER'], lemma: 'sembler' },
-            { id: 2, word: 'se', pos: ['PRO:per'], lemma: 'se' },
-            { id: 3, word: 'nourrir', pos: ['VER'], lemma: 'nourrir' },
+        from([[{ id: 0, token: 'elle', tag: ['PRO:per'], lemma: 'elle' },
+            { id: 1, token: 'semble', tag: ['VER'], lemma: 'sembler' },
+            { id: 2, token: 'se', tag: ['PRO:per'], lemma: 'se' },
+            { id: 3, token: 'nourrir', tag: ['VER'], lemma: 'nourrir' },
             { id: 4,
-                word: 'essentiellement',
-                pos: ['ADV'],
+                token: 'essentiellement',
+                tag: ['ADV'],
                 lemma: 'essentiellement',
             },
-            { id: 5, word: 'de', pos: ['PRE', 'ART:def'], lemma: 'de' },
-            { id: 6, word: 'plancton', pos: ['NOM'], lemma: 'plancton' },
-            { id: 7, word: 'frais', pos: ['ADJ'], lemma: 'frais' }]])
+            { id: 5, token: 'de', tag: ['PRE', 'ART:def'], lemma: 'de' },
+            { id: 6, token: 'plancton', tag: ['NOM'], lemma: 'plancton' },
+            { id: 7, token: 'frais', tag: ['ADJ'], lemma: 'frais' }]])
         /* eslint-enable object-curly-newline */
             .pipe(ezs('TEEFTFilterTags'))
             // .pipe(ezs('debug'))
@@ -227,8 +227,8 @@ describe('filter tags', () => {
             })
             .on('end', () => {
                 assert.equal(2, res.length);
-                assert.equal('NOM', res[0].pos[0]);
-                assert.equal('ADJ', res[1].pos[0]);
+                assert.equal('NOM', res[0].tag[0]);
+                assert.equal('ADJ', res[1].tag[0]);
                 done();
             });
     });
@@ -236,18 +236,18 @@ describe('filter tags', () => {
     it('should keep only passed tag', (done) => {
         let res = [];
         /* eslint-disable object-curly-newline */
-        from([[{ id: 0, word: 'elle', pos: ['PRO:per'], lemma: 'elle' },
-            { id: 1, word: 'semble', pos: ['VER'], lemma: 'sembler' },
-            { id: 2, word: 'se', pos: ['PRO:per'], lemma: 'se' },
-            { id: 3, word: 'nourrir', pos: ['VER'], lemma: 'nourrir' },
+        from([[{ id: 0, token: 'elle', tag: ['PRO:per'], lemma: 'elle' },
+            { id: 1, token: 'semble', tag: ['VER'], lemma: 'sembler' },
+            { id: 2, token: 'se', tag: ['PRO:per'], lemma: 'se' },
+            { id: 3, token: 'nourrir', tag: ['VER'], lemma: 'nourrir' },
             { id: 4,
-                word: 'essentiellement',
-                pos: ['ADV'],
+                token: 'essentiellement',
+                tag: ['ADV'],
                 lemma: 'essentiellement',
             },
-            { id: 5, word: 'de', pos: ['PRE', 'ART:def'], lemma: 'de' },
-            { id: 6, word: 'plancton', pos: ['NOM'], lemma: 'plancton' },
-            { id: 7, word: 'frais', pos: ['ADJ'], lemma: 'frais' }]])
+            { id: 5, token: 'de', tag: ['PRE', 'ART:def'], lemma: 'de' },
+            { id: 6, token: 'plancton', tag: ['NOM'], lemma: 'plancton' },
+            { id: 7, token: 'frais', tag: ['ADJ'], lemma: 'frais' }]])
         /* eslint-enable object-curly-newline */
             .pipe(ezs('TEEFTFilterTags', { tags: ['VER'] }))
             // .pipe(ezs('debug'))
@@ -257,7 +257,7 @@ describe('filter tags', () => {
             })
             .on('end', () => {
                 assert.equal(2, res.length);
-                assert.equal('VER', res[0].pos[0]);
+                assert.equal('VER', res[0].tag[0]);
                 done();
             });
     });
@@ -265,18 +265,18 @@ describe('filter tags', () => {
     it('should keep only passed tag (based on the beginning)', (done) => {
         let res = [];
         /* eslint-disable object-curly-newline */
-        from([[{ id: 0, word: 'elle', pos: ['PRO:per'], lemma: 'elle' },
-            { id: 1, word: 'semble', pos: ['VER'], lemma: 'sembler' },
-            { id: 2, word: 'se', pos: ['PRO:per'], lemma: 'se' },
-            { id: 3, word: 'nourrir', pos: ['VER'], lemma: 'nourrir' },
+        from([[{ id: 0, token: 'elle', tag: ['PRO:per'], lemma: 'elle' },
+            { id: 1, token: 'semble', tag: ['VER'], lemma: 'sembler' },
+            { id: 2, token: 'se', tag: ['PRO:per'], lemma: 'se' },
+            { id: 3, token: 'nourrir', tag: ['VER'], lemma: 'nourrir' },
             { id: 4,
-                word: 'essentiellement',
-                pos: ['ADV'],
+                token: 'essentiellement',
+                tag: ['ADV'],
                 lemma: 'essentiellement',
             },
-            { id: 5, word: 'de', pos: ['PRE', 'ART:def'], lemma: 'de' },
-            { id: 6, word: 'plancton', pos: ['NOM'], lemma: 'plancton' },
-            { id: 7, word: 'frais', pos: ['ADJ'], lemma: 'frais' }]])
+            { id: 5, token: 'de', tag: ['PRE', 'ART:def'], lemma: 'de' },
+            { id: 6, token: 'plancton', tag: ['NOM'], lemma: 'plancton' },
+            { id: 7, token: 'frais', tag: ['ADJ'], lemma: 'frais' }]])
         /* eslint-enable object-curly-newline */
             .pipe(ezs('TEEFTFilterTags', { tags: ['PRO'] }))
             // .pipe(ezs('debug'))
@@ -286,7 +286,7 @@ describe('filter tags', () => {
             })
             .on('end', () => {
                 assert.equal(2, res.length);
-                assert.equal('PRO:per', res[0].pos[0]);
+                assert.equal('PRO:per', res[0].tag[0]);
                 done();
             });
     });
@@ -294,18 +294,18 @@ describe('filter tags', () => {
     it('should keep only passed tag, even if not the first', (done) => {
         let res = [];
         /* eslint-disable object-curly-newline */
-        from([[{ id: 0, word: 'elle', pos: ['PRO:per'], lemma: 'elle' },
-            { id: 1, word: 'semble', pos: ['VER'], lemma: 'sembler' },
-            { id: 2, word: 'se', pos: ['PRO:per'], lemma: 'se' },
-            { id: 3, word: 'nourrir', pos: ['VER'], lemma: 'nourrir' },
+        from([[{ id: 0, token: 'elle', tag: ['PRO:per'], lemma: 'elle' },
+            { id: 1, token: 'semble', tag: ['VER'], lemma: 'sembler' },
+            { id: 2, token: 'se', tag: ['PRO:per'], lemma: 'se' },
+            { id: 3, token: 'nourrir', tag: ['VER'], lemma: 'nourrir' },
             { id: 4,
-                word: 'essentiellement',
-                pos: ['ADV'],
+                token: 'essentiellement',
+                tag: ['ADV'],
                 lemma: 'essentiellement',
             },
-            { id: 5, word: 'de', pos: ['PRE', 'ART:def'], lemma: 'de' },
-            { id: 6, word: 'plancton', pos: ['NOM'], lemma: 'plancton' },
-            { id: 7, word: 'frais', pos: ['ADJ'], lemma: 'frais' }]])
+            { id: 5, token: 'de', tag: ['PRE', 'ART:def'], lemma: 'de' },
+            { id: 6, token: 'plancton', tag: ['NOM'], lemma: 'plancton' },
+            { id: 7, token: 'frais', tag: ['ADJ'], lemma: 'frais' }]])
         /* eslint-enable object-curly-newline */
             .pipe(ezs('TEEFTFilterTags', { tags: ['ART'] }))
             // .pipe(ezs('debug'))
@@ -315,7 +315,7 @@ describe('filter tags', () => {
             })
             .on('end', () => {
                 assert.equal(1, res.length);
-                assert.equal('ART:def', res[0].pos[1]);
+                assert.equal('ART:def', res[0].tag[1]);
                 done();
             });
     });
