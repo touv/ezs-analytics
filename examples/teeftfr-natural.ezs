@@ -36,15 +36,15 @@ tags = adj
 ; text = stop-words
 ; [profile]
 [TEEFTSumUpFrequencies]
-[debug]
-text = sum
+; [debug]
+; text = sum
 ; [profile]
-; [TEEFTSpecificity]
-; ; [debug]
-; ; text = spec
+[TEEFTSpecificity]
+; [debug]
+; text = spec
 ; [profile]
-; [TEEFTFilterMultiFreq]
+[TEEFTFilterMultiFreq]
 ; [profile]
-; [JSONString]
-; wrap = false
-; indent = true
+[JSONString]
+wrap = false
+indent = true
