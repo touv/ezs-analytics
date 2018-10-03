@@ -73,9 +73,9 @@ export default function TEEFTExtractTerms(data, feed) {
 
     // Merge taggedTerms and value (length and frequency) of words (output of
     // computeLengthFrequency)
-    const mergeTagsAndFrequency = (lengthFreq, lemma) => R.merge(
-        { ...lengthFreq, [keys.token]: lemma },
-        R.find(taggedTerm => taggedTerm[keys.lemma] === lemma, taggedTerms),
+    const mergeTagsAndFrequency = (lengthFreq, token) => R.merge(
+        { ...lengthFreq, [keys.token]: token },
+        R.find(taggedTerm => taggedTerm[keys.token] === token, taggedTerms),
     );
 
     // Add tags to terms
