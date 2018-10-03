@@ -10,21 +10,21 @@
 plugin = basics
 plugin = teeftfr
 
-[profile]
+; [profile]
 [TEEFTTokenize]
 ; [debug]
 ; text = token
-[profile]
+; [profile]
 [TEEFTNaturalTag]
-[debug]
-text = natural
-[profile]
-; [TEEFTExtractTerms]
-; nounTag = nc
-; adjTag = adj
-; keys = { "token": "token", "tag": "tag" }
 ; [debug]
-; text = multiterms
+; text = natural
+; [profile]
+[TEEFTExtractTerms]
+nounTag = nc
+adjTag = adj
+keys = { "token": "token", "tag": "tag" }
+[debug]
+text = multiterms
 ; [profile]
 ; [TEEFTFilterTags]
 ; ; [debug]
@@ -44,6 +44,6 @@ text = natural
 ; [profile]
 ; [TEEFTFilterMultiFreq]
 ; [profile]
-[JSONString]
-wrap = false
-indent = true
+; [JSONString]
+; wrap = false
+; indent = true
