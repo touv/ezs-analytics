@@ -9,7 +9,7 @@ export function getResource(fileName) {
 }
 
 /**
- * Filter the text in input, by removing stopwords in lemma
+ * Filter the text in input, by removing stopwords in token
  *
  * @export
  * @param {Stream} data
@@ -24,7 +24,7 @@ export default function TEEFTStopWords(data, feed) {
     const stopWordsFile = this.getParam('stopwords', 'StopwFrench');
     const stopWords = getResource(stopWordsFile);
     const res = data
-        .filter(w => !stopWords.includes(w.lemma));
+        .filter(w => !stopWords.includes(w.token));
     feed.write(res);
     feed.end();
 }

@@ -22,17 +22,18 @@ plugin = teeftfr
 [TEEFTExtractTerms]
 nounTag = nc
 adjTag = adj
-keys = { "token": "token", "tag": "tag" }
+; [debug]
+; text = multiterms
+; [profile]
+[TEEFTFilterTags]
+tags = nc
+tags = adj
+; [debug]
+; text = filter-tags
+; [profile]
+[TEEFTStopWords]
 [debug]
-text = multiterms
-; [profile]
-; [TEEFTFilterTags]
-; ; [debug]
-; ; text = filter-tags
-; [profile]
-; [TEEFTStopWords]
-; ; [debug]
-; ; text = stop-words
+text = stop-words
 ; [profile]
 ; [TEEFTSumUpFrequencies]
 ; ; [debug]
