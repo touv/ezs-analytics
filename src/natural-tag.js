@@ -27,6 +27,7 @@ export default function TEEFTNaturalTag(data, feed) {
     if (this.isFirst()) {
         tokens = [];
     }
-    tokens.push(data);
+    const tokensArray = Array.isArray(data) ? data : [data];
+    tokens = tokens.concat(tokensArray);
     feed.end();
 }
