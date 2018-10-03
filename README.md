@@ -28,18 +28,21 @@ process.stdin
 -   [TEEFTFrToTagLem](#teeftfrtotaglem)
     -   [Parameters](#parameters-2)
     -   [Examples](#examples)
--   [profile](#profile)
+-   [TEEFTNaturalTag](#teeftnaturaltag)
     -   [Parameters](#parameters-3)
--   [TEEFTSpecificity](#teeftspecificity)
+    -   [Examples](#examples-1)
+-   [profile](#profile)
     -   [Parameters](#parameters-4)
--   [TEEFTStopWords](#teeftstopwords)
+-   [TEEFTSpecificity](#teeftspecificity)
     -   [Parameters](#parameters-5)
--   [TEEFTSumUpFrequencies](#teeftsumupfrequencies)
+-   [TEEFTStopWords](#teeftstopwords)
     -   [Parameters](#parameters-6)
--   [TEEFTExtractTerms](#teeftextractterms)
+-   [TEEFTSumUpFrequencies](#teeftsumupfrequencies)
     -   [Parameters](#parameters-7)
--   [TEEFTTokenize](#teefttokenize)
+-   [TEEFTExtractTerms](#teeftextractterms)
     -   [Parameters](#parameters-8)
+-   [TEEFTTokenize](#teefttokenize)
+    -   [Parameters](#parameters-9)
 
 ### TEEFTFilterMultiFreq
 
@@ -94,6 +97,28 @@ from(['Elle semble se nourrir essentiellement de plancton, et de hotdog.'])
 { id: 7, word: 'et', pos: [ 'CON' ] },
 { id: 8, word: 'de', pos: [ 'PRE', 'NOM', 'ART:def' ] },
 { id: 9, word: 'hotdog', pos: [ 'UNK' ] } ]
+```
+
+### TEEFTNaturalTag
+
+POS Tagger from natural
+
+French pos tagging using natural (and LEFFF resources)
+
+#### Parameters
+
+-   `data` **[Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;[String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)>** Array of tokens (string)
+-   `feed` **[Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)>** Array of tokens (object, with `token` and `tag`)
+
+#### Examples
+
+```javascript
+{ "token": "dans",      "tag": "prep" },
+{ "token": "le",        "tag": "det"  },
+{ "token": "cadre",     "tag": "nc" },
+{ "token": "du",        "tag": "det" },
+{ "token": "programme", "tag": "nc" }
+},
 ```
 
 ### profile
@@ -159,6 +184,7 @@ and computes statistics (frequency, _etc_.).
 -   `feed` **[Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)>** 
 -   `nounTag` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** noun tag (optional, default `'NOM'`)
 -   `adjTag` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** adjective tag (optional, default `'ADJ'`)
+-   `keys` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**  (optional, default `{lemma:'lemma',token:'word',tag:'pos'}`)
 
 ### TEEFTTokenize
 

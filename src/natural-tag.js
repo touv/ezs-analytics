@@ -13,9 +13,19 @@ let tokens;
 /**
  * POS Tagger from natural
  *
+ * French pos tagging using natural (and LEFFF resources)
+ *
+ * @example
+ *  { "token": "dans",      "tag": "prep" },
+    { "token": "le",        "tag": "det"  },
+    { "token": "cadre",     "tag": "nc" },
+    { "token": "du",        "tag": "det" },
+    { "token": "programme", "tag": "nc" }
+    },
+ *
  * @export
- * @param {*} data
- * @param {*} feed
+ * @param {Array<String>} data  Array of tokens (string)
+ * @param {Array<Object>} feed  Array of tokens (object, with `token` and `tag`)
  * @returns
  */
 export default function TEEFTNaturalTag(data, feed) {
