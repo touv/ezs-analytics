@@ -123,8 +123,8 @@ describe('fr-to-tag-lem', () => {
                 })
                 .on('end', () => {
                     assert.equal(10, res.length);
-                    assert.equal('semble', res[1].word);
-                    assert.equal('VER', res[1].pos[0]);
+                    assert.equal('semble', res[1].token);
+                    assert.equal('VER', res[1].tag[0]);
                     done();
                 });
         });
@@ -142,7 +142,7 @@ describe('fr-to-tag-lem', () => {
                 })
                 .on('end', () => {
                     assert.equal(10, res.length);
-                    assert.equal('semble', res[1].word);
+                    assert.equal('semble', res[1].token);
                     assert.equal('sembler', res[1].lemma);
                     done();
                 });
@@ -161,9 +161,9 @@ describe('fr-to-tag-lem', () => {
                 })
                 .on('end', () => {
                     assert.equal(10, res.length);
-                    assert.equal('semble', res[1].word);
+                    assert.equal('semble', res[1].token);
                     assert.equal('sembler', res[1].lemma);
-                    assert.equal('VER', res[1].pos[0]);
+                    assert.equal('VER', res[1].tag[0]);
                     done();
                 });
         });
