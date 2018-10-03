@@ -11,7 +11,6 @@ import { someBeginsWith } from './filter-tags';
  * @param {Array<string>}   feed
  * @param {string}  [nounTag='NOM']  noun tag
  * @param {string}  [adjTag='ADJ']   adjective tag
- * @param {Object}  [keys={ lemma: 'lemma', token: 'word', tag: 'pos' }]
  */
 export default function TEEFTExtractTerms(data, feed) {
     if (this.isLast()) {
@@ -19,12 +18,10 @@ export default function TEEFTExtractTerms(data, feed) {
     }
     const nounTag = this.getParam('nounTag', 'NOM');
     const adjTag = this.getParam('adjTag', 'ADJ');
-    const keysParam = JSON.parse(this.getParam('keys', '{ "lemma": "lemma", "token": "word", "tag": "pos" }'));
-    const keys = Object.assign({ lemma: 'lemma', token: 'word', tag: 'pos' }, keysParam);
     const isNoun = R.curry(someBeginsWith)([nounTag]);
     const isAdj = R.curry(someBeginsWith)([adjTag]);
     const taggedTerms = R.clone(data)
-        .map(term => ({ ...term, [keys.tag]: Array.isArray(term[keys.tag]) ? term[keys.tag] : [term[keys.tag]] }));
+        .map(term => ({ ...term, tag: Array.isArray(term.tag) ? term.tag : [term.tag] }));
     const termFrequency = {};
     let multiterm = [];
     const termSequence = [];
@@ -33,16 +30,16 @@ export default function TEEFTExtractTerms(data, feed) {
     let state = SEARCH;
     taggedTerms
         .forEach((taggedTerm) => {
-            const tags = taggedTerm[keys.tag];
-            const norm = taggedTerm[keys.token];
+            const tags = taggedTerm.tag;
+            const norm = taggedTerm.token;
             if (state === SEARCH && (isNoun(tags) || isAdj(tags))) {
                 state = NOUN;
                 multiterm.push(norm);
-                termSequence.push(taggedTerm[keys.token]);
+                termSequence.push(taggedTerm.token);
                 termFrequency[norm] = (termFrequency[norm] || 0) + 1;
             } else if (state === NOUN && (isNoun(tags) || isAdj(tags))) {
                 multiterm.push(norm);
-                termSequence.push(taggedTerm[keys.token]);
+                termSequence.push(taggedTerm.token);
                 termFrequency[norm] = (termFrequency[norm] || 0) + 1;
             } else if (state === NOUN && !isNoun(tags) && !isAdj(tags)) {
                 state = SEARCH;
@@ -74,8 +71,8 @@ export default function TEEFTExtractTerms(data, feed) {
     // Merge taggedTerms and value (length and frequency) of words (output of
     // computeLengthFrequency)
     const mergeTagsAndFrequency = (lengthFreq, token) => R.merge(
-        { ...lengthFreq, [keys.token]: token },
-        R.find(taggedTerm => taggedTerm[keys.token] === token, taggedTerms),
+        { ...lengthFreq, token },
+        R.find(taggedTerm => taggedTerm.token === token, taggedTerms),
     );
 
     // Add tags to terms
