@@ -7,10 +7,11 @@ import { someBeginsWith } from './filter-tags';
  *
  * @see https://github.com/istex/sisyphe/blob/master/src/worker/teeft/lib/termextractor.js
  * @export
- * @param {Stream} data tagged terms
- * @param {Array<string>} feed
- * @param {string} [nounTag='NOM']  noun tag
- * @param {string} [adjTag='ADJ']   adjective tag
+ * @param {Stream}  data tagged terms
+ * @param {Array<string>}   feed
+ * @param {string}  [nounTag='NOM']  noun tag
+ * @param {string}  [adjTag='ADJ']   adjective tag
+ * @param {Object}  [keys={ lemma: 'lemma', token: 'word', tag: 'pos' }]
  */
 export default function TEEFTExtractTerms(data, feed) {
     if (this.isLast()) {
@@ -18,6 +19,7 @@ export default function TEEFTExtractTerms(data, feed) {
     }
     const nounTag = this.getParam('nounTag', 'NOM');
     const adjTag = this.getParam('adjTag', 'ADJ');
+    const keys = this.getParam('keys', { lemma: 'lemma', token: 'word', tag: 'pos' });
     const isNoun = R.curry(someBeginsWith)([nounTag]);
     const isAdj = R.curry(someBeginsWith)([adjTag]);
     const taggedTerms = R.clone(data);
@@ -29,16 +31,16 @@ export default function TEEFTExtractTerms(data, feed) {
     let state = SEARCH;
     taggedTerms
         .forEach((taggedTerm) => {
-            const tags = taggedTerm.pos;
-            const norm = taggedTerm.lemma;
+            const tags = taggedTerm[keys.tag];
+            const norm = taggedTerm[keys.lemma];
             if (state === SEARCH && (isNoun(tags) || isAdj(tags))) {
                 state = NOUN;
                 multiterm.push(norm);
-                termSequence.push(taggedTerm.lemma);
+                termSequence.push(taggedTerm[keys.lemma]);
                 termFrequency[norm] = (termFrequency[norm] || 0) + 1;
             } else if (state === NOUN && (isNoun(tags) || isAdj(tags))) {
                 multiterm.push(norm);
-                termSequence.push(taggedTerm.lemma);
+                termSequence.push(taggedTerm[keys.lemma]);
                 termFrequency[norm] = (termFrequency[norm] || 0) + 1;
             } else if (state === NOUN && !isNoun(tags) && !isAdj(tags)) {
                 state = SEARCH;
@@ -71,7 +73,7 @@ export default function TEEFTExtractTerms(data, feed) {
     // computeLengthFrequency)
     const mergeTagsAndFrequency = (lengthFreq, lemma) => R.merge(
         { ...lengthFreq, word: lemma },
-        R.find(taggedTerm => taggedTerm.lemma === lemma, taggedTerms),
+        R.find(taggedTerm => taggedTerm[keys.lemma] === lemma, taggedTerms),
     );
 
     // Add tags to terms

@@ -747,7 +747,7 @@ describe('filter multiterms and frequent monoterms', () => {
     });
 });
 
-describe.only('natural', () => {
+describe('natural', () => {
     describe('tag', () => {
         it('should correctly tag a sentence in French', (done) => {
             let res = [];
