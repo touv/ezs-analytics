@@ -14,10 +14,10 @@ describe('tokenize', () => {
                 res = res.concat(chunk);
             })
             .on('end', () => {
-                assert.equal(3, res.length);
-                assert.equal('aha', res[0]);
-                assert.equal('blabla', res[1]);
-                assert.equal('hehe', res[2]);
+                assert.equal(res.length, 3);
+                assert.equal(res[0], 'aha');
+                assert.equal(res[1], 'blabla');
+                assert.equal(res[2], 'hehe');
                 done();
             });
     });
@@ -31,10 +31,10 @@ describe('tokenize', () => {
                 res = res.concat(chunk);
             })
             .on('end', () => {
-                assert.equal(3, res.length);
-                assert.equal('ça', res[0]);
-                assert.equal('va', res[1]);
-                assert.equal('héhé', res[2]);
+                assert.equal(res.length, 3);
+                assert.equal(res[0], 'ça');
+                assert.equal(res[1], 'va');
+                assert.equal(res[2], 'héhé');
                 done();
             });
     });
@@ -48,10 +48,10 @@ describe('tokenize', () => {
                 res = res.concat(chunk);
             })
             .on('end', () => {
-                assert.equal(3, res.length);
-                assert.equal('ça', res[0]);
-                assert.equal('va', res[1]);
-                assert.equal('héhé', res[2]);
+                assert.equal(res.length, 3);
+                assert.equal(res[0], 'ça');
+                assert.equal(res[1], 'va');
+                assert.equal(res[2], 'héhé');
                 done();
             });
     });
@@ -68,10 +68,10 @@ describe('fr-to-tag-lem', () => {
                     res = res.concat(chunk);
                 })
                 .on('end', () => {
-                    assert.equal(3, res.length);
-                    assert.equal('aha', res[0]);
-                    assert.equal('blabla', res[1]);
-                    assert.equal('hehe', res[2]);
+                    assert.equal(res.length, 3);
+                    assert.equal(res[0], 'aha');
+                    assert.equal(res[1], 'blabla');
+                    assert.equal(res[2], 'hehe');
                     done();
                 });
         });
@@ -85,10 +85,10 @@ describe('fr-to-tag-lem', () => {
                     res = res.concat(chunk);
                 })
                 .on('end', () => {
-                    assert.equal(3, res.length);
-                    assert.equal('ça', res[0]);
-                    assert.equal('va', res[1]);
-                    assert.equal('héhé', res[2]);
+                    assert.equal(res.length, 3);
+                    assert.equal(res[0], 'ça');
+                    assert.equal(res[1], 'va');
+                    assert.equal(res[2], 'héhé');
                     done();
                 });
         });
@@ -102,10 +102,10 @@ describe('fr-to-tag-lem', () => {
                     res = res.concat(chunk);
                 })
                 .on('end', () => {
-                    assert.equal(3, res.length);
-                    assert.equal('ça', res[0]);
-                    assert.equal('va', res[1]);
-                    assert.equal('héhé', res[2]);
+                    assert.equal(res.length, 3);
+                    assert.equal(res[0], 'ça');
+                    assert.equal(res[1], 'va');
+                    assert.equal(res[2], 'héhé');
                     done();
                 });
         });
@@ -122,9 +122,9 @@ describe('fr-to-tag-lem', () => {
                     res = res.concat(chunk);
                 })
                 .on('end', () => {
-                    assert.equal(10, res.length);
-                    assert.equal('semble', res[1].token);
-                    assert.equal('VER', res[1].tag[0]);
+                    assert.equal(res.length, 10);
+                    assert.equal(res[1].token, 'semble');
+                    assert.equal(res[1].tag[0], 'VER');
                     done();
                 });
         });
@@ -141,9 +141,9 @@ describe('fr-to-tag-lem', () => {
                     res = res.concat(chunk);
                 })
                 .on('end', () => {
-                    assert.equal(10, res.length);
-                    assert.equal('semble', res[1].token);
-                    assert.equal('sembler', res[1].lemma);
+                    assert.equal(res.length, 10);
+                    assert.equal(res[1].token, 'semble');
+                    assert.equal(res[1].lemma, 'sembler');
                     done();
                 });
         });
@@ -160,10 +160,10 @@ describe('fr-to-tag-lem', () => {
                     res = res.concat(chunk);
                 })
                 .on('end', () => {
-                    assert.equal(10, res.length);
-                    assert.equal('semble', res[1].token);
-                    assert.equal('sembler', res[1].lemma);
-                    assert.equal('VER', res[1].tag[0]);
+                    assert.equal(res.length, 10);
+                    assert.equal(res[1].token, 'semble');
+                    assert.equal(res[1].lemma, 'sembler');
+                    assert.equal(res[1].tag[0], 'VER');
                     done();
                 });
         });
@@ -196,7 +196,7 @@ describe('stopwords', () => {
                 res = res.concat(chunk);
             })
             .on('end', () => {
-                assert.equal(5, res.length);
+                assert.equal(res.length, 5);
                 done();
             });
     });
@@ -226,9 +226,9 @@ describe('filter tags', () => {
                 res = res.concat(chunk);
             })
             .on('end', () => {
-                assert.equal(2, res.length);
-                assert.equal('NOM', res[0].tag[0]);
-                assert.equal('ADJ', res[1].tag[0]);
+                assert.equal(res.length, 2);
+                assert.equal(res[0].tag[0], 'NOM');
+                assert.equal(res[1].tag[0], 'ADJ');
                 done();
             });
     });
@@ -256,8 +256,8 @@ describe('filter tags', () => {
                 res = res.concat(chunk);
             })
             .on('end', () => {
-                assert.equal(2, res.length);
-                assert.equal('VER', res[0].tag[0]);
+                assert.equal(res.length, 2);
+                assert.equal(res[0].tag[0], 'VER');
                 done();
             });
     });
@@ -285,8 +285,8 @@ describe('filter tags', () => {
                 res = res.concat(chunk);
             })
             .on('end', () => {
-                assert.equal(2, res.length);
-                assert.equal('PRO:per', res[0].tag[0]);
+                assert.equal(res.length, 2);
+                assert.equal(res[0].tag[0], 'PRO:per');
                 done();
             });
     });
@@ -314,8 +314,8 @@ describe('filter tags', () => {
                 res = res.concat(chunk);
             })
             .on('end', () => {
-                assert.equal(1, res.length);
-                assert.equal('ART:def', res[0].tag[1]);
+                assert.equal(res.length, 1);
+                assert.equal(res[0].tag[1], 'ART:def');
                 done();
             });
     });
@@ -348,22 +348,22 @@ describe('extract terms', () => {
                 res.push(chunk);
             })
             .on('end', () => {
-                assert.equal(3, res.length);
-                assert.equal('plancton', res[0].token);
-                assert.equal('frais', res[1].token);
-                assert.equal('plancton frais', res[2].token);
-                assert.equal('plancton', res[0].lemma);
-                assert.equal('frais', res[1].lemma);
-                assert.strictEqual(undefined, res[2].lemma);
-                assert.equal('NOM', res[0].tag[0]);
-                assert.equal('ADJ', res[1].tag[0]);
-                assert.strictEqual(undefined, res[2].tag);
-                assert.equal(1, res[0].frequency);
-                assert.equal(1, res[1].frequency);
-                assert.equal(1, res[2].frequency);
-                assert.equal(1, res[0].length);
-                assert.equal(1, res[1].length);
-                assert.equal(2, res[2].length);
+                assert.equal(res.length, 3);
+                assert.equal(res[0].token, 'plancton');
+                assert.equal(res[1].token, 'frais');
+                assert.equal(res[2].token, 'plancton frais');
+                assert.equal(res[0].lemma, 'plancton');
+                assert.equal(res[1].lemma, 'frais');
+                assert.strictEqual(res[2].lemma, undefined);
+                assert.equal(res[0].tag[0], 'NOM');
+                assert.equal(res[1].tag[0], 'ADJ');
+                assert.strictEqual(res[2].tag, undefined);
+                assert.equal(res[0].frequency, 1);
+                assert.equal(res[1].frequency, 1);
+                assert.equal(res[2].frequency, 1);
+                assert.equal(res[0].length, 1);
+                assert.equal(res[1].length, 1);
+                assert.equal(res[2].length, 2);
                 done();
             });
     });
@@ -394,14 +394,14 @@ describe('extract terms', () => {
                 res.push(chunk);
             })
             .on('end', () => {
-                assert.equal(11, res.length);
-                assert.equal('elle', res[0].token);
-                assert.equal('elle', res[0].lemma);
-                assert.equal('PRO:per', res[0].tag[0]);
-                assert.equal(1, res[0].frequency);
-                assert.equal(2, res[5].frequency);
-                assert.equal(11, res[10].length);
-                assert.strictEqual(1, res[1].frequency); // no undefined
+                assert.equal(res.length, 11);
+                assert.equal(res[0].token, 'elle');
+                assert.equal(res[0].lemma, 'elle');
+                assert.equal(res[0].tag[0], 'PRO:per');
+                assert.equal(res[0].frequency, 1);
+                assert.equal(res[5].frequency, 2);
+                assert.equal(res[10].length, 11);
+                assert.strictEqual(res[1].frequency, 1); // no undefined
                 done();
             });
     });
@@ -433,11 +433,11 @@ describe('extract terms', () => {
                 res.push(chunk);
             })
             .on('end', () => {
-                assert.equal(13, res.length);
-                assert.equal('de', res[5].lemma);
-                assert.equal('de', res[10].lemma);
-                assert.equal(1, res[5].frequency);
-                assert.equal(1, res[10].frequency);
+                assert.equal(res.length, 13);
+                assert.equal(res[5].lemma, 'de');
+                assert.equal(res[10].lemma, 'de');
+                assert.equal(res[5].frequency, 1);
+                assert.equal(res[10].frequency, 1);
                 done();
             });
     });
@@ -472,9 +472,9 @@ describe('sum up frequencies', () => {
                 res.push(chunk);
             })
             .on('end', () => {
-                assert.equal(11, res.length);
-                assert.equal('de', res[5].lemma);
-                assert.equal(2, res[5].frequency);
+                assert.equal(res.length, 11);
+                assert.equal(res[5].lemma, 'de');
+                assert.equal(res[5].frequency, 2);
                 done();
             });
     });
@@ -504,10 +504,10 @@ describe('compute specificity', () => {
                 res = res.concat(chunk);
             })
             .on('end', () => {
-                assert.equal(10, res.length);
-                assert.equal('elle', res[0].lemma);
-                assert.equal(8, res[0].frequency);
-                assert.equal(1, res[0].specificity);
+                assert.equal(res.length, 10);
+                assert.equal(res[0].lemma, 'elle');
+                assert.equal(res[0].frequency, 8);
+                assert.equal(res[0].specificity, 1);
                 done();
             });
     });
@@ -589,10 +589,10 @@ describe('compute specificity', () => {
                 res = res.concat(chunk);
             })
             .on('end', () => {
-                assert.equal(10, res.length);
-                assert.equal(1, res.find(t => t.token === 'elle').specificity);
-                assert.equal(0.25, res.find(t => t.token === 'de').specificity);
-                assert.equal(0.125, res.find(t => t.token === 'semble').specificity);
+                assert.equal(res.length, 10);
+                assert.equal(res.find(t => t.token === 'elle').specificity, 1);
+                assert.equal(res.find(t => t.token === 'de').specificity, 0.25);
+                assert.equal(res.find(t => t.token === 'semble').specificity, 0.125);
                 done();
             });
     });
@@ -621,10 +621,10 @@ describe('compute specificity', () => {
                 res = res.concat(chunk);
             })
             .on('end', () => {
-                assert.equal(10, res.length);
-                assert.equal(1, res.find(t => t.token === 'elle').specificity);
-                assert.equal(0.25, res.find(t => t.token === 'de').specificity);
-                assert.equal(0.125, res.find(t => t.token === 'semble').specificity);
+                assert.equal(res.length, 10);
+                assert.equal(res.find(t => t.token === 'elle').specificity, 1);
+                assert.equal(res.find(t => t.token === 'de').specificity, 0.25);
+                assert.equal(res.find(t => t.token === 'semble').specificity, 0.125);
                 done();
             });
     });
@@ -646,14 +646,14 @@ describe('compute specificity', () => {
                 res = res.concat(chunk);
             })
             .on('end', () => {
-                assert.equal(2, res.length);
-                assert.equal('logiciel', res[0].lemma);
-                assert.equal(3, res[0].frequency);
-                assert.equal(1, res[0].specificity);
-                assert.equal('logiciel content', res[1].token);
-                assert.equal(1, res[1].frequency);
-                assert.equal(2, res[1].length);
-                assert.equal(1 / 3, res[1].specificity);
+                assert.equal(res.length, 2);
+                assert.equal(res[0].lemma, 'logiciel');
+                assert.equal(res[0].frequency, 3);
+                assert.equal(res[0].specificity, 1);
+                assert.equal(res[1].token, 'logiciel content');
+                assert.equal(res[1].frequency, 1);
+                assert.equal(res[1].length, 2);
+                assert.equal(res[1].specificity, 1 / 3);
                 done();
             });
     });
@@ -708,9 +708,9 @@ describe('filter multiterms and frequent monoterms', () => {
                 res = res.concat(chunk);
             })
             .on('end', () => {
-                assert.equal(1, res.length);
-                assert.equal('elle', res[0].lemma);
-                assert.equal(8, res[0].frequency);
+                assert.equal(res.length, 1);
+                assert.equal(res[0].lemma, 'elle');
+                assert.equal(res[0].frequency, 8);
                 done();
             });
     });
@@ -740,9 +740,9 @@ describe('filter multiterms and frequent monoterms', () => {
                 res = res.concat(chunk);
             })
             .on('end', () => {
-                assert.equal(2, res.length);
-                assert.equal('elle sembler se nourrir essentiellement de', res[0].token);
-                assert.equal('plancton frais et de hotdog', res[1].token);
+                assert.equal(res.length, 2);
+                assert.equal(res[0].token, 'elle sembler se nourrir essentiellement de');
+                assert.equal(res[1].token, 'plancton frais et de hotdog');
                 done();
             });
     });
