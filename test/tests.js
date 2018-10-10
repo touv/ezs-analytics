@@ -825,4 +825,43 @@ describe('natural', () => {
                 });
         });
     });
+
+    describe('sentence-tokenize', () => {
+        it('should correctly segment sentences', (done) => {
+            let res = [];
+            from(['Je ne suis pas sûr. Il faut un tableau.'])
+                .pipe(ezs('TEEFTSentenceTokenize'))
+                // .pipe(ezs('debug'))
+                .on('data', (chunk) => {
+                    assert(chunk);
+                    assert(Array.isArray(chunk));
+                    res = res.concat(chunk);
+                })
+                .on('end', () => {
+                    assert.equal(res.length, 2);
+                    assert.equal(res[0], 'Je ne suis pas sûr.');
+                    assert.equal(res[1], 'Il faut un tableau.');
+                    done();
+                });
+        });
+
+        it('should correctly segment sentences in several strings', (done) => {
+            let res = [];
+            from(['Il faut un tableau.', 'Et ça j\'en suis sûr. Maintenant!'])
+                .pipe(ezs('TEEFTSentenceTokenize'))
+                // .pipe(ezs('debug'))
+                .on('data', (chunk) => {
+                    assert(chunk);
+                    assert(Array.isArray(chunk));
+                    res = res.concat(chunk);
+                })
+                .on('end', () => {
+                    assert.equal(res.length, 3);
+                    assert.equal(res[0], 'Il faut un tableau.');
+                    assert.equal(res[1], 'Et ça j\'en suis sûr.');
+                    assert.equal(res[2], 'Maintenant!');
+                    done();
+                });
+        });
+    });
 });

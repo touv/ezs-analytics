@@ -8,6 +8,7 @@ import TEEFTFilterMultiFreq from './filter-multi-freq';
 import TEEFTSpecificity from './specificity';
 import profile from './profile';
 import TEEFTNaturalTag from './natural-tag';
+import TEEFTSentenceTokenize from './sentence-tokenize';
 
 export default {
     TEEFTTokenize,
@@ -20,4 +21,5 @@ export default {
     TEEFTSpecificity,
     profile,
     TEEFTNaturalTag,
+    TEEFTSentenceTokenize,
 };
