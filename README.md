@@ -28,18 +28,21 @@ process.stdin
 -   [TEEFTFrToTagLem](#teeftfrtotaglem)
     -   [Parameters](#parameters-2)
     -   [Examples](#examples)
--   [profile](#profile)
+-   [TEEFTNaturalTag](#teeftnaturaltag)
     -   [Parameters](#parameters-3)
--   [TEEFTSpecificity](#teeftspecificity)
+    -   [Examples](#examples-1)
+-   [profile](#profile)
     -   [Parameters](#parameters-4)
--   [TEEFTStopWords](#teeftstopwords)
+-   [TEEFTSpecificity](#teeftspecificity)
     -   [Parameters](#parameters-5)
--   [TEEFTSumUpFrequencies](#teeftsumupfrequencies)
+-   [TEEFTStopWords](#teeftstopwords)
     -   [Parameters](#parameters-6)
--   [TEEFTExtractTerms](#teeftextractterms)
+-   [TEEFTSumUpFrequencies](#teeftsumupfrequencies)
     -   [Parameters](#parameters-7)
--   [TEEFTTokenize](#teefttokenize)
+-   [TEEFTExtractTerms](#teeftextractterms)
     -   [Parameters](#parameters-8)
+-   [TEEFTTokenize](#teefttokenize)
+    -   [Parameters](#parameters-9)
 
 ### TEEFTFilterMultiFreq
 
@@ -84,16 +87,38 @@ from(['Elle semble se nourrir essentiellement de plancton, et de hotdog.'])
 ```
 
 ```javascript
-[ { id: 0, word: 'elle', pos: [ 'PRO:per' ] },
-{ id: 1, word: 'semble', pos: [ 'VER' ] },
-{ id: 2, word: 'se', pos: [ 'PRO:per' ] },
-{ id: 3, word: 'nourrir', pos: [ 'VER' ] },
-{ id: 4, word: 'essentiellement', pos: [ 'ADV' ] },
-{ id: 5, word: 'de', pos: [ 'PRE', 'NOM', 'ART:def' ] },
-{ id: 6, word: 'plancton', pos: [ 'NOM' ] },
-{ id: 7, word: 'et', pos: [ 'CON' ] },
-{ id: 8, word: 'de', pos: [ 'PRE', 'NOM', 'ART:def' ] },
-{ id: 9, word: 'hotdog', pos: [ 'UNK' ] } ]
+[ { id: 0, token: 'elle', tag: [ 'PRO:per' ] },
+{ id: 1, token: 'semble', tag: [ 'VER' ] },
+{ id: 2, token: 'se', tag: [ 'PRO:per' ] },
+{ id: 3, token: 'nourrir', tag: [ 'VER' ] },
+{ id: 4, token: 'essentiellement', tag: [ 'ADV' ] },
+{ id: 5, token: 'de', tag: [ 'PRE', 'NOM', 'ART:def' ] },
+{ id: 6, token: 'plancton', tag: [ 'NOM' ] },
+{ id: 7, token: 'et', tag: [ 'CON' ] },
+{ id: 8, token: 'de', tag: [ 'PRE', 'NOM', 'ART:def' ] },
+{ id: 9, token: 'hotdog', tag: [ 'UNK' ] } ]
+```
+
+### TEEFTNaturalTag
+
+POS Tagger from natural
+
+French pos tagging using natural (and LEFFF resources)
+
+#### Parameters
+
+-   `data` **[Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;[String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)>** Array of tokens (string)
+-   `feed` **[Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)>** Array of tokens (object, with `token` and `tag`)
+
+#### Examples
+
+```javascript
+{ "token": "dans",      "tag": ["prep"] },
+{ "token": "le",        "tag": ["det"]  },
+{ "token": "cadre",     "tag": ["nc"] },
+{ "token": "du",        "tag": ["det"] },
+{ "token": "programme", "tag": ["nc"] }
+},
 ```
 
 ### profile
@@ -128,7 +153,7 @@ Can also sort the objects according to their specificity, when `sort` is
 
 ### TEEFTStopWords
 
-Filter the text in input, by removing stopwords
+Filter the text in input, by removing stopwords in lemma
 
 #### Parameters
 
@@ -159,6 +184,7 @@ and computes statistics (frequency, _etc_.).
 -   `feed` **[Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)>** 
 -   `nounTag` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** noun tag (optional, default `'NOM'`)
 -   `adjTag` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** adjective tag (optional, default `'ADJ'`)
+-   `keys` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**  (optional, default `{lemma:'lemma',token:'word',tag:'pos'}`)
 
 ### TEEFTTokenize
 

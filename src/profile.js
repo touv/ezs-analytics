@@ -16,7 +16,9 @@ let index = 0;
 export default function profile(data, feed) {
     if (this.isLast()) {
         const label = labels.shift();
-        console.timeEnd(`Stage ${label}`);
+        if (label) {
+            console.timeEnd(`Stage ${label}`);
+        }
         return feed.close();
     }
     if (this.isFirst()) {

@@ -1,5 +1,19 @@
 import NlpjsTFr from 'nlp-js-tools-french';
 
+const toCommonStruct = (taggedWord) => {
+    const res = {
+        id: taggedWord.id,
+        token: taggedWord.word,
+    };
+    if (taggedWord.pos) {
+        res.tag = taggedWord.pos;
+    }
+    if (taggedWord.lemma) {
+        res.lemma = taggedWord.lemma;
+    }
+    return res;
+};
+
 /**
  * Tokenize, tag, and lemmatize a French text
  *
@@ -7,16 +21,16 @@ import NlpjsTFr from 'nlp-js-tools-french';
  * from(['Elle semble se nourrir essentiellement de plancton, et de hotdog.'])
                 .pipe(ezs('TEEFTFrToTagLem', { doLemmatize: false }))
  * @example
- * [ { id: 0, word: 'elle', pos: [ 'PRO:per' ] },
- * { id: 1, word: 'semble', pos: [ 'VER' ] },
- * { id: 2, word: 'se', pos: [ 'PRO:per' ] },
- * { id: 3, word: 'nourrir', pos: [ 'VER' ] },
- * { id: 4, word: 'essentiellement', pos: [ 'ADV' ] },
- * { id: 5, word: 'de', pos: [ 'PRE', 'NOM', 'ART:def' ] },
- * { id: 6, word: 'plancton', pos: [ 'NOM' ] },
- * { id: 7, word: 'et', pos: [ 'CON' ] },
- * { id: 8, word: 'de', pos: [ 'PRE', 'NOM', 'ART:def' ] },
- * { id: 9, word: 'hotdog', pos: [ 'UNK' ] } ]
+ * [ { id: 0, token: 'elle', tag: [ 'PRO:per' ] },
+ * { id: 1, token: 'semble', tag: [ 'VER' ] },
+ * { id: 2, token: 'se', tag: [ 'PRO:per' ] },
+ * { id: 3, token: 'nourrir', tag: [ 'VER' ] },
+ * { id: 4, token: 'essentiellement', tag: [ 'ADV' ] },
+ * { id: 5, token: 'de', tag: [ 'PRE', 'NOM', 'ART:def' ] },
+ * { id: 6, token: 'plancton', tag: [ 'NOM' ] },
+ * { id: 7, token: 'et', tag: [ 'CON' ] },
+ * { id: 8, token: 'de', tag: [ 'PRE', 'NOM', 'ART:def' ] },
+ * { id: 9, token: 'hotdog', tag: [ 'UNK' ] } ]
  *
  * @export
  * @param {Stream} data
@@ -44,8 +58,10 @@ export default function TEEFTFrToTagLem(data, feed) {
     };
     const nlpToolsFr = new NlpjsTFr(data, config);
     const tokenizedWords = nlpToolsFr.tokenized;
-    const posTaggedWords = doTag ? nlpToolsFr.posTagger() : [];
-    const lemmatizedWords = doLemmatize ? nlpToolsFr.lemmatizer() : [];
+    const posTaggedWords = (doTag ? nlpToolsFr.posTagger() : [])
+        .map(toCommonStruct);
+    const lemmatizedWords = (doLemmatize ? nlpToolsFr.lemmatizer() : [])
+        .map(toCommonStruct);
     if (!doTag && !doLemmatize) {
         feed.write(tokenizedWords);
         return feed.end();

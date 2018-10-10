@@ -37,7 +37,7 @@ export default function TEEFTFilterTags(data, feed) {
     const tagsToKeep = this.getParam('tags', ['ADJ', 'NOM']);
     const dataArray = Array.isArray(data) ? data : [data];
     const res = dataArray
-        .filter(w => someBeginsWith(tagsToKeep, w.pos));
+        .filter(w => someBeginsWith(tagsToKeep, w.tag));
     feed.write(res);
     feed.end();
 }

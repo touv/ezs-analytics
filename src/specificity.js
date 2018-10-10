@@ -18,12 +18,12 @@ function initialize() {
     specificitySum = 0;
 }
 
-const isMulti = term => !term.pos;
-const isMono = term => term.pos;
+const isMulti = term => !term.tag;
+const isMono = term => term.tag;
 
 function addSpecificity(term) {
-    const { frequency, word } = term;
-    const weight = weights[word] || 10 ** -5;
+    const { frequency, token } = term;
+    const weight = weights[token] || 10 ** -5;
     const computeSpecificity = pipe(
         divide(__, totalFrequencies),
         divide(__, weight),
