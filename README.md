@@ -33,16 +33,18 @@ process.stdin
     -   [Examples](#examples-1)
 -   [profile](#profile)
     -   [Parameters](#parameters-4)
--   [TEEFTSpecificity](#teeftspecificity)
+-   [TEEFTSentenceTokenize](#teeftsentencetokenize)
     -   [Parameters](#parameters-5)
--   [TEEFTStopWords](#teeftstopwords)
+-   [TEEFTSpecificity](#teeftspecificity)
     -   [Parameters](#parameters-6)
--   [TEEFTSumUpFrequencies](#teeftsumupfrequencies)
+-   [TEEFTStopWords](#teeftstopwords)
     -   [Parameters](#parameters-7)
--   [TEEFTExtractTerms](#teeftextractterms)
+-   [TEEFTSumUpFrequencies](#teeftsumupfrequencies)
     -   [Parameters](#parameters-8)
--   [TEEFTTokenize](#teefttokenize)
+-   [TEEFTExtractTerms](#teeftextractterms)
     -   [Parameters](#parameters-9)
+-   [TEEFTTokenize](#teefttokenize)
+    -   [Parameters](#parameters-10)
 
 ### TEEFTFilterMultiFreq
 
@@ -133,6 +135,15 @@ takes.
 -   `data` **any** 
 -   `feed` **any** 
 
+### TEEFTSentenceTokenize
+
+Segment the data into an array of sentences.
+
+#### Parameters
+
+-   `data` **[Stream](https://nodejs.org/api/stream.html)** Array of strings
+-   `feed` **[Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;[String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)>** 
+
 ### TEEFTSpecificity
 
 Process objects containing frequency, add a specificity to each object, and
@@ -153,7 +164,7 @@ Can also sort the objects according to their specificity, when `sort` is
 
 ### TEEFTStopWords
 
-Filter the text in input, by removing stopwords in lemma
+Filter the text in input, by removing stopwords in token
 
 #### Parameters
 
@@ -163,8 +174,7 @@ Filter the text in input, by removing stopwords in lemma
 
 ### TEEFTSumUpFrequencies
 
-Sums up the frequencies of identical lemmas from different chunks,
-and yield as last object { totalFrequencies }.
+Sums up the frequencies of identical lemmas from different chunks.
 
 #### Parameters
 
@@ -184,7 +194,6 @@ and computes statistics (frequency, _etc_.).
 -   `feed` **[Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)>** 
 -   `nounTag` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** noun tag (optional, default `'NOM'`)
 -   `adjTag` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** adjective tag (optional, default `'ADJ'`)
--   `keys` **[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**  (optional, default `{lemma:'lemma',token:'word',tag:'pos'}`)
 
 ### TEEFTTokenize
 
