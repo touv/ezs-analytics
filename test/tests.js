@@ -84,7 +84,6 @@ describe('tokenize', () => {
                 done();
             });
     });
-
 });
 
 describe('fr-to-tag-lem', () => {
@@ -817,7 +816,7 @@ describe('natural', () => {
     describe('tag', () => {
         it('should correctly tag a sentence in French', (done) => {
             let res = [];
-            from(['Elle', 'semble', 'se', 'nourrir', 'essentiellement', 'de', 'plancton', 'et', 'de', 'hotdog'])
+            from([['Elle', 'semble', 'se', 'nourrir', 'essentiellement', 'de', 'plancton', 'et', 'de', 'hotdog']])
                 .pipe(ezs('TEEFTNaturalTag'))
                 // .pipe(ezs('debug'))
                 .on('data', (chunk) => {
@@ -826,18 +825,20 @@ describe('natural', () => {
                     res = res.concat(chunk);
                 })
                 .on('end', () => {
-                    assert.equal(res.length, 10);
-                    assert.equal(res[1].token, 'semble');
-                    assert.equal(res[1].tag[0], 'v');
-                    assert.equal(res[4].token, 'essentiellement');
-                    assert.equal(res[4].tag[0], 'adv');
+                    assert.equal(res.length, 1);
+                    const firstSentence = res[0];
+                    assert.equal(firstSentence.length, 10);
+                    assert.equal(firstSentence[1].token, 'semble');
+                    assert.equal(firstSentence[1].tag[0], 'v');
+                    assert.equal(firstSentence[4].token, 'essentiellement');
+                    assert.equal(firstSentence[4].tag[0], 'adv');
                     done();
                 });
         });
 
         it('should correctly tag a sentence in French with accented words', (done) => {
             let res = [];
-            from(['Ça', 'veut', 'sûrement', 'dire', 'qu\'', 'il', 'fut', 'assassiné'])
+            from([['Ça', 'veut', 'sûrement', 'dire', 'qu\'', 'il', 'fut', 'assassiné']])
                 .pipe(ezs('TEEFTNaturalTag'))
                 // .pipe(ezs('debug'))
                 .on('data', (chunk) => {
@@ -846,11 +847,42 @@ describe('natural', () => {
                     res = res.concat(chunk);
                 })
                 .on('end', () => {
-                    assert.equal(res.length, 8);
-                    assert.equal(res[1].token, 'veut');
-                    assert.equal(res[1].tag[0], 'v');
-                    assert.equal(res[2].token, 'sûrement');
-                    assert.equal(res[2].tag[0], 'adv');
+                    assert.equal(res.length, 1);
+                    const firstSentence = res[0];
+                    assert.equal(firstSentence.length, 8);
+                    assert.equal(firstSentence[1].token, 'veut');
+                    assert.equal(firstSentence[1].tag[0], 'v');
+                    assert.equal(firstSentence[2].token, 'sûrement');
+                    assert.equal(firstSentence[2].tag[0], 'adv');
+                    done();
+                });
+        });
+
+        it('should correctly tag two sentences in French with accented words', (done) => {
+            let res = [];
+            from([
+                ['Ça', 'veut', 'sûrement', 'dire', 'qu\'', 'il', 'fut', 'assassiné'],
+                ['Mais', 'j\'', 'espère', 'que', 'ce', 'n\'', 'était', 'pas', 'grave'],
+            ])
+                .pipe(ezs('TEEFTNaturalTag'))
+                // .pipe(ezs('debug'))
+                .on('data', (chunk) => {
+                    assert(chunk);
+                    assert(Array.isArray(chunk));
+                    res = res.concat(chunk);
+                })
+                .on('end', () => {
+                    assert.equal(res.length, 2);
+                    const firstSentence = res[0];
+                    assert.equal(firstSentence.length, 8);
+                    assert.equal(firstSentence[1].token, 'veut');
+                    assert.equal(firstSentence[1].tag[0], 'v');
+                    assert.equal(firstSentence[2].token, 'sûrement');
+                    assert.equal(firstSentence[2].tag[0], 'adv');
+                    const secondSentence = res[1];
+                    assert.equal(secondSentence.length, 9);
+                    assert.equal(secondSentence[0].token, 'Mais');
+                    assert(secondSentence[0].tag);
                     done();
                 });
         });
