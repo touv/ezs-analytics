@@ -14,10 +14,12 @@ describe('tokenize', () => {
                 res = res.concat(chunk);
             })
             .on('end', () => {
-                assert.equal(res.length, 3);
-                assert.equal(res[0], 'aha');
-                assert.equal(res[1], 'blabla');
-                assert.equal(res[2], 'hehe');
+                const firstSentence = res[0];
+                assert(Array.isArray(firstSentence));
+                assert.equal(firstSentence.length, 3);
+                assert.equal(firstSentence[0], 'aha');
+                assert.equal(firstSentence[1], 'blabla');
+                assert.equal(firstSentence[2], 'hehe');
                 done();
             });
     });
@@ -31,30 +33,58 @@ describe('tokenize', () => {
                 res = res.concat(chunk);
             })
             .on('end', () => {
-                assert.equal(res.length, 3);
-                assert.equal(res[0], 'ça');
-                assert.equal(res[1], 'va');
-                assert.equal(res[2], 'héhé');
+                const firstSentence = res[0];
+                assert(Array.isArray(firstSentence));
+                assert.equal(firstSentence.length, 3);
+                assert.equal(firstSentence[0], 'ça');
+                assert.equal(firstSentence[1], 'va');
+                assert.equal(firstSentence[2], 'héhé');
                 done();
             });
     });
 
     it('should remove punctuation characters', (done) => {
         let res = [];
-        from(['ça va? héhé!'])
+        from(['ça va, héhé!'])
             .pipe(ezs('TEEFTTokenize'))
             .on('data', (chunk) => {
                 assert(Array.isArray(chunk));
                 res = res.concat(chunk);
             })
             .on('end', () => {
-                assert.equal(res.length, 3);
-                assert.equal(res[0], 'ça');
-                assert.equal(res[1], 'va');
-                assert.equal(res[2], 'héhé');
+                const firstSentence = res[0];
+                assert(Array.isArray(firstSentence));
+                assert.equal(firstSentence.length, 3);
+                assert.equal(firstSentence[0], 'ça');
+                assert.equal(firstSentence[1], 'va');
+                assert.equal(firstSentence[2], 'héhé');
                 done();
             });
     });
+
+    it('should output as many items as sentences', (done) => {
+        let res = [];
+        from(['ça va?', 'héhé!'])
+            .pipe(ezs('TEEFTTokenize'))
+            .on('data', (chunk) => {
+                assert(Array.isArray(chunk));
+                res = res.concat(chunk);
+            })
+            .on('end', () => {
+                assert.equal(res.length, 2);
+                const firstSentence = res[0];
+                assert(Array.isArray(firstSentence));
+                assert.equal(firstSentence.length, 2);
+                assert.equal(firstSentence[0], 'ça');
+                assert.equal(firstSentence[1], 'va');
+                const secondSentence = res[1];
+                assert(Array.isArray(secondSentence));
+                assert.equal(secondSentence.length, 1);
+                assert.equal(secondSentence[0], 'héhé');
+                done();
+            });
+    });
+
 });
 
 describe('fr-to-tag-lem', () => {
