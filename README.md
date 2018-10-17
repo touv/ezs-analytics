@@ -43,6 +43,7 @@ process.stdin
     -   [Parameters](#parameters-8)
 -   [TEEFTExtractTerms](#teeftextractterms)
     -   [Parameters](#parameters-9)
+    -   [Examples](#examples-2)
 -   [TEEFTTokenize](#teefttokenize)
     -   [Parameters](#parameters-10)
 
@@ -109,18 +110,19 @@ French pos tagging using natural (and LEFFF resources)
 
 #### Parameters
 
--   `data` **[Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;[String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)>** Array of tokens (string)
--   `feed` **[Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)>** Array of tokens (object, with `token` and `tag`)
+-   `data` **[Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;[Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;[String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)>>** Array of arrays of tokens (string)
+-   `feed` **[Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;[Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)>>** Array of arrays of tokens (object, with `token` and `tag`)
 
 #### Examples
 
 ```javascript
-{ "token": "dans",      "tag": ["prep"] },
+[{ "token": "dans",      "tag": ["prep"] },
 { "token": "le",        "tag": ["det"]  },
 { "token": "cadre",     "tag": ["nc"] },
 { "token": "du",        "tag": ["det"] },
 { "token": "programme", "tag": ["nc"] }
 },
+]
 ```
 
 ### profile
@@ -190,10 +192,29 @@ and computes statistics (frequency, _etc_.).
 
 #### Parameters
 
--   `data` **[Stream](https://nodejs.org/api/stream.html)** tagged terms
+-   `data` **[Stream](https://nodejs.org/api/stream.html)** array of tagged terms
 -   `feed` **[Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)>** 
 -   `nounTag` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** noun tag (optional, default `'NOM'`)
 -   `adjTag` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** adjective tag (optional, default `'ADJ'`)
+
+#### Examples
+
+```javascript
+[[[{ token: 'elle', tag: ['PRO:per'] },
+{ token: 'semble', tag: ['VER'] },
+{ token: 'se', tag: ['PRO:per'] },
+{ token: 'nourrir', tag: ['VER'] },
+{
+token: 'essentiellement',
+tag: ['ADV'],
+},
+{ token: 'de', tag: ['PRE', 'ART:def'] },
+{ token: 'plancton', tag: ['NOM'] },
+{ token: 'frais', tag: ['ADJ'] },
+{ token: 'et', tag: ['CON'] },
+{ token: 'de', tag: ['PRE', 'ART:def'] },
+{ token: 'hotdog', tag: ['UNK'] }]]]
+```
 
 ### TEEFTTokenize
 
@@ -204,4 +225,4 @@ Extract tokens from a text
 #### Parameters
 
 -   `data` **[Stream](https://nodejs.org/api/stream.html)** 
--   `feed` **[Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)>** 
+-   `feed`  
