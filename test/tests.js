@@ -1,6 +1,7 @@
 const assert = require('assert');
 const from = require('from');
 const ezs = require('ezs');
+const { reinitSequenceFrequency, extractSentenceTerms } = require('../lib/term-extractor');
 
 ezs.use(require('../lib'));
 
@@ -353,25 +354,78 @@ describe('filter tags', () => {
     });
 });
 
+describe('extract sentence\'s terms', () => {
+    it('should return three terms', () => {
+        reinitSequenceFrequency();
+        const taggedWords = [
+            { token: 'elle', tag: ['PRO:per'] },
+            { token: 'semble', tag: ['VER'] },
+            { token: 'se', tag: ['PRO:per'] },
+            { token: 'nourrir', tag: ['VER'] },
+            {
+                token: 'essentiellement',
+                tag: ['ADV'],
+            },
+            { token: 'de', tag: ['PRE', 'ART:def'] },
+            { token: 'plancton', tag: ['NOM'] },
+            { token: 'frais', tag: ['ADJ'] },
+            { token: 'et', tag: ['CON'] },
+            { token: 'de', tag: ['PRE', 'ART:def'] },
+            { token: 'hotdog', tag: ['UNK'] },
+        ];
+        const { termSequence, termFrequency } = extractSentenceTerms(taggedWords);
+        assert.equal(termSequence.length, 3);
+        assert.equal(termSequence[0], 'plancton');
+        assert.equal(termSequence[1], 'frais');
+        assert.equal(termSequence[2], 'plancton frais');
+        assert.equal(termFrequency.plancton, 1);
+        assert.equal(termFrequency.frais, 1);
+        assert.equal(termFrequency['plancton frais'], 1);
+    });
+
+    it('should compute correct frequencies', () => {
+        reinitSequenceFrequency();
+        const taggedWords = [
+            { token: 'elle', tag: ['PRO:per'] },
+            { token: 'semble', tag: ['VER'] },
+            { token: 'se', tag: ['PRO:per'] },
+            { token: 'nourrir', tag: ['VER'] },
+            {
+                token: 'essentiellement',
+                tag: ['ADV'],
+            },
+            { token: 'de', tag: ['PRE', 'ART:def'] },
+            { token: 'plancton', tag: ['NOM'] },
+            { token: 'frais', tag: ['ADJ'] },
+            { token: 'et', tag: ['CON'] },
+            { token: 'de', tag: ['PRE', 'ART:def'] },
+            { token: 'hotdog', tag: ['UNK'] },
+        ];
+        const { termFrequency } = extractSentenceTerms(taggedWords, '', '');
+        assert.equal(Object.keys(termFrequency).length, 11);
+        assert.equal(termFrequency.elle, 1);
+        assert.equal(termFrequency.de, 2);
+    });
+});
+
 describe('extract terms', () => {
     it('should return three terms', (done) => {
         const res = [];
         /* eslint-disable object-curly-newline */
-        from([[{ id: 0, token: 'elle', tag: ['PRO:per'], lemma: 'elle' },
-            { id: 1, token: 'semble', tag: ['VER'], lemma: 'sembler' },
-            { id: 2, token: 'se', tag: ['PRO:per'], lemma: 'se' },
-            { id: 3, token: 'nourrir', tag: ['VER'], lemma: 'nourrir' },
-            { id: 4,
+        from([[[{ token: 'elle', tag: ['PRO:per'] },
+            { token: 'semble', tag: ['VER'] },
+            { token: 'se', tag: ['PRO:per'] },
+            { token: 'nourrir', tag: ['VER'] },
+            {
                 token: 'essentiellement',
                 tag: ['ADV'],
-                lemma: 'essentiellement',
             },
-            { id: 5, token: 'de', tag: ['PRE', 'ART:def'], lemma: 'de' },
-            { id: 6, token: 'plancton', tag: ['NOM'], lemma: 'plancton' },
-            { id: 7, token: 'frais', tag: ['ADJ'], lemma: 'frais' },
-            { id: 8, token: 'et', tag: ['CON'], lemma: 'et' },
-            { id: 9, token: 'de', tag: ['PRE', 'ART:def'], lemma: 'de' },
-            { id: 10, token: 'hotdog', tag: ['UNK'], lemma: 'hotdog' }]])
+            { token: 'de', tag: ['PRE', 'ART:def'] },
+            { token: 'plancton', tag: ['NOM'] },
+            { token: 'frais', tag: ['ADJ'] },
+            { token: 'et', tag: ['CON'] },
+            { token: 'de', tag: ['PRE', 'ART:def'] },
+            { token: 'hotdog', tag: ['UNK'] }]]])
         /* eslint-enable object-curly-newline */
             .pipe(ezs('TEEFTExtractTerms'))
             // .pipe(ezs('debug'))
@@ -384,9 +438,6 @@ describe('extract terms', () => {
                 assert.equal(res[0].token, 'plancton');
                 assert.equal(res[1].token, 'frais');
                 assert.equal(res[2].token, 'plancton frais');
-                assert.equal(res[0].lemma, 'plancton');
-                assert.equal(res[1].lemma, 'frais');
-                assert.strictEqual(res[2].lemma, undefined);
                 assert.equal(res[0].tag[0], 'NOM');
                 assert.equal(res[1].tag[0], 'ADJ');
                 assert.strictEqual(res[2].tag, undefined);
