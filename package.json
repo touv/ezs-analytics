@@ -1,6 +1,6 @@
 {
   "name": "ezs-teeftfr",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "teeftfr statements for EZS",
   "directories": {
     "test": "test"
