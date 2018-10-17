@@ -473,7 +473,7 @@ describe('extract terms', () => {
             .pipe(ezs('TEEFTExtractTerms', { nounTag: '', adjTag: '' }))
             // .pipe(ezs('debug'))
             .on('data', (chunk) => {
-                assert(typeof chunk, 'object');
+                assert.equal(typeof chunk, 'object');
                 res.push(chunk);
             })
             .on('end', () => {
@@ -485,6 +485,29 @@ describe('extract terms', () => {
                 assert.equal(res[5].frequency, 2);
                 assert.equal(res[10].length, 11);
                 assert.strictEqual(res[1].frequency, 1); // no undefined
+                done();
+            });
+    });
+
+    it('should return terms from several sentences', (done) => {
+        const res = [];
+        from([[[
+            { token: 'elle', tag: ['PRO:per'] },
+            { token: 'semble', tag: ['VER'] },
+            { token: 'heureuse', tag: ['ADJ'] },
+        ], [
+            { token: 'mais', tag: ['CON'] },
+            { token: 'pas', tag: ['FAKE'] },
+            { token: 'lui', tag: ['PRO'] },
+        ]]])
+            .pipe(ezs('TEEFTExtractTerms', { nounTag: '', adjTag: '' }))
+            // .pipe(ezs('debug'))
+            .on('data', (chunk) => {
+                assert.equal(typeof chunk, 'object');
+                res.push(chunk);
+            })
+            .on('end', () => {
+                assert.equal(res.length, 8); // One multiterm per sentence (no tags given)
                 done();
             });
     });
