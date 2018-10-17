@@ -8,10 +8,11 @@ const lexicon = new Lexicon(lexiconFilename, defaultCategory);
 const rules = new RuleSet();
 const tagger = new BrillPOSTagger(lexicon, rules);
 
-const toCommonStruct = taggedWord => ({
-    token: taggedWord.token,
-    tag: [taggedWord.tag],
-});
+const toCommonStruct = taggedWords => taggedWords
+    .map(taggedWord => ({
+        token: taggedWord.token,
+        tag: [taggedWord.tag],
+    }));
 
 /**
  * POS Tagger from natural
@@ -36,7 +37,12 @@ export default function TEEFTNaturalTag(data, feed) {
     if (this.isLast()) {
         return feed.close();
     }
-    const res = tagger.tag(data);
-    feed.write([res.taggedWords.map(toCommonStruct)]);
+    const res = data // [[token]] = array of sentences [sentence]
+        .map((tokens) => {
+            const { taggedWords } = tagger.tag(tokens);
+            return taggedWords;
+        })
+        .map(toCommonStruct);
+    feed.write(res);
     feed.end();
 }

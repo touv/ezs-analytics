@@ -7,13 +7,14 @@ ezs.use(require('../lib'));
 describe('tokenize', () => {
     it('should split ascii simple words', (done) => {
         let res = [];
-        from(['aha blabla hehe'])
+        from([['aha blabla hehe']])
             .pipe(ezs('TEEFTTokenize'))
             .on('data', (chunk) => {
                 assert(Array.isArray(chunk));
                 res = res.concat(chunk);
             })
             .on('end', () => {
+                assert.equal(res.length, 1);
                 const firstSentence = res[0];
                 assert(Array.isArray(firstSentence));
                 assert.equal(firstSentence.length, 3);
@@ -26,13 +27,14 @@ describe('tokenize', () => {
 
     it('should split french simple words', (done) => {
         let res = [];
-        from(['ça va héhé'])
+        from([['ça va héhé']])
             .pipe(ezs('TEEFTTokenize'))
             .on('data', (chunk) => {
                 assert(Array.isArray(chunk));
                 res = res.concat(chunk);
             })
             .on('end', () => {
+                assert.equal(res.length, 1);
                 const firstSentence = res[0];
                 assert(Array.isArray(firstSentence));
                 assert.equal(firstSentence.length, 3);
@@ -45,13 +47,14 @@ describe('tokenize', () => {
 
     it('should remove punctuation characters', (done) => {
         let res = [];
-        from(['ça va, héhé!'])
+        from([['ça va, héhé!']])
             .pipe(ezs('TEEFTTokenize'))
             .on('data', (chunk) => {
                 assert(Array.isArray(chunk));
                 res = res.concat(chunk);
             })
             .on('end', () => {
+                assert.equal(res.length, 1);
                 const firstSentence = res[0];
                 assert(Array.isArray(firstSentence));
                 assert.equal(firstSentence.length, 3);
@@ -64,7 +67,7 @@ describe('tokenize', () => {
 
     it('should output as many items as sentences', (done) => {
         let res = [];
-        from(['ça va?', 'héhé!'])
+        from([['ça va?', 'héhé!']])
             .pipe(ezs('TEEFTTokenize'))
             .on('data', (chunk) => {
                 assert(Array.isArray(chunk));
@@ -816,7 +819,7 @@ describe('natural', () => {
     describe('tag', () => {
         it('should correctly tag a sentence in French', (done) => {
             let res = [];
-            from([['Elle', 'semble', 'se', 'nourrir', 'essentiellement', 'de', 'plancton', 'et', 'de', 'hotdog']])
+            from([[['Elle', 'semble', 'se', 'nourrir', 'essentiellement', 'de', 'plancton', 'et', 'de', 'hotdog']]])
                 .pipe(ezs('TEEFTNaturalTag'))
                 // .pipe(ezs('debug'))
                 .on('data', (chunk) => {
@@ -838,7 +841,7 @@ describe('natural', () => {
 
         it('should correctly tag a sentence in French with accented words', (done) => {
             let res = [];
-            from([['Ça', 'veut', 'sûrement', 'dire', 'qu\'', 'il', 'fut', 'assassiné']])
+            from([[['Ça', 'veut', 'sûrement', 'dire', 'qu\'', 'il', 'fut', 'assassiné']]])
                 .pipe(ezs('TEEFTNaturalTag'))
                 // .pipe(ezs('debug'))
                 .on('data', (chunk) => {
@@ -860,10 +863,10 @@ describe('natural', () => {
 
         it('should correctly tag two sentences in French with accented words', (done) => {
             let res = [];
-            from([
+            from([[
                 ['Ça', 'veut', 'sûrement', 'dire', 'qu\'', 'il', 'fut', 'assassiné'],
                 ['Mais', 'j\'', 'espère', 'que', 'ce', 'n\'', 'était', 'pas', 'grave'],
-            ])
+            ]])
                 .pipe(ezs('TEEFTNaturalTag'))
                 // .pipe(ezs('debug'))
                 .on('data', (chunk) => {

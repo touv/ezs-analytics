@@ -12,6 +12,6 @@ export default function TEEFTTokenize(data, feed) {
     if (this.isLast()) {
         return feed.close();
     }
-    feed.write([words(data)]);
+    feed.write(data.map(words));
     feed.end();
 }
