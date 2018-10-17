@@ -454,7 +454,7 @@ describe('extract terms', () => {
     it('should compute correct frequencies', (done) => {
         const res = [];
         /* eslint-disable object-curly-newline */
-        from([[{ id: 0, token: 'elle', tag: ['PRO:per'], lemma: 'elle' },
+        from([[[{ id: 0, token: 'elle', tag: ['PRO:per'], lemma: 'elle' },
             { id: 1, token: 'semble', tag: ['VER'], lemma: 'sembler' },
             { id: 2, token: 'se', tag: ['PRO:per'], lemma: 'se' },
             { id: 3, token: 'nourrir', tag: ['VER'], lemma: 'nourrir' },
@@ -468,7 +468,7 @@ describe('extract terms', () => {
             { id: 7, token: 'frais', tag: ['ADJ'], lemma: 'frais' },
             { id: 8, token: 'et', tag: ['CON'], lemma: 'et' },
             { id: 9, token: 'de', tag: ['PRE', 'ART:def'], lemma: 'de' },
-            { id: 10, token: 'hotdog', tag: ['UNK'], lemma: 'hotdog' }]])
+            { id: 10, token: 'hotdog', tag: ['UNK'], lemma: 'hotdog' }]]])
         /* eslint-enable object-curly-newline */
             .pipe(ezs('TEEFTExtractTerms', { nounTag: '', adjTag: '' }))
             // .pipe(ezs('debug'))
@@ -492,7 +492,7 @@ describe('extract terms', () => {
     it('should decompose frequencies when in several chunks', (done) => {
         const res = [];
         /* eslint-disable object-curly-newline */
-        from([[{ id: 0, token: 'elle', tag: ['PRO:per'], lemma: 'elle' },
+        from([[[{ id: 0, token: 'elle', tag: ['PRO:per'], lemma: 'elle' },
             { id: 1, token: 'semble', tag: ['VER'], lemma: 'sembler' },
             { id: 2, token: 'se', tag: ['PRO:per'], lemma: 'se' },
             { id: 3, token: 'nourrir', tag: ['VER'], lemma: 'nourrir' },
@@ -502,12 +502,12 @@ describe('extract terms', () => {
                 lemma: 'essentiellement',
             },
             { id: 5, token: 'de', tag: ['PRE', 'ART:def'], lemma: 'de' },
-        ], [
+        ]], [[
             { id: 6, token: 'plancton', tag: ['NOM'], lemma: 'plancton' },
             { id: 7, token: 'frais', tag: ['ADJ'], lemma: 'frais' },
             { id: 8, token: 'et', tag: ['CON'], lemma: 'et' },
             { id: 9, token: 'de', tag: ['PRE', 'ART:def'], lemma: 'de' },
-            { id: 10, token: 'hotdog', tag: ['UNK'], lemma: 'hotdog' }]])
+            { id: 10, token: 'hotdog', tag: ['UNK'], lemma: 'hotdog' }]]])
         /* eslint-enable object-curly-newline */
             .pipe(ezs('TEEFTExtractTerms', { nounTag: '', adjTag: '' }))
             // .pipe(ezs('debug'))

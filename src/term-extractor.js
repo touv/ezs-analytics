@@ -72,7 +72,7 @@ export function extractSentenceTerms(taggedTerms,
  *
  * @see https://github.com/istex/sisyphe/blob/master/src/worker/teeft/lib/termextractor.js
  * @export
- * @param {Stream}  data tagged terms
+ * @param {Stream}  data array of tagged terms
  * @param {Array<string>}   feed
  * @param {string}  [nounTag='NOM']  noun tag
  * @param {string}  [adjTag='ADJ']   adjective tag
@@ -81,10 +81,17 @@ export default function TEEFTExtractTerms(data, feed) {
     if (this.isLast()) {
         return feed.close();
     }
-    const taggedTerms = R.clone(data)
-        .map(term => ({ ...term, tag: Array.isArray(term.tag) ? term.tag : [term.tag] }));
-    reinitSequenceFrequency();
-    extractSentenceTerms(taggedTerms);
+    const nounTag = this.getParam('nounTag', 'NOM');
+    const adjTag = this.getParam('adjTag', 'ADJ');
+    let taggedTerms = [];
+    const sentences = R.clone(data);
+    sentences.forEach((sentence) => {
+        const sentenceTaggedTerms = R.clone(sentence)
+            .map(term => ({ ...term, tag: Array.isArray(term.tag) ? term.tag : [term.tag] }));
+        reinitSequenceFrequency();
+        extractSentenceTerms(sentenceTaggedTerms, nounTag, adjTag);
+        taggedTerms = taggedTerms.concat(sentenceTaggedTerms);
+    });
 
     // Compute `length` (number of words) and frequency
     // @param termSequence
