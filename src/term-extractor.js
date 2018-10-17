@@ -83,12 +83,12 @@ export default function TEEFTExtractTerms(data, feed) {
     }
     const nounTag = this.getParam('nounTag', 'NOM');
     const adjTag = this.getParam('adjTag', 'ADJ');
+    reinitSequenceFrequency();
     let taggedTerms = [];
     const sentences = R.clone(data);
     sentences.forEach((sentence) => {
         const sentenceTaggedTerms = R.clone(sentence)
             .map(term => ({ ...term, tag: Array.isArray(term.tag) ? term.tag : [term.tag] }));
-        reinitSequenceFrequency();
         extractSentenceTerms(sentenceTaggedTerms, nounTag, adjTag);
         taggedTerms = taggedTerms.concat(sentenceTaggedTerms);
     });

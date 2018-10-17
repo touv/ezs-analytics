@@ -11,6 +11,10 @@ plugin = basics
 plugin = teeftfr
 
 ; [profile]
+[TEEFTSentenceTokenize]
+; [debug]
+; text = sentence
+; [profile]
 [TEEFTTokenize]
 ; [debug]
 ; text = token
