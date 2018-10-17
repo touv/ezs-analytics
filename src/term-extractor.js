@@ -1,32 +1,22 @@
 import R from 'ramda';
 import { someBeginsWith } from './filter-tags';
 
-/**
- * Regroup multi-terms when possible (noun + noun, adjective + noun, *etc*.),
- * and computes statistics (frequency, *etc*.).
- *
- * @see https://github.com/istex/sisyphe/blob/master/src/worker/teeft/lib/termextractor.js
- * @export
- * @param {Stream}  data tagged terms
- * @param {Array<string>}   feed
- * @param {string}  [nounTag='NOM']  noun tag
- * @param {string}  [adjTag='ADJ']   adjective tag
- */
-export default function TEEFTExtractTerms(data, feed) {
-    if (this.isLast()) {
-        return feed.close();
-    }
-    const nounTag = this.getParam('nounTag', 'NOM');
-    const adjTag = this.getParam('adjTag', 'ADJ');
-    const isNoun = R.curry(someBeginsWith)([nounTag]);
-    const isAdj = R.curry(someBeginsWith)([adjTag]);
-    const taggedTerms = R.clone(data)
-        .map(term => ({ ...term, tag: Array.isArray(term.tag) ? term.tag : [term.tag] }));
-    const termFrequency = {};
+let termFrequency = {};
+let termSequence = [];
+const SEARCH = Symbol('SEARCH');
+const NOUN = Symbol('NOUN');
+
+export function reinitSequenceFrequency() {
+    termFrequency = {};
+    termSequence = [];
+}
+
+export function extractSentenceTerms(taggedTerms,
+    nounTag = 'NOM',
+    adjTag = 'ADJ',
+    isNoun = R.curry(someBeginsWith)([nounTag]),
+    isAdj = R.curry(someBeginsWith)([adjTag])) {
     let multiterm = [];
-    const termSequence = [];
-    const SEARCH = Symbol('SEARCH');
-    const NOUN = Symbol('NOUN');
     let state = SEARCH;
     taggedTerms
         .forEach((taggedTerm) => {
@@ -57,6 +47,51 @@ export default function TEEFTExtractTerms(data, feed) {
         termSequence.push(word);
         termFrequency[word] = (termFrequency[word] || 0) + 1;
     }
+    return { termSequence, termFrequency };
+}
+
+/**
+ * Regroup multi-terms when possible (noun + noun, adjective + noun, *etc*.),
+ * and computes statistics (frequency, *etc*.).
+ *
+ * @example
+ * [[[{ token: 'elle', tag: ['PRO:per'] },
+    { token: 'semble', tag: ['VER'] },
+    { token: 'se', tag: ['PRO:per'] },
+    { token: 'nourrir', tag: ['VER'] },
+    {
+        token: 'essentiellement',
+        tag: ['ADV'],
+    },
+    { token: 'de', tag: ['PRE', 'ART:def'] },
+    { token: 'plancton', tag: ['NOM'] },
+    { token: 'frais', tag: ['ADJ'] },
+    { token: 'et', tag: ['CON'] },
+    { token: 'de', tag: ['PRE', 'ART:def'] },
+    { token: 'hotdog', tag: ['UNK'] }]]]
+ *
+ * @see https://github.com/istex/sisyphe/blob/master/src/worker/teeft/lib/termextractor.js
+ * @export
+ * @param {Stream}  data array of tagged terms
+ * @param {Array<string>}   feed
+ * @param {string}  [nounTag='NOM']  noun tag
+ * @param {string}  [adjTag='ADJ']   adjective tag
+ */
+export default function TEEFTExtractTerms(data, feed) {
+    if (this.isLast()) {
+        return feed.close();
+    }
+    const nounTag = this.getParam('nounTag', 'NOM');
+    const adjTag = this.getParam('adjTag', 'ADJ');
+    reinitSequenceFrequency();
+    let taggedTerms = [];
+    const sentences = R.clone(data);
+    sentences.forEach((sentence) => {
+        const sentenceTaggedTerms = R.clone(sentence)
+            .map(term => ({ ...term, tag: Array.isArray(term.tag) ? term.tag : [term.tag] }));
+        extractSentenceTerms(sentenceTaggedTerms, nounTag, adjTag);
+        taggedTerms = taggedTerms.concat(sentenceTaggedTerms);
+    });
 
     // Compute `length` (number of words) and frequency
     // @param termSequence

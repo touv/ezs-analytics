@@ -1,57 +1,90 @@
 const assert = require('assert');
 const from = require('from');
 const ezs = require('ezs');
+const { reinitSequenceFrequency, extractSentenceTerms } = require('../lib/term-extractor');
 
 ezs.use(require('../lib'));
 
 describe('tokenize', () => {
     it('should split ascii simple words', (done) => {
         let res = [];
-        from(['aha blabla hehe'])
+        from([['aha blabla hehe']])
             .pipe(ezs('TEEFTTokenize'))
             .on('data', (chunk) => {
                 assert(Array.isArray(chunk));
                 res = res.concat(chunk);
             })
             .on('end', () => {
-                assert.equal(res.length, 3);
-                assert.equal(res[0], 'aha');
-                assert.equal(res[1], 'blabla');
-                assert.equal(res[2], 'hehe');
+                assert.equal(res.length, 1);
+                const firstSentence = res[0];
+                assert(Array.isArray(firstSentence));
+                assert.equal(firstSentence.length, 3);
+                assert.equal(firstSentence[0], 'aha');
+                assert.equal(firstSentence[1], 'blabla');
+                assert.equal(firstSentence[2], 'hehe');
                 done();
             });
     });
 
     it('should split french simple words', (done) => {
         let res = [];
-        from(['ça va héhé'])
+        from([['ça va héhé']])
             .pipe(ezs('TEEFTTokenize'))
             .on('data', (chunk) => {
                 assert(Array.isArray(chunk));
                 res = res.concat(chunk);
             })
             .on('end', () => {
-                assert.equal(res.length, 3);
-                assert.equal(res[0], 'ça');
-                assert.equal(res[1], 'va');
-                assert.equal(res[2], 'héhé');
+                assert.equal(res.length, 1);
+                const firstSentence = res[0];
+                assert(Array.isArray(firstSentence));
+                assert.equal(firstSentence.length, 3);
+                assert.equal(firstSentence[0], 'ça');
+                assert.equal(firstSentence[1], 'va');
+                assert.equal(firstSentence[2], 'héhé');
                 done();
             });
     });
 
     it('should remove punctuation characters', (done) => {
         let res = [];
-        from(['ça va? héhé!'])
+        from([['ça va, héhé!']])
             .pipe(ezs('TEEFTTokenize'))
             .on('data', (chunk) => {
                 assert(Array.isArray(chunk));
                 res = res.concat(chunk);
             })
             .on('end', () => {
-                assert.equal(res.length, 3);
-                assert.equal(res[0], 'ça');
-                assert.equal(res[1], 'va');
-                assert.equal(res[2], 'héhé');
+                assert.equal(res.length, 1);
+                const firstSentence = res[0];
+                assert(Array.isArray(firstSentence));
+                assert.equal(firstSentence.length, 3);
+                assert.equal(firstSentence[0], 'ça');
+                assert.equal(firstSentence[1], 'va');
+                assert.equal(firstSentence[2], 'héhé');
+                done();
+            });
+    });
+
+    it('should output as many items as sentences', (done) => {
+        let res = [];
+        from([['ça va?', 'héhé!']])
+            .pipe(ezs('TEEFTTokenize'))
+            .on('data', (chunk) => {
+                assert(Array.isArray(chunk));
+                res = res.concat(chunk);
+            })
+            .on('end', () => {
+                assert.equal(res.length, 2);
+                const firstSentence = res[0];
+                assert(Array.isArray(firstSentence));
+                assert.equal(firstSentence.length, 2);
+                assert.equal(firstSentence[0], 'ça');
+                assert.equal(firstSentence[1], 'va');
+                const secondSentence = res[1];
+                assert(Array.isArray(secondSentence));
+                assert.equal(secondSentence.length, 1);
+                assert.equal(secondSentence[0], 'héhé');
                 done();
             });
     });
@@ -321,25 +354,78 @@ describe('filter tags', () => {
     });
 });
 
+describe('extract sentence\'s terms', () => {
+    it('should return three terms', () => {
+        reinitSequenceFrequency();
+        const taggedWords = [
+            { token: 'elle', tag: ['PRO:per'] },
+            { token: 'semble', tag: ['VER'] },
+            { token: 'se', tag: ['PRO:per'] },
+            { token: 'nourrir', tag: ['VER'] },
+            {
+                token: 'essentiellement',
+                tag: ['ADV'],
+            },
+            { token: 'de', tag: ['PRE', 'ART:def'] },
+            { token: 'plancton', tag: ['NOM'] },
+            { token: 'frais', tag: ['ADJ'] },
+            { token: 'et', tag: ['CON'] },
+            { token: 'de', tag: ['PRE', 'ART:def'] },
+            { token: 'hotdog', tag: ['UNK'] },
+        ];
+        const { termSequence, termFrequency } = extractSentenceTerms(taggedWords);
+        assert.equal(termSequence.length, 3);
+        assert.equal(termSequence[0], 'plancton');
+        assert.equal(termSequence[1], 'frais');
+        assert.equal(termSequence[2], 'plancton frais');
+        assert.equal(termFrequency.plancton, 1);
+        assert.equal(termFrequency.frais, 1);
+        assert.equal(termFrequency['plancton frais'], 1);
+    });
+
+    it('should compute correct frequencies', () => {
+        reinitSequenceFrequency();
+        const taggedWords = [
+            { token: 'elle', tag: ['PRO:per'] },
+            { token: 'semble', tag: ['VER'] },
+            { token: 'se', tag: ['PRO:per'] },
+            { token: 'nourrir', tag: ['VER'] },
+            {
+                token: 'essentiellement',
+                tag: ['ADV'],
+            },
+            { token: 'de', tag: ['PRE', 'ART:def'] },
+            { token: 'plancton', tag: ['NOM'] },
+            { token: 'frais', tag: ['ADJ'] },
+            { token: 'et', tag: ['CON'] },
+            { token: 'de', tag: ['PRE', 'ART:def'] },
+            { token: 'hotdog', tag: ['UNK'] },
+        ];
+        const { termFrequency } = extractSentenceTerms(taggedWords, '', '');
+        assert.equal(Object.keys(termFrequency).length, 11);
+        assert.equal(termFrequency.elle, 1);
+        assert.equal(termFrequency.de, 2);
+    });
+});
+
 describe('extract terms', () => {
     it('should return three terms', (done) => {
         const res = [];
         /* eslint-disable object-curly-newline */
-        from([[{ id: 0, token: 'elle', tag: ['PRO:per'], lemma: 'elle' },
-            { id: 1, token: 'semble', tag: ['VER'], lemma: 'sembler' },
-            { id: 2, token: 'se', tag: ['PRO:per'], lemma: 'se' },
-            { id: 3, token: 'nourrir', tag: ['VER'], lemma: 'nourrir' },
-            { id: 4,
+        from([[[{ token: 'elle', tag: ['PRO:per'] },
+            { token: 'semble', tag: ['VER'] },
+            { token: 'se', tag: ['PRO:per'] },
+            { token: 'nourrir', tag: ['VER'] },
+            {
                 token: 'essentiellement',
                 tag: ['ADV'],
-                lemma: 'essentiellement',
             },
-            { id: 5, token: 'de', tag: ['PRE', 'ART:def'], lemma: 'de' },
-            { id: 6, token: 'plancton', tag: ['NOM'], lemma: 'plancton' },
-            { id: 7, token: 'frais', tag: ['ADJ'], lemma: 'frais' },
-            { id: 8, token: 'et', tag: ['CON'], lemma: 'et' },
-            { id: 9, token: 'de', tag: ['PRE', 'ART:def'], lemma: 'de' },
-            { id: 10, token: 'hotdog', tag: ['UNK'], lemma: 'hotdog' }]])
+            { token: 'de', tag: ['PRE', 'ART:def'] },
+            { token: 'plancton', tag: ['NOM'] },
+            { token: 'frais', tag: ['ADJ'] },
+            { token: 'et', tag: ['CON'] },
+            { token: 'de', tag: ['PRE', 'ART:def'] },
+            { token: 'hotdog', tag: ['UNK'] }]]])
         /* eslint-enable object-curly-newline */
             .pipe(ezs('TEEFTExtractTerms'))
             // .pipe(ezs('debug'))
@@ -352,9 +438,6 @@ describe('extract terms', () => {
                 assert.equal(res[0].token, 'plancton');
                 assert.equal(res[1].token, 'frais');
                 assert.equal(res[2].token, 'plancton frais');
-                assert.equal(res[0].lemma, 'plancton');
-                assert.equal(res[1].lemma, 'frais');
-                assert.strictEqual(res[2].lemma, undefined);
                 assert.equal(res[0].tag[0], 'NOM');
                 assert.equal(res[1].tag[0], 'ADJ');
                 assert.strictEqual(res[2].tag, undefined);
@@ -371,7 +454,7 @@ describe('extract terms', () => {
     it('should compute correct frequencies', (done) => {
         const res = [];
         /* eslint-disable object-curly-newline */
-        from([[{ id: 0, token: 'elle', tag: ['PRO:per'], lemma: 'elle' },
+        from([[[{ id: 0, token: 'elle', tag: ['PRO:per'], lemma: 'elle' },
             { id: 1, token: 'semble', tag: ['VER'], lemma: 'sembler' },
             { id: 2, token: 'se', tag: ['PRO:per'], lemma: 'se' },
             { id: 3, token: 'nourrir', tag: ['VER'], lemma: 'nourrir' },
@@ -385,12 +468,12 @@ describe('extract terms', () => {
             { id: 7, token: 'frais', tag: ['ADJ'], lemma: 'frais' },
             { id: 8, token: 'et', tag: ['CON'], lemma: 'et' },
             { id: 9, token: 'de', tag: ['PRE', 'ART:def'], lemma: 'de' },
-            { id: 10, token: 'hotdog', tag: ['UNK'], lemma: 'hotdog' }]])
+            { id: 10, token: 'hotdog', tag: ['UNK'], lemma: 'hotdog' }]]])
         /* eslint-enable object-curly-newline */
             .pipe(ezs('TEEFTExtractTerms', { nounTag: '', adjTag: '' }))
             // .pipe(ezs('debug'))
             .on('data', (chunk) => {
-                assert(typeof chunk, 'object');
+                assert.equal(typeof chunk, 'object');
                 res.push(chunk);
             })
             .on('end', () => {
@@ -406,10 +489,33 @@ describe('extract terms', () => {
             });
     });
 
+    it('should return terms from several sentences', (done) => {
+        const res = [];
+        from([[[
+            { token: 'elle', tag: ['PRO:per'] },
+            { token: 'semble', tag: ['VER'] },
+            { token: 'heureuse', tag: ['ADJ'] },
+        ], [
+            { token: 'mais', tag: ['CON'] },
+            { token: 'pas', tag: ['FAKE'] },
+            { token: 'lui', tag: ['PRO'] },
+        ]]])
+            .pipe(ezs('TEEFTExtractTerms', { nounTag: '', adjTag: '' }))
+            // .pipe(ezs('debug'))
+            .on('data', (chunk) => {
+                assert.equal(typeof chunk, 'object');
+                res.push(chunk);
+            })
+            .on('end', () => {
+                assert.equal(res.length, 8); // One multiterm per sentence (no tags given)
+                done();
+            });
+    });
+
     it('should decompose frequencies when in several chunks', (done) => {
         const res = [];
         /* eslint-disable object-curly-newline */
-        from([[{ id: 0, token: 'elle', tag: ['PRO:per'], lemma: 'elle' },
+        from([[[{ id: 0, token: 'elle', tag: ['PRO:per'], lemma: 'elle' },
             { id: 1, token: 'semble', tag: ['VER'], lemma: 'sembler' },
             { id: 2, token: 'se', tag: ['PRO:per'], lemma: 'se' },
             { id: 3, token: 'nourrir', tag: ['VER'], lemma: 'nourrir' },
@@ -419,12 +525,12 @@ describe('extract terms', () => {
                 lemma: 'essentiellement',
             },
             { id: 5, token: 'de', tag: ['PRE', 'ART:def'], lemma: 'de' },
-        ], [
+        ]], [[
             { id: 6, token: 'plancton', tag: ['NOM'], lemma: 'plancton' },
             { id: 7, token: 'frais', tag: ['ADJ'], lemma: 'frais' },
             { id: 8, token: 'et', tag: ['CON'], lemma: 'et' },
             { id: 9, token: 'de', tag: ['PRE', 'ART:def'], lemma: 'de' },
-            { id: 10, token: 'hotdog', tag: ['UNK'], lemma: 'hotdog' }]])
+            { id: 10, token: 'hotdog', tag: ['UNK'], lemma: 'hotdog' }]]])
         /* eslint-enable object-curly-newline */
             .pipe(ezs('TEEFTExtractTerms', { nounTag: '', adjTag: '' }))
             // .pipe(ezs('debug'))
@@ -447,7 +553,7 @@ describe('sum up frequencies', () => {
     it('should sum up frequencies when in several chunks', (done) => {
         const res = [];
         /* eslint-disable object-curly-newline */
-        from([[{ id: 0, token: 'elle', tag: ['PRO:per'], lemma: 'elle' },
+        from([[[{ id: 0, token: 'elle', tag: ['PRO:per'], lemma: 'elle' },
             { id: 1, token: 'semble', tag: ['VER'], lemma: 'sembler' },
             { id: 2, token: 'se', tag: ['PRO:per'], lemma: 'se' },
             { id: 3, token: 'nourrir', tag: ['VER'], lemma: 'nourrir' },
@@ -457,12 +563,12 @@ describe('sum up frequencies', () => {
                 lemma: 'essentiellement',
             },
             { id: 5, token: 'de', tag: ['PRE', 'ART:def'], lemma: 'de' },
-        ], [
+        ]], [[
             { id: 6, token: 'plancton', tag: ['NOM'], lemma: 'plancton' },
             { id: 7, token: 'frais', tag: ['ADJ'], lemma: 'frais' },
             { id: 8, token: 'et', tag: ['CON'], lemma: 'et' },
             { id: 9, token: 'de', tag: ['PRE', 'ART:def'], lemma: 'de' },
-            { id: 10, token: 'hotdog', tag: ['UNK'], lemma: 'hotdog' }]])
+            { id: 10, token: 'hotdog', tag: ['UNK'], lemma: 'hotdog' }]]])
         /* eslint-enable object-curly-newline */
             .pipe(ezs('TEEFTExtractTerms', { nounTag: '', adjTag: '' }))
             .pipe(ezs('TEEFTSumUpFrequencies'))
@@ -482,22 +588,21 @@ describe('sum up frequencies', () => {
     it('should sum up frequencies when in several chunks, and no lemma', (done) => {
         const res = [];
         /* eslint-disable object-curly-newline */
-        from([[{ id: 0, token: 'elle', tag: ['PRO:per'], lemma: 'elle' },
-            { id: 1, token: 'semble', tag: ['VER'], lemma: 'sembler' },
-            { id: 2, token: 'se', tag: ['PRO:per'], lemma: 'se' },
-            { id: 3, token: 'nourrir', tag: ['VER'], lemma: 'nourrir' },
+        from([[[{ id: 0, token: 'elle', tag: ['PRO:per'] },
+            { id: 1, token: 'semble', tag: ['VER'] },
+            { id: 2, token: 'se', tag: ['PRO:per'] },
+            { id: 3, token: 'nourrir', tag: ['VER'] },
             { id: 4,
                 token: 'essentiellement',
                 tag: ['ADV'],
-                lemma: 'essentiellement',
             },
             { id: 5, token: 'de', tag: ['PRE', 'ART:def'] },
-        ], [
-            { id: 6, token: 'plancton', tag: ['NOM'], lemma: 'plancton' },
-            { id: 7, token: 'frais', tag: ['ADJ'], lemma: 'frais' },
-            { id: 8, token: 'et', tag: ['CON'], lemma: 'et' },
+        ]], [[
+            { id: 6, token: 'plancton', tag: ['NOM'] },
+            { id: 7, token: 'frais', tag: ['ADJ'] },
+            { id: 8, token: 'et', tag: ['CON'] },
             { id: 9, token: 'de', tag: ['PRE', 'ART:def'] },
-            { id: 10, token: 'hotdog', tag: ['UNK'], lemma: 'hotdog' }]])
+            { id: 10, token: 'hotdog', tag: ['UNK'] }]]])
         /* eslint-enable object-curly-newline */
             .pipe(ezs('TEEFTExtractTerms', { nounTag: '', adjTag: '' }))
             .pipe(ezs('TEEFTSumUpFrequencies'))
@@ -787,7 +892,7 @@ describe('natural', () => {
     describe('tag', () => {
         it('should correctly tag a sentence in French', (done) => {
             let res = [];
-            from(['Elle', 'semble', 'se', 'nourrir', 'essentiellement', 'de', 'plancton', 'et', 'de', 'hotdog'])
+            from([[['Elle', 'semble', 'se', 'nourrir', 'essentiellement', 'de', 'plancton', 'et', 'de', 'hotdog']]])
                 .pipe(ezs('TEEFTNaturalTag'))
                 // .pipe(ezs('debug'))
                 .on('data', (chunk) => {
@@ -796,18 +901,20 @@ describe('natural', () => {
                     res = res.concat(chunk);
                 })
                 .on('end', () => {
-                    assert.equal(res.length, 10);
-                    assert.equal(res[1].token, 'semble');
-                    assert.equal(res[1].tag[0], 'v');
-                    assert.equal(res[4].token, 'essentiellement');
-                    assert.equal(res[4].tag[0], 'adv');
+                    assert.equal(res.length, 1);
+                    const firstSentence = res[0];
+                    assert.equal(firstSentence.length, 10);
+                    assert.equal(firstSentence[1].token, 'semble');
+                    assert.equal(firstSentence[1].tag[0], 'v');
+                    assert.equal(firstSentence[4].token, 'essentiellement');
+                    assert.equal(firstSentence[4].tag[0], 'adv');
                     done();
                 });
         });
 
         it('should correctly tag a sentence in French with accented words', (done) => {
             let res = [];
-            from(['Ça', 'veut', 'sûrement', 'dire', 'qu\'', 'il', 'fut', 'assassiné'])
+            from([[['Ça', 'veut', 'sûrement', 'dire', 'qu\'', 'il', 'fut', 'assassiné']]])
                 .pipe(ezs('TEEFTNaturalTag'))
                 // .pipe(ezs('debug'))
                 .on('data', (chunk) => {
@@ -816,11 +923,42 @@ describe('natural', () => {
                     res = res.concat(chunk);
                 })
                 .on('end', () => {
-                    assert.equal(res.length, 8);
-                    assert.equal(res[1].token, 'veut');
-                    assert.equal(res[1].tag[0], 'v');
-                    assert.equal(res[2].token, 'sûrement');
-                    assert.equal(res[2].tag[0], 'adv');
+                    assert.equal(res.length, 1);
+                    const firstSentence = res[0];
+                    assert.equal(firstSentence.length, 8);
+                    assert.equal(firstSentence[1].token, 'veut');
+                    assert.equal(firstSentence[1].tag[0], 'v');
+                    assert.equal(firstSentence[2].token, 'sûrement');
+                    assert.equal(firstSentence[2].tag[0], 'adv');
+                    done();
+                });
+        });
+
+        it('should correctly tag two sentences in French with accented words', (done) => {
+            let res = [];
+            from([[
+                ['Ça', 'veut', 'sûrement', 'dire', 'qu\'', 'il', 'fut', 'assassiné'],
+                ['Mais', 'j\'', 'espère', 'que', 'ce', 'n\'', 'était', 'pas', 'grave'],
+            ]])
+                .pipe(ezs('TEEFTNaturalTag'))
+                // .pipe(ezs('debug'))
+                .on('data', (chunk) => {
+                    assert(chunk);
+                    assert(Array.isArray(chunk));
+                    res = res.concat(chunk);
+                })
+                .on('end', () => {
+                    assert.equal(res.length, 2);
+                    const firstSentence = res[0];
+                    assert.equal(firstSentence.length, 8);
+                    assert.equal(firstSentence[1].token, 'veut');
+                    assert.equal(firstSentence[1].tag[0], 'v');
+                    assert.equal(firstSentence[2].token, 'sûrement');
+                    assert.equal(firstSentence[2].tag[0], 'adv');
+                    const secondSentence = res[1];
+                    assert.equal(secondSentence.length, 9);
+                    assert.equal(secondSentence[0].token, 'Mais');
+                    assert(secondSentence[0].tag);
                     done();
                 });
         });
