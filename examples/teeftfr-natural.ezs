@@ -24,14 +24,14 @@ plugin = teeftfr
 ; text = natural
 ; [profile]
 [TEEFTExtractTerms]
-nounTag = nc
-adjTag = adj
+nounTag = NOM
+adjTag = ADJ
 ; [debug]
 ; text = multiterms
 ; [profile]
 [TEEFTFilterTags]
-tags = nc
-tags = adj
+tags = NOM
+tags = ADJ
 ; [debug]
 ; text = filter-tags
 ; [profile]
@@ -44,6 +44,7 @@ tags = adj
 ; text = sum
 ; [profile]
 [TEEFTSpecificity]
+sort = true
 ; [debug]
 ; text = spec
 ; [profile]

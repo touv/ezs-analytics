@@ -1,7 +1,7 @@
 import { Lexicon, RuleSet, BrillPOSTagger } from 'natural';
 
 const baseFolder = `${__dirname}/..`;
-const lexiconFilename = `${baseFolder}/resources/lexicon_from_posjs.json`;
+const lexiconFilename = `${baseFolder}/resources/tagging_wiki08.json`;
 const defaultCategory = 'UNK';
 
 const lexicon = new Lexicon(lexiconFilename, defaultCategory);
