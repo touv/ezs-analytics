@@ -7,7 +7,9 @@ BEGIN	{
   for (i = 3; i <= NF; i++) {
     pos = pos ", \"" $i "\""
   }
-  print "  \"" $1 "\": [" pos "],"
+  key = $1
+  gsub(/\\/, "\\\\\\\\", key)
+  print "  \"" key "\": [" pos "],"
 }
 END	{
   print "}"
