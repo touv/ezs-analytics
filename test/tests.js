@@ -822,6 +822,23 @@ describe('compute specificity', () => {
                 done();
             });
     });
+
+    it('should not crash when input is empty', (done) => {
+        let res = [];
+        let err;
+        from([])
+            .pipe(ezs('TEEFTSpecificity'))
+            // .pipe(ezs('debug'))
+            .pipe(ezs.catch((error) => { err = error; }))
+            .on('data', (chunk) => {
+                assert(Array.isArray(chunk));
+                res = res.concat(chunk);
+            })
+            .on('end', () => {
+                assert.equal(res.length, 0);
+                done(err);
+            });
+    });
 });
 
 describe('filter multiterms and frequent monoterms', () => {

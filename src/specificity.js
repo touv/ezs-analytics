@@ -73,6 +73,10 @@ export default function TEEFTSpecificity(data, feed) {
     const filter = this.getParam('filter', true);
     const sort = this.getParam('sort', false);
     if (this.isLast()) {
+        // When input is empty (this.isFirst && this.isLast)
+        if (terms.length === 0) {
+            return feed.close();
+        }
         let result = addNormalizedSpecificity(terms);
 
         if (filter) {
@@ -85,6 +89,7 @@ export default function TEEFTSpecificity(data, feed) {
         }
 
         feed.write(result);
+        initialize();
         return feed.close();
     }
     if (this.isFirst()) {
