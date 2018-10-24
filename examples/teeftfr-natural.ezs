@@ -6,6 +6,11 @@
 
 # > Note: ezs-basics has to be installed if you want to use JSONString
 
+# > Note: use jq '[limit(10;.[])]' to get only the 10 first tokens
+
+# > Note: use jq 'map(select(.token == "structuration"))' to select a token
+#             jq '.[] | select(.token == "structuration")' does the same
+
 [use]
 plugin = basics
 plugin = teeftfr
