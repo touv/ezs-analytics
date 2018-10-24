@@ -839,6 +839,39 @@ describe('compute specificity', () => {
                 done(err);
             });
     });
+
+    it('should work on several sentences', (done) => {
+        let res = [];
+        from([[
+            /* eslint-disable object-curly-newline */
+            { frequency: 3, length: 1, token: 'logiciel', id: 2703, tag: ['ADJ', 'NOM'], lemma: 'logiciel' },
+            { frequency: 1, length: 1, token: 'content', id: 2704, tag: ['NOM', 'ADJ', 'VER'], lemma: 'content' },
+            { frequency: 1, length: 2, token: 'logiciel content' },
+        ], [
+            { frequency: 1, length: 1, token: 'management', id: 2706, tag: ['NOM'], lemma: 'management' },
+            /* eslint-enable object-curly-newline */
+        ]])
+            .pipe(ezs('TEEFTSpecificity', { sort: true, weightedDictionary: '', filter: false }))
+            // .pipe(ezs('debug'))
+            .on('data', (chunk) => {
+                assert(Array.isArray(chunk));
+                res = res.concat(chunk);
+            })
+            .on('end', () => {
+                assert.equal(res.length, 4);
+                assert.equal(res[0].lemma, 'logiciel');
+                assert.equal(res[0].frequency, 3);
+                assert.equal(res[0].specificity, 1);
+                assert.equal(res[2].token, 'logiciel content');
+                assert.equal(res[2].frequency, 1);
+                assert.equal(res[2].length, 2);
+                assert.equal(res[2].specificity, 1 / 3);
+                assert.equal(res[3].token, 'management');
+                assert.equal(res[3].frequency, 1);
+                assert.equal(res[3].specificity, 1 / 3);
+                done();
+            });
+    });
 });
 
 describe('filter multiterms and frequent monoterms', () => {
