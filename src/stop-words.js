@@ -24,7 +24,7 @@ export default function TEEFTStopWords(data, feed) {
     const stopWordsFile = this.getParam('stopwords', 'StopwFrench');
     const stopWords = getResource(stopWordsFile);
     const res = data
-        .filter(w => !stopWords.includes(w.token));
+        .filter(w => !stopWords.includes(w.token && w.token.toLowerCase()));
     feed.write(res);
     feed.end();
 }

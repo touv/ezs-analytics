@@ -233,6 +233,27 @@ describe('stopwords', () => {
                 done();
             });
     });
+
+    it('should remove uppercase stopwords', (done) => {
+        let res = [];
+        from([[
+        /* eslint-disable object-curly-newline */
+            { frequency: 1, length: 1, token: 'Introduction', tag: ['NOM'] },
+            { frequency: 14, length: 1, token: 'L', tag: ['NOM'] },
+            { frequency: 5, length: 1, token: 'accès', tag: ['NOM'] },
+        /* eslint-enable object-curly-newline */
+        ]])
+            .pipe(ezs('TEEFTStopWords'))
+            // .pipe(ezs('debug'))
+            .on('data', (chunk) => {
+                assert(Array.isArray(chunk));
+                res = res.concat(chunk);
+            })
+            .on('end', () => {
+                assert.equal(res.length, 2);
+                done();
+            });
+    });
 });
 
 describe('filter tags', () => {
