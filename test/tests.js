@@ -1077,3 +1077,93 @@ describe('natural', () => {
         });
     });
 });
+
+describe(('filter-multi-spec'), () => {
+    it('should return all monoterms', (done) => {
+        let res = [];
+        const input = [
+            /* eslint-disable object-curly-newline */
+            { length: 1, token: 'elle', tag: ['PRO:per'] },
+            { length: 1, token: 'semble', tag: ['VER'] },
+            { length: 1, token: 'se', tag: ['PRO:per'] },
+            { length: 1, token: 'nourrir', tag: ['VER'] },
+            { length: 1, token: 'essentiellement', tag: ['ADV'] },
+            { length: 1, token: 'de', tag: ['PRE', 'ART:def'] },
+            { length: 1, token: 'plancton', tag: ['NOM'] },
+            { length: 1, token: 'frais', tag: ['ADJ'] },
+            { length: 1, token: 'et', tag: ['CON'] },
+            { length: 1, token: 'hotdog', tag: ['UNK'] },
+            /* eslint-enable object-curly-newline */
+        ];
+        from([input])
+            .pipe(ezs('TEEFTFilterMultiSpec'))
+            .pipe(ezs('debug'))
+            .on('data', (chunk) => {
+                assert(chunk);
+                assert(Array.isArray(chunk));
+                res = res.concat(chunk);
+            })
+            .on('end', () => {
+                assert.equal(res.length, input.length);
+                done();
+            });
+    });
+
+    it('should return all multiterms above average spec', (done) => {
+        let res = [];
+        const input = [
+            /* eslint-disable object-curly-newline */
+            { length: 2, specificity: 0.5, token: 'apprentissage automatique' },
+            { length: 3, specificity: 0.5, token: 'réseau de neurones' },
+            { length: 4, specificity: 0.24, token: 'information scientifique et technique' },
+            { length: 4, specificity: 0.75, token: 'enseignement supérieur et recherche' },
+            /* eslint-enable object-curly-newline */
+        ];
+        from([input])
+            .pipe(ezs('TEEFTFilterMultiSpec'))
+            .pipe(ezs('debug'))
+            .on('data', (chunk) => {
+                assert(chunk);
+                assert(Array.isArray(chunk));
+                res = res.concat(chunk);
+            })
+            .on('end', () => {
+                assert.equal(res.length, 3);
+                assert.equal(res[0].specificity, 0.5);
+                assert.equal(res[0].token, 'apprentissage automatique');
+                assert.equal(res[2].specificity, 0.75);
+                assert.equal(res[2].token, 'enseignement supérieur et recherche');
+                done();
+            });
+    });
+
+    it('should return all multiterms above average spec, and all monoterms', (done) => {
+        let res = [];
+        const input = [
+            /* eslint-disable object-curly-newline */
+            { length: 2, specificity: 0.5, token: 'apprentissage automatique' },
+            { length: 3, specificity: 0.5, token: 'réseau de neurones' },
+            { length: 4, specificity: 0.24, token: 'information scientifique et technique' },
+            { length: 4, specificity: 0.75, token: 'enseignement supérieur et recherche' },
+            { length: 1, token: 'elle', tag: ['PRO:per'] },
+            { length: 1, token: 'semble', tag: ['VER'] },
+            /* eslint-enable object-curly-newline */
+        ];
+        from([input])
+            .pipe(ezs('TEEFTFilterMultiSpec'))
+            .pipe(ezs('debug'))
+            .on('data', (chunk) => {
+                assert(chunk);
+                assert(Array.isArray(chunk));
+                res = res.concat(chunk);
+            })
+            .on('end', () => {
+                assert.equal(res.length, 5);
+                assert.equal(res[0].specificity, 0.5);
+                assert.equal(res[0].token, 'apprentissage automatique');
+                assert.equal(res[2].specificity, 0.75);
+                assert.equal(res[2].token, 'enseignement supérieur et recherche');
+                done();
+            });
+    });
+});
