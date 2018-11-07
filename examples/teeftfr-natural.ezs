@@ -55,6 +55,8 @@ sort = true
 ; [profile]
 [TEEFTFilterMultiFreq]
 ; [profile]
+[TEEFTFilterMultiSpec]
+; [profile]
 [JSONString]
 wrap = false
 indent = true
