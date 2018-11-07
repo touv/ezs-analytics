@@ -1078,7 +1078,7 @@ describe('natural', () => {
     });
 });
 
-describe(('filter-multi-spec'), () => {
+describe('filter-multi-spec', () => {
     it('should return all monoterms', (done) => {
         let res = [];
         const input = [
@@ -1097,7 +1097,7 @@ describe(('filter-multi-spec'), () => {
         ];
         from([input])
             .pipe(ezs('TEEFTFilterMultiSpec'))
-            .pipe(ezs('debug'))
+            // .pipe(ezs('debug'))
             .on('data', (chunk) => {
                 assert(chunk);
                 assert(Array.isArray(chunk));
@@ -1121,7 +1121,7 @@ describe(('filter-multi-spec'), () => {
         ];
         from([input])
             .pipe(ezs('TEEFTFilterMultiSpec'))
-            .pipe(ezs('debug'))
+            // .pipe(ezs('debug'))
             .on('data', (chunk) => {
                 assert(chunk);
                 assert(Array.isArray(chunk));
@@ -1151,7 +1151,7 @@ describe(('filter-multi-spec'), () => {
         ];
         from([input])
             .pipe(ezs('TEEFTFilterMultiSpec'))
-            .pipe(ezs('debug'))
+            // .pipe(ezs('debug'))
             .on('data', (chunk) => {
                 assert(chunk);
                 assert(Array.isArray(chunk));
