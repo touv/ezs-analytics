@@ -15,48 +15,21 @@
 plugin = basics
 plugin = teeftfr
 
-; [profile]
 [TEEFTSentenceTokenize]
-; [debug]
-; text = sentence
-; [profile]
 [TEEFTTokenize]
-; [debug]
-; text = token
-; [profile]
 [TEEFTNaturalTag]
-; [debug]
-; text = natural
-; [profile]
 [TEEFTExtractTerms]
 nounTag = NOM
 adjTag = ADJ
-; [debug]
-; text = multiterms
-; [profile]
 [TEEFTFilterTags]
 tags = NOM
 tags = ADJ
-; [debug]
-; text = filter-tags
-; [profile]
 [TEEFTStopWords]
-; [debug]
-; text = stop-words
-; [profile]
 [TEEFTSumUpFrequencies]
-; [debug]
-; text = sum
-; [profile]
 [TEEFTSpecificity]
 sort = true
-; [debug]
-; text = spec
-; [profile]
 [TEEFTFilterMultiFreq]
-; [profile]
 [TEEFTFilterMultiSpec]
-; [profile]
 [JSONString]
 wrap = false
 indent = true
