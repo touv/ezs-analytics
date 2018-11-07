@@ -30,7 +30,7 @@ tags = ADJ
 [TEEFTSumUpFrequencies]
 [TEEFTSpecificity]
 sort = true
-[TEEFTFilterMultiFreq]
+[TEEFTFilterMonoFreq]
 [TEEFTFilterMultiSpec]
 [JSONString]
 wrap = false

@@ -912,7 +912,7 @@ describe('filter multiterms and frequent monoterms', () => {
             { frequency: 1, length: 1, token: 'hotdog', id: 10, tag: ['UNK'], lemma: 'hotdog' },
             /* eslint-enable object-curly-newline */
         ]])
-            .pipe(ezs('TEEFTFilterMultiFreq'))
+            .pipe(ezs('TEEFTFilterMonoFreq'))
             // .pipe(ezs('debug'))
             .on('data', (chunk) => {
                 assert(Array.isArray(chunk));
@@ -944,7 +944,7 @@ describe('filter multiterms and frequent monoterms', () => {
             { frequency: 1, length: 5, token: 'plancton frais et de hotdog' },
             /* eslint-enable object-curly-newline */
         ]])
-            .pipe(ezs('TEEFTFilterMultiFreq'))
+            .pipe(ezs('TEEFTFilterMonoFreq'))
             // .pipe(ezs('debug'))
             .on('data', (chunk) => {
                 assert(Array.isArray(chunk));

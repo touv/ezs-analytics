@@ -21,7 +21,7 @@ process.stdin
 
 #### Table of Contents
 
--   [TEEFTFilterMultiFreq](#teeftfiltermultifreq)
+-   [TEEFTFilterMonoFreq](#teeftfiltermonofreq)
     -   [Parameters](#parameters)
 -   [TEEFTFilterMultiSpec](#teeftfiltermultispec)
     -   [Parameters](#parameters-1)
@@ -49,7 +49,7 @@ process.stdin
 -   [TEEFTTokenize](#teefttokenize)
     -   [Parameters](#parameters-11)
 
-### TEEFTFilterMultiFreq
+### TEEFTFilterMonoFreq
 
 Filter the `data`, keeping only multiterms and frequent monoterms.
 

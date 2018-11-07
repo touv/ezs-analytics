@@ -4,7 +4,7 @@ import TEEFTStopWords from './stop-words';
 import TEEFTFilterTags from './filter-tags';
 import TEEFTExtractTerms from './term-extractor';
 import TEEFTSumUpFrequencies from './sum-up-freq';
-import TEEFTFilterMultiFreq from './filter-multi-freq';
+import TEEFTFilterMonoFreq from './filter-mono-freq';
 import TEEFTSpecificity from './specificity';
 import profile from './profile';
 import TEEFTNaturalTag from './natural-tag';
@@ -18,7 +18,7 @@ export default {
     TEEFTFilterTags,
     TEEFTExtractTerms,
     TEEFTSumUpFrequencies,
-    TEEFTFilterMultiFreq,
+    TEEFTFilterMonoFreq,
     TEEFTSpecificity,
     profile,
     TEEFTNaturalTag,

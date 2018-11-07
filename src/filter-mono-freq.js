@@ -9,7 +9,7 @@ import { both, either, filter } from 'ramda';
  * @param {Number}  [multiLimit=2]  threshold for being a multiterm (in tokens number)
  * @param {Number}  [minFrequency=7]    minimal frequency to be taken as a frequent term
  */
-export default function TEEFTFilterMultiFreq(data, feed) {
+export default function TEEFTFilterMonoFreq(data, feed) {
     if (this.isLast()) {
         return feed.close();
     }
