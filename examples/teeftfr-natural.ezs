@@ -11,6 +11,8 @@
 # > Note: use jq 'map(select(.token == "structuration"))' to select a token
 #             jq '.[] | select(.token == "structuration")' does the same
 
+# > Note: use jq 'length' to count the tokens
+
 [use]
 plugin = basics
 plugin = teeftfr
