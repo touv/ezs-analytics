@@ -1041,7 +1041,35 @@ describe('natural', () => {
     describe('sentence-tokenize', () => {
         it('should correctly segment sentences', (done) => {
             let res = [];
-            from(['Je ne suis pas sûr. Il faut un tableau.'])
+            from([{
+                path: '/path/1',
+                content: 'Je ne suis pas sûr. Il faut un tableau.',
+            }])
+                .pipe(ezs('TEEFTSentenceTokenize'))
+                // .pipe(ezs('debug'))
+                .on('data', (chunk) => {
+                    assert(chunk);
+                    assert(Array.isArray(chunk));
+                    res = res.concat(chunk);
+                })
+                .on('end', () => {
+                    assert.equal(res.length, 1);
+                    assert.equel(res[0].sentences.length, 2);
+                    assert.equal(res[0].sentences[0], 'Je ne suis pas sûr.');
+                    assert.equal(res[0].sentences[1], 'Il faut un tableau.');
+                    done();
+                });
+        });
+
+        it('should correctly segment sentences in several strings', (done) => {
+            let res = [];
+            from([{
+                path: '/path/1',
+                content: 'Il faut un tableau.',
+            }, {
+                path: '/path/2',
+                content: 'Et ça j\'en suis sûr. Maintenant!',
+            }])
                 .pipe(ezs('TEEFTSentenceTokenize'))
                 // .pipe(ezs('debug'))
                 .on('data', (chunk) => {
@@ -1051,27 +1079,11 @@ describe('natural', () => {
                 })
                 .on('end', () => {
                     assert.equal(res.length, 2);
-                    assert.equal(res[0], 'Je ne suis pas sûr.');
-                    assert.equal(res[1], 'Il faut un tableau.');
-                    done();
-                });
-        });
-
-        it('should correctly segment sentences in several strings', (done) => {
-            let res = [];
-            from(['Il faut un tableau.', 'Et ça j\'en suis sûr. Maintenant!'])
-                .pipe(ezs('TEEFTSentenceTokenize'))
-                // .pipe(ezs('debug'))
-                .on('data', (chunk) => {
-                    assert(chunk);
-                    assert(Array.isArray(chunk));
-                    res = res.concat(chunk);
-                })
-                .on('end', () => {
-                    assert.equal(res.length, 3);
-                    assert.equal(res[0], 'Il faut un tableau.');
-                    assert.equal(res[1], 'Et ça j\'en suis sûr.');
-                    assert.equal(res[2], 'Maintenant!');
+                    assert.equal(res[0].sentences.length, 1);
+                    assert.equal(res[1].sentences.length, 2);
+                    assert.equal(res[0].sentence[0], 'Il faut un tableau.');
+                    assert.equal(res[1].sentence[0], 'Et ça j\'en suis sûr.');
+                    assert.equal(res[1].sentence[1], 'Maintenant!');
                     done();
                 });
         });
