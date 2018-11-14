@@ -33,20 +33,19 @@ process.stdin
 -   [GetFilesContent](#getfilescontent)
 -   [ListFiles](#listfiles)
     -   [Parameters](#parameters-4)
--   [TEEFTNaturalTag](#teeftnaturaltag)
-    -   [Parameters](#parameters-5)
+-   [natural-tag](#natural-tag)
     -   [Examples](#examples-1)
 -   [profile](#profile)
-    -   [Parameters](#parameters-6)
+    -   [Parameters](#parameters-5)
 -   [TEEFTSentenceTokenize](#teeftsentencetokenize)
 -   [TEEFTSpecificity](#teeftspecificity)
-    -   [Parameters](#parameters-7)
+    -   [Parameters](#parameters-6)
 -   [TEEFTStopWords](#teeftstopwords)
-    -   [Parameters](#parameters-8)
+    -   [Parameters](#parameters-7)
 -   [TEEFTSumUpFrequencies](#teeftsumupfrequencies)
-    -   [Parameters](#parameters-9)
+    -   [Parameters](#parameters-8)
 -   [TEEFTExtractTerms](#teeftextractterms)
-    -   [Parameters](#parameters-10)
+    -   [Parameters](#parameters-9)
     -   [Examples](#examples-2)
 -   [tokenize](#tokenize)
 
@@ -129,27 +128,37 @@ file paths matching the pattern in the directories from the input.
 
 -   `pattern` **[String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** pattern for files (ex: "\*.txt") (optional, default `"*"`)
 
-### TEEFTNaturalTag
+### natural-tag
 
 POS Tagger from natural
 
 French pos tagging using natural (and LEFFF resources)
 
-#### Parameters
+Take an array of documents (objects: { path, sentences: \[\[]] })
 
--   `data` **[Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;[Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;[String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)>>** Array of arrays of tokens (string)
--   `feed` **[Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;[Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)>>** Array of arrays of tokens (object, with `token` and `tag`)
+Yield an array of documents (objects: {
+     path, sentences: \[
+         \[{
+             token: "token",
+             tag: [ "tag", ... ]
+         },
+         ...]
+     ]
+})
 
 #### Examples
 
 ```javascript
-[{ "token": "dans",      "tag": ["prep"] },
-{ "token": "le",        "tag": ["det"]  },
-{ "token": "cadre",     "tag": ["nc"] },
-{ "token": "du",        "tag": ["det"] },
-{ "token": "programme", "tag": ["nc"] }
-},
-]
+[{
+     path: "/path/1",
+     sentences: [{ "token": "dans",      "tag": ["prep"] },
+                 { "token": "le",        "tag": ["det"]  },
+                 { "token": "cadre",     "tag": ["nc"] },
+                 { "token": "du",        "tag": ["det"] },
+                 { "token": "programme", "tag": ["nc"] }
+                 },
+     ]
+ }]
 ```
 
 ### profile

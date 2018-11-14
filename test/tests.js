@@ -979,7 +979,12 @@ describe('natural', () => {
     describe('tag', () => {
         it('should correctly tag a sentence in French', (done) => {
             let res = [];
-            from([[['Elle', 'semble', 'se', 'nourrir', 'essentiellement', 'de', 'plancton', 'et', 'de', 'hotdog']]])
+            from([{
+                path: '/path/1',
+                sentences: [
+                    ['Elle', 'semble', 'se', 'nourrir', 'essentiellement', 'de', 'plancton', 'et', 'de', 'hotdog'],
+                ],
+            }])
                 .pipe(ezs('TEEFTNaturalTag'))
                 // .pipe(ezs('debug'))
                 .on('data', (chunk) => {
@@ -989,7 +994,8 @@ describe('natural', () => {
                 })
                 .on('end', () => {
                     assert.equal(res.length, 1);
-                    const firstSentence = res[0];
+                    assert.equal(res[0].sentences.length, 1);
+                    const firstSentence = res[0].sentences[0];
                     assert.equal(firstSentence.length, 10);
                     assert.equal(firstSentence[1].token, 'semble');
                     assert.equal(firstSentence[1].tag[0], 'VER');
@@ -1001,7 +1007,10 @@ describe('natural', () => {
 
         it('should correctly tag a sentence in French with accented words', (done) => {
             let res = [];
-            from([[['Ça', 'veut', 'sûrement', 'dire', 'qu\'', 'il', 'fut', 'assassiné']]])
+            from([{
+                path: '/path/1',
+                sentences: [['Ça', 'veut', 'sûrement', 'dire', 'qu\'', 'il', 'fut', 'assassiné']],
+            }])
                 .pipe(ezs('TEEFTNaturalTag'))
                 // .pipe(ezs('debug'))
                 .on('data', (chunk) => {
@@ -1011,7 +1020,8 @@ describe('natural', () => {
                 })
                 .on('end', () => {
                     assert.equal(res.length, 1);
-                    const firstSentence = res[0];
+                    assert.equal(res[0].sentences.length, 1);
+                    const firstSentence = res[0].sentences[0];
                     assert.equal(firstSentence.length, 8);
                     assert.equal(firstSentence[1].token, 'veut');
                     assert.equal(firstSentence[1].tag[0], 'VER');
@@ -1023,10 +1033,13 @@ describe('natural', () => {
 
         it('should correctly tag two sentences in French with accented words', (done) => {
             let res = [];
-            from([[
-                ['Ça', 'veut', 'sûrement', 'dire', 'qu\'', 'il', 'fut', 'assassiné'],
-                ['Mais', 'j\'', 'espère', 'que', 'ce', 'n\'', 'était', 'pas', 'grave'],
-            ]])
+            from([{
+                path: '/path/1',
+                sentences: [
+                    ['Ça', 'veut', 'sûrement', 'dire', 'qu\'', 'il', 'fut', 'assassiné'],
+                    ['Mais', 'j\'', 'espère', 'que', 'ce', 'n\'', 'était', 'pas', 'grave'],
+                ],
+            }])
                 .pipe(ezs('TEEFTNaturalTag'))
                 // .pipe(ezs('debug'))
                 .on('data', (chunk) => {
@@ -1035,14 +1048,15 @@ describe('natural', () => {
                     res = res.concat(chunk);
                 })
                 .on('end', () => {
-                    assert.equal(res.length, 2);
-                    const firstSentence = res[0];
+                    assert.equal(res.length, 1);
+                    assert.equal(res[0].sentences.length, 2);
+                    const firstSentence = res[0].sentences[0];
                     assert.equal(firstSentence.length, 8);
                     assert.equal(firstSentence[1].token, 'veut');
                     assert.equal(firstSentence[1].tag[0], 'VER');
                     assert.equal(firstSentence[2].token, 'sûrement');
                     assert.equal(firstSentence[2].tag[0], 'ADV');
-                    const secondSentence = res[1];
+                    const secondSentence = res[0].sentences[1];
                     assert.equal(secondSentence.length, 9);
                     assert.equal(secondSentence[0].token, 'Mais');
                     assert(secondSentence[0].tag);
