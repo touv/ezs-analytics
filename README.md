@@ -30,6 +30,7 @@ process.stdin
 -   [TEEFTFrToTagLem](#teeftfrtotaglem)
     -   [Parameters](#parameters-3)
     -   [Examples](#examples)
+-   [GetFilesContent](#getfilescontent)
 -   [ListFiles](#listfiles)
     -   [Parameters](#parameters-4)
 -   [TEEFTNaturalTag](#teeftnaturaltag)
@@ -115,6 +116,11 @@ from(['Elle semble se nourrir essentiellement de plancton, et de hotdog.'])
 { id: 8, token: 'de', tag: [ 'PRE', 'NOM', 'ART:def' ] },
 { id: 9, token: 'hotdog', tag: [ 'UNK' ] } ]
 ```
+
+### GetFilesContent
+
+Take an array of file paths as input, and returns a list of
+objects containing the `path`, and the `content` of each file.
 
 ### ListFiles
 
