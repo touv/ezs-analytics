@@ -1054,7 +1054,7 @@ describe('natural', () => {
                 })
                 .on('end', () => {
                     assert.equal(res.length, 1);
-                    assert.equel(res[0].sentences.length, 2);
+                    assert.equal(res[0].sentences.length, 2);
                     assert.equal(res[0].sentences[0], 'Je ne suis pas sûr.');
                     assert.equal(res[0].sentences[1], 'Il faut un tableau.');
                     done();
@@ -1081,9 +1081,9 @@ describe('natural', () => {
                     assert.equal(res.length, 2);
                     assert.equal(res[0].sentences.length, 1);
                     assert.equal(res[1].sentences.length, 2);
-                    assert.equal(res[0].sentence[0], 'Il faut un tableau.');
-                    assert.equal(res[1].sentence[0], 'Et ça j\'en suis sûr.');
-                    assert.equal(res[1].sentence[1], 'Maintenant!');
+                    assert.equal(res[0].sentences[0], 'Il faut un tableau.');
+                    assert.equal(res[1].sentences[0], 'Et ça j\'en suis sûr.');
+                    assert.equal(res[1].sentences[1], 'Maintenant!');
                     done();
                 });
         });

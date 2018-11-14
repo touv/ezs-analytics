@@ -13,6 +13,11 @@ export default function TEEFTSentenceTokenize(data, feed) {
     if (this.isLast()) {
         return feed.close();
     }
-    feed.write(tokenizer.tokenize(data));
+    const docsIn = Array.isArray(data) ? data : [data];
+    const docsOut = docsIn.map(doc => ({
+        path: doc.path,
+        sentences: tokenizer.tokenize(doc.content),
+    }));
+    feed.write(docsOut);
     feed.end();
 }
