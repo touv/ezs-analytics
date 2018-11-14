@@ -22,7 +22,7 @@ function ListFiles(data, feed) {
  *
  * @name ListFiles
  * @param {String}  [pattern="*"]   pattern for files (ex: "*.txt")
- * @returns {<Array<String>>}   an array of file paths
+ * @param {<Array<String>>} feed    an array of file paths
  */
 export default {
     ListFiles,

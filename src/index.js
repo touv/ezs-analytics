@@ -11,6 +11,7 @@ import TEEFTSentenceTokenize from './sentence-tokenize';
 import TEEFTFilterMultiSpec from './filter-multi-spec';
 import profile from './profile';
 import ListFiles from './list-files';
+import GetFilesContent from './get-files-content';
 
 export default {
     TEEFTTokenize,
@@ -26,4 +27,5 @@ export default {
     TEEFTSentenceTokenize,
     TEEFTFilterMultiSpec,
     ListFiles,
+    GetFilesContent,
 };
