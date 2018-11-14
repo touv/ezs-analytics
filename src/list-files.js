@@ -1,9 +1,19 @@
+import { glob } from 'glob';
+
 function ListFiles(data, feed) {
     if (this.isLast()) {
         return feed.close();
     }
-    feed.write();
-    feed.end();
+    const pattern = this.getParam('pattern', '*');
+    glob(`${data}/${pattern}`, (err, files) => {
+        if (err) {
+            throw err;
+        }
+        if (files.length) {
+            feed.write(files);
+        }
+        feed.end();
+    });
 }
 
 /**

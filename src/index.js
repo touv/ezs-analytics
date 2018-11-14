@@ -6,10 +6,11 @@ import TEEFTExtractTerms from './term-extractor';
 import TEEFTSumUpFrequencies from './sum-up-freq';
 import TEEFTFilterMonoFreq from './filter-mono-freq';
 import TEEFTSpecificity from './specificity';
-import profile from './profile';
 import TEEFTNaturalTag from './natural-tag';
 import TEEFTSentenceTokenize from './sentence-tokenize';
 import TEEFTFilterMultiSpec from './filter-multi-spec';
+import profile from './profile';
+import ListFiles from './list-files';
 
 export default {
     TEEFTTokenize,
@@ -24,4 +25,5 @@ export default {
     TEEFTNaturalTag,
     TEEFTSentenceTokenize,
     TEEFTFilterMultiSpec,
+    ListFiles,
 };
