@@ -16,6 +16,11 @@ function GetFilesContent(data, feed) {
     Promise.all(promises)
         .then((objects) => {
             feed.write(objects);
+        })
+        .catch((err) => {
+            feed.write([err]);
+        })
+        .finally(() => {
             feed.end();
         });
 }
