@@ -30,24 +30,26 @@ process.stdin
 -   [TEEFTFrToTagLem](#teeftfrtotaglem)
     -   [Parameters](#parameters-3)
     -   [Examples](#examples)
--   [TEEFTNaturalTag](#teeftnaturaltag)
+-   [ListFiles](#listfiles)
     -   [Parameters](#parameters-4)
+-   [TEEFTNaturalTag](#teeftnaturaltag)
+    -   [Parameters](#parameters-5)
     -   [Examples](#examples-1)
 -   [profile](#profile)
-    -   [Parameters](#parameters-5)
--   [TEEFTSentenceTokenize](#teeftsentencetokenize)
     -   [Parameters](#parameters-6)
--   [TEEFTSpecificity](#teeftspecificity)
+-   [TEEFTSentenceTokenize](#teeftsentencetokenize)
     -   [Parameters](#parameters-7)
--   [TEEFTStopWords](#teeftstopwords)
+-   [TEEFTSpecificity](#teeftspecificity)
     -   [Parameters](#parameters-8)
--   [TEEFTSumUpFrequencies](#teeftsumupfrequencies)
+-   [TEEFTStopWords](#teeftstopwords)
     -   [Parameters](#parameters-9)
--   [TEEFTExtractTerms](#teeftextractterms)
+-   [TEEFTSumUpFrequencies](#teeftsumupfrequencies)
     -   [Parameters](#parameters-10)
+-   [TEEFTExtractTerms](#teeftextractterms)
+    -   [Parameters](#parameters-11)
     -   [Examples](#examples-2)
 -   [TEEFTTokenize](#teefttokenize)
-    -   [Parameters](#parameters-11)
+    -   [Parameters](#parameters-12)
 
 ### TEEFTFilterMonoFreq
 
@@ -113,6 +115,15 @@ from(['Elle semble se nourrir essentiellement de plancton, et de hotdog.'])
 { id: 8, token: 'de', tag: [ 'PRE', 'NOM', 'ART:def' ] },
 { id: 9, token: 'hotdog', tag: [ 'UNK' ] } ]
 ```
+
+### ListFiles
+
+Take an array of directory paths as input, a pattern, and returns a list of
+file paths matching the pattern in the directories from the input.
+
+#### Parameters
+
+-   `pattern` **[String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** pattern for files (ex: "\*.txt") (optional, default `"*"`)
 
 ### TEEFTNaturalTag
 
