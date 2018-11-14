@@ -8,7 +8,10 @@ ezs.use(require('../lib'));
 describe('tokenize', () => {
     it('should split ascii simple words', (done) => {
         let res = [];
-        from([['aha blabla hehe']])
+        from([{
+            path: '/path/1',
+            sentences: ['aha blabla hehe'],
+        }])
             .pipe(ezs('TEEFTTokenize'))
             .on('data', (chunk) => {
                 assert(Array.isArray(chunk));
@@ -16,7 +19,8 @@ describe('tokenize', () => {
             })
             .on('end', () => {
                 assert.equal(res.length, 1);
-                const firstSentence = res[0];
+                assert.equal(res[0].sentences.length, 1);
+                const firstSentence = res[0].sentences[0];
                 assert(Array.isArray(firstSentence));
                 assert.equal(firstSentence.length, 3);
                 assert.equal(firstSentence[0], 'aha');
@@ -28,7 +32,10 @@ describe('tokenize', () => {
 
     it('should split french simple words', (done) => {
         let res = [];
-        from([['ça va héhé']])
+        from([{
+            path: '/path/1',
+            sentences: ['ça va héhé'],
+        }])
             .pipe(ezs('TEEFTTokenize'))
             .on('data', (chunk) => {
                 assert(Array.isArray(chunk));
@@ -36,7 +43,8 @@ describe('tokenize', () => {
             })
             .on('end', () => {
                 assert.equal(res.length, 1);
-                const firstSentence = res[0];
+                assert.equal(res[0].sentences.length, 1);
+                const firstSentence = res[0].sentences[0];
                 assert(Array.isArray(firstSentence));
                 assert.equal(firstSentence.length, 3);
                 assert.equal(firstSentence[0], 'ça');
@@ -48,7 +56,10 @@ describe('tokenize', () => {
 
     it('should remove punctuation characters', (done) => {
         let res = [];
-        from([['ça va, héhé!']])
+        from([{
+            path: '/path/1',
+            sentences: ['ça va, héhé!'],
+        }])
             .pipe(ezs('TEEFTTokenize'))
             .on('data', (chunk) => {
                 assert(Array.isArray(chunk));
@@ -56,7 +67,8 @@ describe('tokenize', () => {
             })
             .on('end', () => {
                 assert.equal(res.length, 1);
-                const firstSentence = res[0];
+                assert.equal(res[0].sentences[0].length, 3);
+                const firstSentence = res[0].sentences[0];
                 assert(Array.isArray(firstSentence));
                 assert.equal(firstSentence.length, 3);
                 assert.equal(firstSentence[0], 'ça');
@@ -68,20 +80,24 @@ describe('tokenize', () => {
 
     it('should output as many items as sentences', (done) => {
         let res = [];
-        from([['ça va?', 'héhé!']])
+        from([{
+            path: '/path/1',
+            sentences: ['ça va?', 'héhé!'],
+        }])
             .pipe(ezs('TEEFTTokenize'))
             .on('data', (chunk) => {
                 assert(Array.isArray(chunk));
                 res = res.concat(chunk);
             })
             .on('end', () => {
-                assert.equal(res.length, 2);
-                const firstSentence = res[0];
+                assert.equal(res.length, 1);
+                assert.equal(res[0].sentences.length, 2);
+                const firstSentence = res[0].sentences[0];
                 assert(Array.isArray(firstSentence));
                 assert.equal(firstSentence.length, 2);
                 assert.equal(firstSentence[0], 'ça');
                 assert.equal(firstSentence[1], 'va');
-                const secondSentence = res[1];
+                const secondSentence = res[0].sentences[1];
                 assert(Array.isArray(secondSentence));
                 assert.equal(secondSentence.length, 1);
                 assert.equal(secondSentence[0], 'héhé');

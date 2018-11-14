@@ -39,18 +39,16 @@ process.stdin
 -   [profile](#profile)
     -   [Parameters](#parameters-6)
 -   [TEEFTSentenceTokenize](#teeftsentencetokenize)
-    -   [Parameters](#parameters-7)
 -   [TEEFTSpecificity](#teeftspecificity)
-    -   [Parameters](#parameters-8)
+    -   [Parameters](#parameters-7)
 -   [TEEFTStopWords](#teeftstopwords)
-    -   [Parameters](#parameters-9)
+    -   [Parameters](#parameters-8)
 -   [TEEFTSumUpFrequencies](#teeftsumupfrequencies)
-    -   [Parameters](#parameters-10)
+    -   [Parameters](#parameters-9)
 -   [TEEFTExtractTerms](#teeftextractterms)
-    -   [Parameters](#parameters-11)
+    -   [Parameters](#parameters-10)
     -   [Examples](#examples-2)
--   [TEEFTTokenize](#teefttokenize)
-    -   [Parameters](#parameters-12)
+-   [tokenize](#tokenize)
 
 ### TEEFTFilterMonoFreq
 
@@ -168,12 +166,9 @@ takes.
 
 ### TEEFTSentenceTokenize
 
-Segment the data into an array of sentences.
+Segment the data into an array of documents (objects { path, content }).
 
-#### Parameters
-
--   `data` **[Stream](https://nodejs.org/api/stream.html)** Array of strings
--   `feed` **[Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;[String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)>** 
+Yield an array of documents (objects { path, sentences: \[]})
 
 ### TEEFTSpecificity
 
@@ -245,13 +240,10 @@ tag: ['ADV'],
 { token: 'hotdog', tag: ['UNK'] }]]]
 ```
 
-### TEEFTTokenize
+### tokenize
 
 -   **See: <http://yomguithereal.github.io/talisman/tokenizers/words>**
 
-Extract tokens from a text
+Extract tokens from an array of documents (objects { path, sentences: \[] }).
 
-#### Parameters
-
--   `data` **[Stream](https://nodejs.org/api/stream.html)** 
--   `feed`  
+Yields an array of documents (objects: { path, sentences: \[\[]] })
