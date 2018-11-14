@@ -71,5 +71,20 @@ describe('files', () => {
                     done();
                 });
         });
+
+        it('should return the list of select files', (done) => {
+            let res = [];
+            const dirPath = path.resolve(__dirname, '../examples/data/fr-articles/');
+            from([dirPath])
+                .pipe(ezs('ListFiles', { pattern: '*m*.txt' }))
+                .on('data', (chunk) => {
+                    assert(Array.isArray(chunk));
+                    res = res.concat(chunk);
+                })
+                .on('end', () => {
+                    assert.equal(res.length, 3);
+                    done();
+                });
+        });
     });
 });
