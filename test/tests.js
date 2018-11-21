@@ -223,20 +223,20 @@ describe('stopwords', () => {
     it('should remove stopwords', (done) => {
         let res = [];
         /* eslint-disable object-curly-newline */
-        from([[{ id: 0, token: 'elle', tag: ['PRO:per'], lemma: 'elle' },
-            { id: 1, token: 'semble', tag: ['VER'], lemma: 'sembler' },
-            { id: 2, token: 'se', tag: ['PRO:per'], lemma: 'se' },
-            { id: 3, token: 'nourrir', tag: ['VER'], lemma: 'nourrir' },
-            { id: 4,
-                token: 'essentiellement',
-                tag: ['ADV'],
-                lemma: 'essentiellement',
-            },
-            { id: 5, token: 'de', tag: ['PRE', 'ART:def'], lemma: 'de' },
-            { id: 6, token: 'plancton', tag: ['NOM'], lemma: 'plancton' },
-            { id: 7, token: 'et', tag: ['CON'], lemma: 'et' },
-            { id: 8, token: 'de', tag: ['PRE', 'ART:def'], lemma: 'de' },
-            { id: 9, token: 'hotdog', tag: ['UNK'], lemma: 'hotdog' }]])
+        from([{
+            path: '/path/1',
+            terms: [
+                { term: 'elle', tag: ['PRO'], frequency: 1, length: 1 },
+                { term: 'semble', tag: ['VER'], frequency: 1, length: 1 },
+                { term: 'se', tag: ['PRO'], frequency: 1, length: 1 },
+                { term: 'nourrir', tag: ['VER'], frequency: 1, length: 1 },
+                { term: 'essentiellement', tag: ['ADV'], frequency: 1, length: 1 },
+                { term: 'de', tag: ['PRP'], frequency: 2, length: 1 },
+                { term: 'plancton', tag: ['NOM'], frequency: 1, length: 1 },
+                { term: 'et', tag: ['KON'], frequency: 1, length: 1 },
+                { term: 'hotdog', tag: ['NOM'], frequency: 1, length: 1 },
+            ],
+        }])
         /* eslint-enable object-curly-newline */
             .pipe(ezs('TEEFTStopWords'))
             // .pipe(ezs('debug'))
@@ -245,20 +245,25 @@ describe('stopwords', () => {
                 res = res.concat(chunk);
             })
             .on('end', () => {
-                assert.equal(res.length, 5);
+                assert.equal(res.length, 1);
+                const { terms } = res[0];
+                assert.equal(terms.length, 5);
                 done();
             });
     });
 
     it('should remove uppercase stopwords', (done) => {
         let res = [];
-        from([[
-        /* eslint-disable object-curly-newline */
-            { frequency: 1, length: 1, token: 'Introduction', tag: ['NOM'] },
-            { frequency: 14, length: 1, token: 'L', tag: ['NOM'] },
-            { frequency: 5, length: 1, token: 'accès', tag: ['NOM'] },
-        /* eslint-enable object-curly-newline */
-        ]])
+        from([{
+            path: '/path/1',
+            terms: [
+            /* eslint-disable object-curly-newline */
+                { frequency: 1, length: 1, term: 'Introduction', tag: ['NOM'] },
+                { frequency: 14, length: 1, term: 'L', tag: ['NOM'] },
+                { frequency: 5, length: 1, term: 'accès', tag: ['NOM'] },
+            /* eslint-enable object-curly-newline */
+            ],
+        }])
             .pipe(ezs('TEEFTStopWords'))
             // .pipe(ezs('debug'))
             .on('data', (chunk) => {
@@ -266,7 +271,9 @@ describe('stopwords', () => {
                 res = res.concat(chunk);
             })
             .on('end', () => {
-                assert.equal(res.length, 2);
+                assert.equal(res.length, 1);
+                const { terms } = res[0];
+                assert.equal(terms.length, 2);
                 done();
             });
     });
