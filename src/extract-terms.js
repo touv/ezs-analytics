@@ -90,39 +90,58 @@ export default function TEEFTExtractTerms(data, feed) {
     }
     const nounTag = this.getParam('nounTag', 'NOM');
     const adjTag = this.getParam('adjTag', 'ADJ');
-    reinitSequenceFrequency();
-    let taggedTerms = [];
-    const sentences = R.clone(data);
-    sentences.forEach((sentence) => {
-        const sentenceTaggedTerms = R.clone(sentence)
-            .map(term => ({ ...term, tag: Array.isArray(term.tag) ? term.tag : [term.tag] }));
-        extractSentenceTerms(sentenceTaggedTerms, nounTag, adjTag);
-        taggedTerms = taggedTerms.concat(sentenceTaggedTerms);
-    });
+    const documents = Array.isArray(data) ? data : [data];
 
-    // Compute `length` (number of words) and frequency
-    // @param termSequence
-    const computeLengthFrequency = R.reduce((acc, word) => {
-        acc[word] = {
-            frequency: termFrequency[word],
-            length: word.split(' ').length,
+    function extractFromDocument(document) {
+        reinitSequenceFrequency();
+        let taggedTerms = [];
+        const { sentences } = document;
+        sentences.forEach((sentence) => {
+            const sentenceTaggedTerms = R.clone(sentence)
+                .map(term => ({ ...term, tag: Array.isArray(term.tag) ? term.tag : [term.tag] }));
+            extractSentenceTerms(sentenceTaggedTerms, nounTag, adjTag);
+            taggedTerms = taggedTerms.concat(sentenceTaggedTerms);
+        });
+
+        // Compute `length` (number of words) and frequency
+        // @param termSequence
+        const computeLengthFrequency = R.reduce((acc, word) => {
+            acc[word] = {
+                frequency: termFrequency[word],
+                length: word.split(' ').length,
+            };
+            return acc;
+        }, {});
+
+        // Merge taggedTerms and value (length and frequency) of words (output of
+        // computeLengthFrequency)
+        const mergeTagsAndFrequency = (lengthFreq, token) => R.merge(
+            { ...lengthFreq, token },
+            R.find(taggedTerm => taggedTerm.token === token, taggedTerms),
+        );
+
+        // Rename `token` property to `term`
+        const moveTokenToTerm = R.pipe(
+            taggedToken => ({ ...taggedToken, term: taggedToken.token }),
+            R.omit('token'),
+        );
+
+        // Add tags to terms
+        const addTags = R.mapObjIndexed(mergeTagsAndFrequency);
+        // NOTE: FilterTag is applied *after* TermExtractor
+
+        const terms = R.pipe(computeLengthFrequency, addTags, R.values)(termSequence);
+        const doc = {
+            ...document,
+            terms: terms.map(moveTokenToTerm),
         };
-        return acc;
-    }, {});
+        const result = R.dissoc('sentences', doc);
 
-    // Merge taggedTerms and value (length and frequency) of words (output of
-    // computeLengthFrequency)
-    const mergeTagsAndFrequency = (lengthFreq, token) => R.merge(
-        { ...lengthFreq, token },
-        R.find(taggedTerm => taggedTerm.token === token, taggedTerms),
-    );
+        return result;
+    }
 
-    // Add tags to terms
-    const addTags = R.mapObjIndexed(mergeTagsAndFrequency);
-    // NOTE: FilterTag is applied *after* TermExtractor
+    const results = documents.map(extractFromDocument);
 
-    const result = R.pipe(computeLengthFrequency, addTags)(termSequence);
-
-    R.map(item => feed.write(item), result);
+    feed.write(results);
     feed.end();
 }

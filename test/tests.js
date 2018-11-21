@@ -447,7 +447,7 @@ describe('extract sentence\'s terms', () => {
 
 describe('extract terms', () => {
     it('should return three terms', (done) => {
-        const res = [];
+        let res = [];
         /* eslint-disable object-curly-newline */
         from([{
             path: '/path/1',
@@ -473,8 +473,8 @@ describe('extract terms', () => {
             .pipe(ezs('TEEFTExtractTerms'))
             // .pipe(ezs('debug'))
             .on('data', (chunk) => {
-                assert(typeof chunk, 'object');
-                res.push(chunk);
+                assert.ok(Array.isArray(chunk));
+                res = res.concat(chunk);
             })
             .on('end', () => {
                 assert.equal(res.length, 1);
@@ -497,7 +497,7 @@ describe('extract terms', () => {
     });
 
     it('should compute correct frequencies', (done) => {
-        const res = [];
+        let res = [];
         /* eslint-disable object-curly-newline */
         from([{
             path: '/path/1',
@@ -524,8 +524,8 @@ describe('extract terms', () => {
             .pipe(ezs('TEEFTExtractTerms', { nounTag: '', adjTag: '' }))
             // .pipe(ezs('debug'))
             .on('data', (chunk) => {
-                assert.equal(typeof chunk, 'object');
-                res.push(chunk);
+                assert.ok(Array.isArray(chunk));
+                res = res.concat(chunk);
             })
             .on('end', () => {
                 assert.equal(res.length, 1);
@@ -543,7 +543,7 @@ describe('extract terms', () => {
     });
 
     it('should return terms from several sentences', (done) => {
-        const res = [];
+        let res = [];
         from([{
             path: '/path/1',
             sentences: [[
@@ -559,8 +559,8 @@ describe('extract terms', () => {
             .pipe(ezs('TEEFTExtractTerms', { nounTag: '', adjTag: '' }))
             // .pipe(ezs('debug'))
             .on('data', (chunk) => {
-                assert.equal(typeof chunk, 'object');
-                res.push(chunk);
+                assert.ok(Array.isArray(chunk));
+                res = res.concat(chunk);
             })
             .on('end', () => {
                 assert.equal(res.length, 1);
@@ -570,39 +570,46 @@ describe('extract terms', () => {
             });
     });
 
-    // Skip this test since sentences should be contained in only one chunk.
-    it.skip('should decompose frequencies when in several chunks', (done) => {
-        const res = [];
-        /* eslint-disable object-curly-newline */
-        from([[[{ id: 0, token: 'elle', tag: ['PRO:per'], lemma: 'elle' },
-            { id: 1, token: 'semble', tag: ['VER'], lemma: 'sembler' },
-            { id: 2, token: 'se', tag: ['PRO:per'], lemma: 'se' },
-            { id: 3, token: 'nourrir', tag: ['VER'], lemma: 'nourrir' },
-            { id: 4,
-                token: 'essentiellement',
-                tag: ['ADV'],
-                lemma: 'essentiellement',
-            },
-            { id: 5, token: 'de', tag: ['PRE', 'ART:def'], lemma: 'de' },
-        ]], [[
-            { id: 6, token: 'plancton', tag: ['NOM'], lemma: 'plancton' },
-            { id: 7, token: 'frais', tag: ['ADJ'], lemma: 'frais' },
-            { id: 8, token: 'et', tag: ['CON'], lemma: 'et' },
-            { id: 9, token: 'de', tag: ['PRE', 'ART:def'], lemma: 'de' },
-            { id: 10, token: 'hotdog', tag: ['UNK'], lemma: 'hotdog' }]]])
-        /* eslint-enable object-curly-newline */
+    it('should consider two different documents as different', (done) => {
+        let res = [];
+        from([{
+            path: '/path/1',
+            sentences: [[
+                { token: 'elle', tag: ['PRO:per'] },
+                { token: 'semble', tag: ['VER'] },
+                { token: 'heureuse', tag: ['ADJ'] },
+            ], [
+                { token: 'mais', tag: ['CON'] },
+                { token: 'pas', tag: ['FAKE'] },
+                { token: 'lui', tag: ['PRO'] },
+            ]],
+        }, {
+            path: '/path/2',
+            sentences: [[
+                { token: 'elle', tag: ['PRO:per'] },
+                { token: 'est', tag: ['VER'] },
+                { token: 'là', tag: ['ADV'] },
+            ]],
+        }])
             .pipe(ezs('TEEFTExtractTerms', { nounTag: '', adjTag: '' }))
             // .pipe(ezs('debug'))
             .on('data', (chunk) => {
-                assert(typeof chunk, 'object');
-                res.push(chunk);
+                assert.ok(Array.isArray(chunk));
+                res = res.concat(chunk);
             })
             .on('end', () => {
-                assert.equal(res.length, 13);
-                assert.equal(res[5].lemma, 'de');
-                assert.equal(res[10].lemma, 'de');
-                assert.equal(res[5].frequency, 1);
-                assert.equal(res[10].frequency, 1);
+                assert.equal(res.length, 2);
+                const [doc1, doc2] = res;
+                const { terms: terms1 } = doc1;
+                const { terms: terms2 } = doc2;
+                assert.equal(terms1.length, 8);
+                assert.equal(terms1[1].term, 'semble');
+                assert.equal(terms1[6].term, 'lui');
+                assert.equal(terms1[1].frequency, 1);
+                assert.equal(terms1[6].frequency, 1);
+                assert.equal(terms2.length, 4);
+                assert.equal(terms2[0].term, 'elle');
+                assert.equal(terms2[0].frequency, 1); // That's the most important
                 done();
             });
     });
