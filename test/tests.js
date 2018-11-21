@@ -707,23 +707,26 @@ describe('sum up frequencies', () => {
     });
 });
 
-describe('compute specificity', () => {
+describe.only('compute specificity', () => {
     it('should work without weights', (done) => {
         let res = [];
-        from([[
-            /* eslint-disable object-curly-newline */
-            { frequency: 8, length: 1, token: 'elle', id: 0, tag: ['PRO:per'], lemma: 'elle' },
-            { frequency: 1, length: 1, token: 'semble', id: 1, tag: ['VER'], lemma: 'sembler' },
-            { frequency: 1, length: 1, token: 'se', id: 2, tag: ['PRO:per'], lemma: 'se' },
-            { frequency: 1, length: 1, token: 'nourrir', id: 3, tag: ['VER'], lemma: 'nourrir' },
-            { frequency: 1, length: 1, token: 'essentiellement', id: 4, tag: ['ADV'], lemma: 'essentiellement' },
-            { frequency: 2, length: 1, token: 'de', id: 9, tag: ['PRE', 'ART:def'], lemma: 'de' },
-            { frequency: 1, length: 1, token: 'plancton', id: 6, tag: ['NOM'], lemma: 'plancton' },
-            { frequency: 1, length: 1, token: 'frais', id: 7, tag: ['ADJ'], lemma: 'frais' },
-            { frequency: 1, length: 1, token: 'et', id: 8, tag: ['CON'], lemma: 'et' },
-            { frequency: 1, length: 1, token: 'hotdog', id: 10, tag: ['UNK'], lemma: 'hotdog' },
-            /* eslint-enable object-curly-newline */
-        ]])
+        from([{
+            path: '/path/1',
+            terms: [
+                /* eslint-disable object-curly-newline */
+                { frequency: 8, length: 1, term: 'elle', id: 0, tag: ['PRO:per'], lemma: 'elle' },
+                { frequency: 1, length: 1, term: 'semble', id: 1, tag: ['VER'], lemma: 'sembler' },
+                { frequency: 1, length: 1, term: 'se', id: 2, tag: ['PRO:per'], lemma: 'se' },
+                { frequency: 1, length: 1, term: 'nourrir', id: 3, tag: ['VER'], lemma: 'nourrir' },
+                { frequency: 1, length: 1, term: 'essentiellement', id: 4, tag: ['ADV'], lemma: 'essentiellement' },
+                { frequency: 2, length: 1, term: 'de', id: 9, tag: ['PRE', 'ART:def'], lemma: 'de' },
+                { frequency: 1, length: 1, term: 'plancton', id: 6, tag: ['NOM'], lemma: 'plancton' },
+                { frequency: 1, length: 1, term: 'frais', id: 7, tag: ['ADJ'], lemma: 'frais' },
+                { frequency: 1, length: 1, term: 'et', id: 8, tag: ['CON'], lemma: 'et' },
+                { frequency: 1, length: 1, term: 'hotdog', id: 10, tag: ['UNK'], lemma: 'hotdog' },
+                /* eslint-enable object-curly-newline */
+            ],
+        }])
             .pipe(ezs('TEEFTSpecificity', { weightedDictionary: null, filter: false }))
             // .pipe(ezs('debug'))
             .on('data', (chunk) => {
@@ -731,26 +734,31 @@ describe('compute specificity', () => {
                 res = res.concat(chunk);
             })
             .on('end', () => {
-                assert.equal(res.length, 10);
-                assert.equal(res[0].lemma, 'elle');
-                assert.equal(res[0].frequency, 8);
-                assert.equal(res[0].specificity, 1);
+                assert.equal(res.length, 1);
+                const { terms } = res[0];
+                assert.equal(terms.length, 10);
+                assert.equal(terms[0].lemma, 'elle');
+                assert.equal(terms[0].frequency, 8);
+                assert.equal(terms[0].specificity, 1);
                 done();
             });
     });
 
     it('should work with weights', (done) => {
         let res = [];
-        from([[
-            /* eslint-disable object-curly-newline */
-            { frequency: 1, length: 1, token: 'semble', id: 1, tag: ['VER'], lemma: 'sembler' },
-            { frequency: 1, length: 1, token: 'nourrir', id: 3, tag: ['VER'], lemma: 'nourrir' },
-            { frequency: 1, length: 1, token: 'essentiellement', id: 4, tag: ['ADV'], lemma: 'essentiellement' },
-            { frequency: 1, length: 1, token: 'plancton', id: 6, tag: ['NOM'], lemma: 'plancton' },
-            { frequency: 1, length: 1, token: 'frais', id: 7, tag: ['ADJ'], lemma: 'frais' },
-            { frequency: 1, length: 1, token: 'hotdog', id: 10, tag: ['UNK'], lemma: 'hotdog' },
-            /* eslint-enable object-curly-newline */
-        ]])
+        from([{
+            path: '/path/1',
+            terms: [
+                /* eslint-disable object-curly-newline */
+                { frequency: 1, length: 1, term: 'semble', id: 1, tag: ['VER'], lemma: 'sembler' },
+                { frequency: 1, length: 1, term: 'nourrir', id: 3, tag: ['VER'], lemma: 'nourrir' },
+                { frequency: 1, length: 1, term: 'essentiellement', id: 4, tag: ['ADV'], lemma: 'essentiellement' },
+                { frequency: 1, length: 1, term: 'plancton', id: 6, tag: ['NOM'], lemma: 'plancton' },
+                { frequency: 1, length: 1, term: 'frais', id: 7, tag: ['ADJ'], lemma: 'frais' },
+                { frequency: 1, length: 1, term: 'hotdog', id: 10, tag: ['UNK'], lemma: 'hotdog' },
+                /* eslint-enable object-curly-newline */
+            ],
+        }])
             .pipe(ezs('TEEFTSpecificity', { filter: false }))
             // .pipe(ezs('debug'))
             .on('data', (chunk) => {
@@ -758,26 +766,31 @@ describe('compute specificity', () => {
                 res = res.concat(chunk);
             })
             .on('end', () => {
-                assert.equal(res.length, 6);
-                assert.equal(res[0].token, 'semble');
-                assert.equal(res[0].frequency, 1);
-                assert.equal(res[0].specificity, 0.0008964346775894244);
+                assert.equal(res.length, 1);
+                const { terms } = res[0];
+                assert.equal(terms.length, 6);
+                assert.equal(terms[0].term, 'semble');
+                assert.equal(terms[0].frequency, 1);
+                assert.equal(terms[0].specificity, 0.0008964346775894244);
                 done();
             });
     });
 
     it('should work with weights and filter', (done) => {
         let res = [];
-        from([[
-            /* eslint-disable object-curly-newline */
-            { frequency: 1, length: 1, token: 'semble', id: 1, tag: ['VER'], lemma: 'sembler' },
-            { frequency: 1, length: 1, token: 'nourrir', id: 3, tag: ['VER'], lemma: 'nourrir' },
-            { frequency: 1, length: 1, token: 'essentiellement', id: 4, tag: ['ADV'], lemma: 'essentiellement' },
-            { frequency: 1, length: 1, token: 'plancton', id: 6, tag: ['NOM'], lemma: 'plancton' },
-            { frequency: 1, length: 1, token: 'frais', id: 7, tag: ['ADJ'], lemma: 'frais' },
-            { frequency: 1, length: 1, token: 'hotdog', id: 10, tag: ['UNK'], lemma: 'hotdog' },
-            /* eslint-enable object-curly-newline */
-        ]])
+        from([{
+            path: '/path/1',
+            terms: [
+                /* eslint-disable object-curly-newline */
+                { frequency: 1, length: 1, term: 'semble', id: 1, tag: ['VER'], lemma: 'sembler' },
+                { frequency: 1, length: 1, term: 'nourrir', id: 3, tag: ['VER'], lemma: 'nourrir' },
+                { frequency: 1, length: 1, term: 'essentiellement', id: 4, tag: ['ADV'], lemma: 'essentiellement' },
+                { frequency: 1, length: 1, term: 'plancton', id: 6, tag: ['NOM'], lemma: 'plancton' },
+                { frequency: 1, length: 1, term: 'frais', id: 7, tag: ['ADJ'], lemma: 'frais' },
+                { frequency: 1, length: 1, term: 'hotdog', id: 10, tag: ['UNK'], lemma: 'hotdog' },
+                /* eslint-enable object-curly-newline */
+            ],
+        }])
             .pipe(ezs('TEEFTSpecificity'))
             // .pipe(ezs('debug'))
             .on('data', (chunk) => {
@@ -786,29 +799,34 @@ describe('compute specificity', () => {
             })
             .on('end', () => {
                 assert.equal(res.length, 1);
-                assert.equal(res[0].lemma, 'hotdog');
-                assert.equal(res[0].frequency, 1);
-                assert.equal(res[0].specificity, 1);
+                const { terms } = res[0];
+                assert.equal(terms.length, 1);
+                assert.equal(terms[0].lemma, 'hotdog');
+                assert.equal(terms[0].frequency, 1);
+                assert.equal(terms[0].specificity, 1);
                 done();
             });
     });
 
     it('should sort when asked', (done) => {
         let res = [];
-        from([[
-            /* eslint-disable object-curly-newline */
-            { frequency: 8, length: 1, token: 'elle', id: 0, tag: ['PRO:per'], lemma: 'elle' },
-            { frequency: 1, length: 1, token: 'semble', id: 1, tag: ['VER'], lemma: 'sembler' },
-            { frequency: 1, length: 1, token: 'se', id: 2, tag: ['PRO:per'], lemma: 'se' },
-            { frequency: 1, length: 1, token: 'nourrir', id: 3, tag: ['VER'], lemma: 'nourrir' },
-            { frequency: 1, length: 1, token: 'essentiellement', id: 4, tag: ['ADV'], lemma: 'essentiellement' },
-            { frequency: 2, length: 1, token: 'de', id: 9, tag: ['PRE', 'ART:def'], lemma: 'de' },
-            { frequency: 1, length: 1, token: 'plancton', id: 6, tag: ['NOM'], lemma: 'plancton' },
-            { frequency: 1, length: 1, token: 'frais', id: 7, tag: ['ADJ'], lemma: 'frais' },
-            { frequency: 1, length: 1, token: 'et', id: 8, tag: ['CON'], lemma: 'et' },
-            { frequency: 1, length: 1, token: 'hotdog', id: 10, tag: ['UNK'], lemma: 'hotdog' },
-            /* eslint-enable object-curly-newline */
-        ]])
+        from([{
+            path: '/path/1',
+            terms: [
+                /* eslint-disable object-curly-newline */
+                { frequency: 8, length: 1, term: 'elle', id: 0, tag: ['PRO:per'], lemma: 'elle' },
+                { frequency: 1, length: 1, term: 'semble', id: 1, tag: ['VER'], lemma: 'sembler' },
+                { frequency: 1, length: 1, term: 'se', id: 2, tag: ['PRO:per'], lemma: 'se' },
+                { frequency: 1, length: 1, term: 'nourrir', id: 3, tag: ['VER'], lemma: 'nourrir' },
+                { frequency: 1, length: 1, term: 'essentiellement', id: 4, tag: ['ADV'], lemma: 'essentiellement' },
+                { frequency: 2, length: 1, term: 'de', id: 9, tag: ['PRE', 'ART:def'], lemma: 'de' },
+                { frequency: 1, length: 1, term: 'plancton', id: 6, tag: ['NOM'], lemma: 'plancton' },
+                { frequency: 1, length: 1, term: 'frais', id: 7, tag: ['ADJ'], lemma: 'frais' },
+                { frequency: 1, length: 1, term: 'et', id: 8, tag: ['CON'], lemma: 'et' },
+                { frequency: 1, length: 1, term: 'hotdog', id: 10, tag: ['UNK'], lemma: 'hotdog' },
+                /* eslint-enable object-curly-newline */
+            ],
+        }])
             .pipe(ezs('TEEFTSpecificity', { sort: true, weightedDictionary: '', filter: false }))
             // .pipe(ezs('debug'))
             .on('data', (chunk) => {
@@ -816,31 +834,35 @@ describe('compute specificity', () => {
                 res = res.concat(chunk);
             })
             .on('end', () => {
-                assert.equal(res.length, 10);
-                assert.equal(res.find(t => t.token === 'elle').specificity, 1);
-                assert.equal(res.find(t => t.token === 'de').specificity, 0.25);
-                assert.equal(res.find(t => t.token === 'semble').specificity, 0.125);
+                assert.equal(res.length, 1);
+                const { terms } = res[0];
+                assert.equal(terms.length, 10);
+                assert.equal(terms.find(t => t.term === 'elle').specificity, 1);
+                assert.equal(terms.find(t => t.term === 'de').specificity, 0.25);
+                assert.equal(terms.find(t => t.term === 'semble').specificity, 0.125);
                 done();
             });
     });
 
     it('should work whatever the order of terms', (done) => {
         let res = [];
-        from([[
-            /* eslint-disable object-curly-newline */
-            { frequency: 1, length: 1, token: 'semble', id: 1, tag: ['VER'], lemma: 'sembler' },
-            { frequency: 1, length: 1, token: 'se', id: 2, tag: ['PRO:per'], lemma: 'se' },
-            { frequency: 1, length: 1, token: 'nourrir', id: 3, tag: ['VER'], lemma: 'nourrir' },
-            { frequency: 1, length: 1, token: 'essentiellement', id: 4, tag: ['ADV'], lemma: 'essentiellement' },
-            { frequency: 2, length: 1, token: 'de', id: 9, tag: ['PRE', 'ART:def'], lemma: 'de' },
-            { frequency: 1, length: 1, token: 'plancton', id: 6, tag: ['NOM'], lemma: 'plancton' },
-            { frequency: 1, length: 1, token: 'frais', id: 7, tag: ['ADJ'], lemma: 'frais' },
-            { frequency: 1, length: 1, token: 'et', id: 8, tag: ['CON'], lemma: 'et' },
-            { frequency: 1, length: 1, token: 'hotdog', id: 10, tag: ['UNK'], lemma: 'hotdog' },
-            { frequency: 8, length: 1, token: 'elle', id: 0, tag: ['PRO:per'], lemma: 'elle' },
-            /* eslint-enable object-curly-newline */
-
-        ]])
+        from([{
+            path: '/path/1',
+            terms: [
+                /* eslint-disable object-curly-newline */
+                { frequency: 1, length: 1, term: 'semble', id: 1, tag: ['VER'], lemma: 'sembler' },
+                { frequency: 1, length: 1, term: 'se', id: 2, tag: ['PRO:per'], lemma: 'se' },
+                { frequency: 1, length: 1, term: 'nourrir', id: 3, tag: ['VER'], lemma: 'nourrir' },
+                { frequency: 1, length: 1, term: 'essentiellement', id: 4, tag: ['ADV'], lemma: 'essentiellement' },
+                { frequency: 2, length: 1, term: 'de', id: 9, tag: ['PRE', 'ART:def'], lemma: 'de' },
+                { frequency: 1, length: 1, term: 'plancton', id: 6, tag: ['NOM'], lemma: 'plancton' },
+                { frequency: 1, length: 1, term: 'frais', id: 7, tag: ['ADJ'], lemma: 'frais' },
+                { frequency: 1, length: 1, term: 'et', id: 8, tag: ['CON'], lemma: 'et' },
+                { frequency: 1, length: 1, term: 'hotdog', id: 10, tag: ['UNK'], lemma: 'hotdog' },
+                { frequency: 8, length: 1, term: 'elle', id: 0, tag: ['PRO:per'], lemma: 'elle' },
+                /* eslint-enable object-curly-newline */
+            ],
+        }])
             .pipe(ezs('TEEFTSpecificity', { sort: true, weightedDictionary: '', filter: false }))
             // .pipe(ezs('debug'))
             .on('data', (chunk) => {
@@ -858,14 +880,17 @@ describe('compute specificity', () => {
 
     it('should keep multiterms (terms without tags)', (done) => {
         let res = [];
-        from([[
-            /* eslint-disable object-curly-newline */
-            { frequency: 3, length: 1, token: 'logiciel', id: 2703, tag: ['ADJ', 'NOM'], lemma: 'logiciel' },
-            { frequency: 1, length: 1, token: 'content', id: 2704, tag: ['NOM', 'ADJ', 'VER'], lemma: 'content' },
-            { frequency: 1, length: 2, token: 'logiciel content' },
-            { frequency: 1, length: 1, token: 'management', id: 2706, tag: ['NOM'], lemma: 'management' },
-            /* eslint-enable object-curly-newline */
-        ]])
+        from([{
+            path: '/path/1',
+            terms: [
+                /* eslint-disable object-curly-newline */
+                { frequency: 3, length: 1, term: 'logiciel', id: 2703, tag: ['ADJ', 'NOM'], lemma: 'logiciel' },
+                { frequency: 1, length: 1, term: 'content', id: 2704, tag: ['NOM', 'ADJ', 'VER'], lemma: 'content' },
+                { frequency: 1, length: 2, term: 'logiciel content' },
+                { frequency: 1, length: 1, term: 'management', id: 2706, tag: ['NOM'], lemma: 'management' },
+                /* eslint-enable object-curly-newline */
+            ],
+        }])
             .pipe(ezs('TEEFTSpecificity', { sort: true, weightedDictionary: '', filter: true }))
             // .pipe(ezs('debug'))
             .on('data', (chunk) => {
@@ -873,28 +898,33 @@ describe('compute specificity', () => {
                 res = res.concat(chunk);
             })
             .on('end', () => {
-                assert.equal(res.length, 2);
-                assert.equal(res[0].lemma, 'logiciel');
-                assert.equal(res[0].frequency, 3);
-                assert.equal(res[0].specificity, 1);
-                assert.equal(res[1].token, 'logiciel content');
-                assert.equal(res[1].frequency, 1);
-                assert.equal(res[1].length, 2);
-                assert.equal(res[1].specificity, 1 / 3);
+                assert.equal(res.length, 1);
+                const { terms } = res[0];
+                assert.equal(terms.length, 2);
+                assert.equal(terms[0].lemma, 'logiciel');
+                assert.equal(terms[0].frequency, 3);
+                assert.equal(terms[0].specificity, 1);
+                assert.equal(terms[1].term, 'logiciel content');
+                assert.equal(terms[1].frequency, 1);
+                assert.equal(terms[1].length, 2);
+                assert.equal(terms[1].specificity, 1 / 3);
                 done();
             });
     });
 
     it('should compute average specificity only on monoterms', (done) => {
         let res = [];
-        from([[
-            /* eslint-disable object-curly-newline */
-            { frequency: 1, length: 1, token: 'logiciel', id: 2703, tag: ['ADJ', 'NOM'], lemma: 'logiciel' },
-            { frequency: 1, length: 1, token: 'content', id: 2704, tag: ['NOM', 'ADJ', 'VER'], lemma: 'content' },
-            { frequency: 10, length: 2, token: 'logiciel content' },
-            { frequency: 1, length: 1, token: 'management', id: 2706, tag: ['NOM'], lemma: 'management' },
-            /* eslint-enable object-curly-newline */
-        ]])
+        from([{
+            path: '/path/1',
+            terms: [
+                /* eslint-disable object-curly-newline */
+                { frequency: 1, length: 1, term: 'logiciel', id: 2703, tag: ['ADJ', 'NOM'], lemma: 'logiciel' },
+                { frequency: 1, length: 1, term: 'content', id: 2704, tag: ['NOM', 'ADJ', 'VER'], lemma: 'content' },
+                { frequency: 10, length: 2, term: 'logiciel content' },
+                { frequency: 1, length: 1, term: 'management', id: 2706, tag: ['NOM'], lemma: 'management' },
+                /* eslint-enable object-curly-newline */
+            ],
+        }])
             .pipe(ezs('TEEFTSpecificity', { sort: true, filter: true }))
             // .pipe(ezs('debug'))
             .on('data', (chunk) => {
@@ -902,10 +932,12 @@ describe('compute specificity', () => {
                 res = res.concat(chunk);
             })
             .on('end', () => {
-                assert.equal(res.length, 2);
-                assert.equal(res[0].tag, undefined); // multiterm
-                assert.equal(res[0].specificity, 1);
-                assert(res[1].tag); // monoterm
+                assert.equal(res.length, 1);
+                const { terms } = res[0];
+                assert.equal(terms.length, 2);
+                assert.equal(terms[0].tag, undefined); // multiterm
+                assert.equal(terms[0].specificity, 1);
+                assert(terms[1].tag); // monoterm
                 done();
             });
     });
@@ -927,17 +959,23 @@ describe('compute specificity', () => {
             });
     });
 
-    it('should work on several sentences', (done) => {
+    it('should work on several documents', (done) => {
         let res = [];
-        from([[
-            /* eslint-disable object-curly-newline */
-            { frequency: 3, length: 1, token: 'logiciel', id: 2703, tag: ['ADJ', 'NOM'], lemma: 'logiciel' },
-            { frequency: 1, length: 1, token: 'content', id: 2704, tag: ['NOM', 'ADJ', 'VER'], lemma: 'content' },
-            { frequency: 1, length: 2, token: 'logiciel content' },
-        ], [
-            { frequency: 1, length: 1, token: 'management', id: 2706, tag: ['NOM'], lemma: 'management' },
-            /* eslint-enable object-curly-newline */
-        ]])
+        /* eslint-disable object-curly-newline */
+        from([{
+            path: '/path/1',
+            terms: [
+                { frequency: 3, length: 1, term: 'logiciel', id: 2703, tag: ['ADJ', 'NOM'], lemma: 'logiciel' },
+                { frequency: 1, length: 1, term: 'content', id: 2704, tag: ['NOM', 'ADJ', 'VER'], lemma: 'content' },
+                { frequency: 1, length: 2, term: 'logiciel content' },
+            ],
+        }, {
+            path: '/path/2',
+            terms: [
+                { frequency: 1, length: 1, term: 'management', id: 2706, tag: ['NOM'], lemma: 'management' },
+            ],
+        }])
+        /* eslint-enable object-curly-newline */
             .pipe(ezs('TEEFTSpecificity', { sort: true, weightedDictionary: '', filter: false }))
             // .pipe(ezs('debug'))
             .on('data', (chunk) => {
@@ -945,17 +983,20 @@ describe('compute specificity', () => {
                 res = res.concat(chunk);
             })
             .on('end', () => {
-                assert.equal(res.length, 4);
-                assert.equal(res[0].lemma, 'logiciel');
-                assert.equal(res[0].frequency, 3);
-                assert.equal(res[0].specificity, 1);
-                assert.equal(res[2].token, 'logiciel content');
-                assert.equal(res[2].frequency, 1);
-                assert.equal(res[2].length, 2);
-                assert.equal(res[2].specificity, 1 / 3);
-                assert.equal(res[3].token, 'management');
-                assert.equal(res[3].frequency, 1);
-                assert.equal(res[3].specificity, 1 / 3);
+                assert.equal(res.length, 2);
+                const { terms: terms1 } = res[0];
+                const { terms: terms2 } = res[1];
+                assert.equal(terms1.length, 3);
+                assert.equal(terms1[0].lemma, 'logiciel');
+                assert.equal(terms1[0].frequency, 3);
+                assert.equal(terms1[0].specificity, 1);
+                assert.equal(terms1[2].term, 'logiciel content');
+                assert.equal(terms1[2].frequency, 1);
+                assert.equal(terms1[2].length, 2);
+                assert.equal(terms1[2].specificity, 1 / 2);
+                assert.equal(terms2[3].term, 'management');
+                assert.equal(terms2[3].frequency, 1);
+                assert.equal(terms2[3].specificity, 1 / 1);
                 done();
             });
     });
