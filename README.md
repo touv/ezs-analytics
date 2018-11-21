@@ -21,33 +21,73 @@ process.stdin
 
 #### Table of Contents
 
--   [TEEFTFilterMonoFreq](#teeftfiltermonofreq)
+-   [TEEFTExtractTerms](#teeftextractterms)
     -   [Parameters](#parameters)
--   [TEEFTFilterMultiSpec](#teeftfiltermultispec)
-    -   [Parameters](#parameters-1)
--   [TEEFTFilterTags](#teeftfiltertags)
-    -   [Parameters](#parameters-2)
--   [TEEFTFrToTagLem](#teeftfrtotaglem)
-    -   [Parameters](#parameters-3)
     -   [Examples](#examples)
+-   [TEEFTFilterMonoFreq](#teeftfiltermonofreq)
+    -   [Parameters](#parameters-1)
+-   [TEEFTFilterMultiSpec](#teeftfiltermultispec)
+    -   [Parameters](#parameters-2)
+-   [TEEFTFilterTags](#teeftfiltertags)
+    -   [Parameters](#parameters-3)
+-   [TEEFTFrToTagLem](#teeftfrtotaglem)
+    -   [Parameters](#parameters-4)
+    -   [Examples](#examples-1)
 -   [GetFilesContent](#getfilescontent)
 -   [ListFiles](#listfiles)
-    -   [Parameters](#parameters-4)
--   [natural-tag](#natural-tag)
-    -   [Examples](#examples-1)
--   [profile](#profile)
     -   [Parameters](#parameters-5)
+-   [natural-tag](#natural-tag)
+    -   [Examples](#examples-2)
+-   [profile](#profile)
+    -   [Parameters](#parameters-6)
 -   [TEEFTSentenceTokenize](#teeftsentencetokenize)
 -   [TEEFTSpecificity](#teeftspecificity)
-    -   [Parameters](#parameters-6)
--   [TEEFTStopWords](#teeftstopwords)
     -   [Parameters](#parameters-7)
--   [TEEFTSumUpFrequencies](#teeftsumupfrequencies)
+-   [TEEFTStopWords](#teeftstopwords)
     -   [Parameters](#parameters-8)
--   [TEEFTExtractTerms](#teeftextractterms)
+-   [TEEFTSumUpFrequencies](#teeftsumupfrequencies)
     -   [Parameters](#parameters-9)
-    -   [Examples](#examples-2)
 -   [tokenize](#tokenize)
+
+### TEEFTExtractTerms
+
+-   **See: <https://github.com/istex/sisyphe/blob/master/src/worker/teeft/lib/termextractor.js>**
+
+Take an array of objects { path, sentences: \[token, tag: ["tag"]]}
+Regroup multi-terms when possible (noun + noun, adjective + noun, _etc_.),
+and computes statistics (frequency, _etc_.).
+
+#### Parameters
+
+-   `data` **[Stream](https://nodejs.org/api/stream.html)** array of documents containing sentences of tagged tokens
+-   `feed` **[Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;Objects>** same as data, with `term` replacing `token`, `length`, and `frequency`
+-   `nounTag` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** noun tag (optional, default `'NOM'`)
+-   `adjTag` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** adjective tag (optional, default `'ADJ'`)
+
+#### Examples
+
+```javascript
+[{
+   path: '/path/1',
+   sentences:
+   [[
+     { token: 'elle', tag: ['PRO:per'] },
+     { token: 'semble', tag: ['VER'] },
+     { token: 'se', tag: ['PRO:per'] },
+     { token: 'nourrir', tag: ['VER'] },
+     {
+       token: 'essentiellement',
+       tag: ['ADV'],
+     },
+     { token: 'de', tag: ['PRE', 'ART:def'] },
+     { token: 'plancton', tag: ['NOM'] },
+     { token: 'frais', tag: ['ADJ'] },
+     { token: 'et', tag: ['CON'] },
+     { token: 'de', tag: ['PRE', 'ART:def'] },
+     { token: 'hotdog', tag: ['UNK'] }
+   ]]
+}]
+```
 
 ### TEEFTFilterMonoFreq
 
@@ -215,39 +255,6 @@ Sums up the frequencies of identical lemmas from different chunks.
 
 -   `data` **[Stream](https://nodejs.org/api/stream.html)** 
 -   `feed` **[Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)>** 
-
-### TEEFTExtractTerms
-
--   **See: <https://github.com/istex/sisyphe/blob/master/src/worker/teeft/lib/termextractor.js>**
-
-Regroup multi-terms when possible (noun + noun, adjective + noun, _etc_.),
-and computes statistics (frequency, _etc_.).
-
-#### Parameters
-
--   `data` **[Stream](https://nodejs.org/api/stream.html)** array of tagged terms
--   `feed` **[Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)>** 
--   `nounTag` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** noun tag (optional, default `'NOM'`)
--   `adjTag` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** adjective tag (optional, default `'ADJ'`)
-
-#### Examples
-
-```javascript
-[[[{ token: 'elle', tag: ['PRO:per'] },
-{ token: 'semble', tag: ['VER'] },
-{ token: 'se', tag: ['PRO:per'] },
-{ token: 'nourrir', tag: ['VER'] },
-{
-token: 'essentiellement',
-tag: ['ADV'],
-},
-{ token: 'de', tag: ['PRE', 'ART:def'] },
-{ token: 'plancton', tag: ['NOM'] },
-{ token: 'frais', tag: ['ADJ'] },
-{ token: 'et', tag: ['CON'] },
-{ token: 'de', tag: ['PRE', 'ART:def'] },
-{ token: 'hotdog', tag: ['UNK'] }]]]
-```
 
 ### tokenize
 

@@ -51,29 +51,36 @@ export function extractSentenceTerms(taggedTerms,
 }
 
 /**
+ * Take an array of objects { path, sentences: [token, tag: ["tag"]]}
  * Regroup multi-terms when possible (noun + noun, adjective + noun, *etc*.),
  * and computes statistics (frequency, *etc*.).
  *
  * @example
- * [[[{ token: 'elle', tag: ['PRO:per'] },
-    { token: 'semble', tag: ['VER'] },
-    { token: 'se', tag: ['PRO:per'] },
-    { token: 'nourrir', tag: ['VER'] },
-    {
-        token: 'essentiellement',
-        tag: ['ADV'],
-    },
-    { token: 'de', tag: ['PRE', 'ART:def'] },
-    { token: 'plancton', tag: ['NOM'] },
-    { token: 'frais', tag: ['ADJ'] },
-    { token: 'et', tag: ['CON'] },
-    { token: 'de', tag: ['PRE', 'ART:def'] },
-    { token: 'hotdog', tag: ['UNK'] }]]]
+ * [{
+ *    path: '/path/1',
+ *    sentences:
+ *    [[
+ *      { token: 'elle', tag: ['PRO:per'] },
+ *      { token: 'semble', tag: ['VER'] },
+ *      { token: 'se', tag: ['PRO:per'] },
+ *      { token: 'nourrir', tag: ['VER'] },
+ *      {
+ *        token: 'essentiellement',
+ *        tag: ['ADV'],
+ *      },
+ *      { token: 'de', tag: ['PRE', 'ART:def'] },
+ *      { token: 'plancton', tag: ['NOM'] },
+ *      { token: 'frais', tag: ['ADJ'] },
+ *      { token: 'et', tag: ['CON'] },
+ *      { token: 'de', tag: ['PRE', 'ART:def'] },
+ *      { token: 'hotdog', tag: ['UNK'] }
+ *    ]]
+ * }]
  *
  * @see https://github.com/istex/sisyphe/blob/master/src/worker/teeft/lib/termextractor.js
  * @export
- * @param {Stream}  data array of tagged terms
- * @param {Array<string>}   feed
+ * @param {Stream}  data array of documents containing sentences of tagged tokens
+ * @param {Array<Objects>}   feed   same as data, with `term` replacing `token`, `length`, and `frequency`
  * @param {string}  [nounTag='NOM']  noun tag
  * @param {string}  [adjTag='ADJ']   adjective tag
  */
