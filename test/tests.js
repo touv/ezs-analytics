@@ -837,9 +837,10 @@ describe.only('compute specificity', () => {
                 assert.equal(res.length, 1);
                 const { terms } = res[0];
                 assert.equal(terms.length, 10);
-                assert.equal(terms.find(t => t.term === 'elle').specificity, 1);
-                assert.equal(terms.find(t => t.term === 'de').specificity, 0.25);
-                assert.equal(terms.find(t => t.term === 'semble').specificity, 0.125);
+                assert.equal(terms[0].term, 'elle');
+                assert.equal(terms[1].term, 'de');
+                assert.equal(terms[2].term, 'se');
+                assert.equal(terms[9].term, 'semble');
                 done();
             });
     });
