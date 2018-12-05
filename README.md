@@ -221,6 +221,9 @@ Yield an array of documents (objects { path, sentences: \[]})
 
 ### TEEFTSpecificity
 
+Take documents (with a `path`, an array of `terms`, each term being an object
+{ term, frequency, length[, tag] })
+
 Process objects containing frequency, add a specificity to each object, and
 remove all object with a specificity below average specificity (except when
 `filter` is `false`).
@@ -232,8 +235,7 @@ Can also sort the objects according to their specificity, when `sort` is
 
 -   `data` **any** 
 -   `feed` **any** 
--   `weightedDictionary` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** name of the weigthed
-    dictionary (optional, default `"Ress_Frantext"`)
+-   `weightedDictionary` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** name of the weigthed dictionary (optional, default `"Ress_Frantext"`)
 -   `filter` **[Boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** filter below average specificity (optional, default `true`)
 -   `sort` **[Boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** sort objects according to their specificity (optional, default `false`)
 

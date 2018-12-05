@@ -707,7 +707,7 @@ describe('sum up frequencies', () => {
     });
 });
 
-describe.only('compute specificity', () => {
+describe('compute specificity', () => {
     it('should work without weights', (done) => {
         let res = [];
         from([{
@@ -837,10 +837,9 @@ describe.only('compute specificity', () => {
                 assert.equal(res.length, 1);
                 const { terms } = res[0];
                 assert.equal(terms.length, 10);
-                assert.equal(terms[0].term, 'elle');
-                assert.equal(terms[1].term, 'de');
-                assert.equal(terms[2].term, 'se');
-                assert.equal(terms[9].term, 'semble');
+                for (let i = 0; i < terms.length - 1; i += 1) {
+                    assert.ok(terms[i].specificity >= terms[i + 1].specificity);
+                }
                 done();
             });
     });
@@ -871,10 +870,12 @@ describe.only('compute specificity', () => {
                 res = res.concat(chunk);
             })
             .on('end', () => {
-                assert.equal(res.length, 10);
-                assert.equal(res.find(t => t.token === 'elle').specificity, 1);
-                assert.equal(res.find(t => t.token === 'de').specificity, 0.25);
-                assert.equal(res.find(t => t.token === 'semble').specificity, 0.125);
+                assert.equal(res.length, 1);
+                const { terms } = res[0];
+                assert.equal(terms.length, 10);
+                assert.equal(terms.find(t => t.term === 'elle').specificity, 1);
+                assert.equal(terms.find(t => t.term === 'de').specificity, 0.25);
+                assert.equal(terms.find(t => t.term === 'semble').specificity, 0.125);
                 done();
             });
     });
@@ -957,7 +958,8 @@ describe.only('compute specificity', () => {
             .on('end', () => {
                 assert.equal(res.length, 0);
                 done(err);
-            });
+            })
+            .on('error', done);
     });
 
     it('should work on several documents', (done) => {
@@ -987,17 +989,21 @@ describe.only('compute specificity', () => {
                 assert.equal(res.length, 2);
                 const { terms: terms1 } = res[0];
                 const { terms: terms2 } = res[1];
+
                 assert.equal(terms1.length, 3);
                 assert.equal(terms1[0].lemma, 'logiciel');
                 assert.equal(terms1[0].frequency, 3);
                 assert.equal(terms1[0].specificity, 1);
+
                 assert.equal(terms1[2].term, 'logiciel content');
                 assert.equal(terms1[2].frequency, 1);
                 assert.equal(terms1[2].length, 2);
-                assert.equal(terms1[2].specificity, 1 / 2);
-                assert.equal(terms2[3].term, 'management');
-                assert.equal(terms2[3].frequency, 1);
-                assert.equal(terms2[3].specificity, 1 / 1);
+                assert.equal(Math.floor(terms1[2].specificity * 1000), Math.floor(1 / 3 * 1000));
+
+                assert.equal(terms2.length, 1);
+                assert.equal(terms2[0].term, 'management');
+                assert.equal(terms2[0].frequency, 1);
+                assert.equal(terms2[0].specificity, 1 / 1);
                 done();
             });
     });

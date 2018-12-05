@@ -1,5 +1,5 @@
 import {
-    __, concat, divide, map, max, pipe, prop, sum,
+    __, divide, map, max, pipe, prop, sum,
 } from 'ramda';
 import { getResource } from './stop-words';
 
@@ -20,7 +20,6 @@ const isMono = term => term.tag;
 
 function addSpecificity(oldTerm) {
     const { frequency, term } = oldTerm;
-    console.log(Object.keys(weights).length);
     const weight = weights[term] || 10 ** -5;
     const computeSpecificity = pipe(
         divide(__, totalFrequencies),
@@ -37,7 +36,6 @@ function addSpecificity(oldTerm) {
 
 function normalizeSpecificity(token) {
     const specificity = token.specificity / maxSpecificity;
-    console.dir({specificity, token, maxSpecificity})
     specificitySum += isMono(token) ? specificity : 0;
     return {
         ...token,
@@ -69,42 +67,6 @@ const addNormalizedSpecificity = pipe(
  * @param {Boolean} [sort=false]    sort objects according to their specificity
  * @returns
  */
-export function oldTEEFTSpecificity(data, feed) {
-    const weightedDictionary = this.getParam('weightedDictionary', 'Ress_Frantext');
-    const filter = this.getParam('filter', true);
-    const sort = this.getParam('sort', false);
-    if (this.isLast()) {
-        // When input is empty (this.isFirst && this.isLast)
-        if (terms.length === 0) {
-            return feed.close();
-        }
-        let result = addNormalizedSpecificity(terms);
-
-        if (filter) {
-            // compute averageSpecificity only on monoTerms
-            const averageSpecificity = specificitySum / terms.filter(isMono).length;
-            result = result.filter(term => term.specificity >= averageSpecificity || isMulti(term));
-        }
-        if (sort) {
-            result = result.sort((a, b) => b.specificity - a.specificity);
-        }
-
-        feed.write(result);
-        initialize();
-        return feed.close();
-    }
-    if (this.isFirst()) {
-        initialize();
-        getResource(weightedDictionary)
-            .map(line => line.split('\t'))
-            .forEach(([term, weight]) => { weights[term] = weight; });
-    }
-    const dataArray = Array.isArray(data) ? data : [data];
-    totalFrequencies = dataArray.reduce((total, { frequency }) => total + (frequency || 0), totalFrequencies);
-    terms = concat(terms, dataArray);
-    feed.end();
-}
-
 export default function TEEFTSpecificity(data, feed) {
     const weightedDictionary = this.getParam('weightedDictionary', 'Ress_Frantext');
     const filter = this.getParam('filter', true);
