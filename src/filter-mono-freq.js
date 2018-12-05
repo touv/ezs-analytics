@@ -16,14 +16,25 @@ export default function TEEFTFilterMonoFreq(data, feed) {
     const multiLimit = this.getParam('multiLimit', 2);
     const minFrequency = this.getParam('minFrequency', 7);
 
-    const isMonoTerm = word => word.length < multiLimit;
-    const isFrequent = word => word.frequency >= minFrequency;
-    const isMultiTerm = word => word.length >= multiLimit;
+    const isMonoTerm = term => term.length < multiLimit;
+    const isFrequent = term => term.frequency >= minFrequency;
+    const isMultiTerm = term => term.length >= multiLimit;
 
     const isFrequentMonoTerm = both(isMonoTerm, isFrequent);
-    const isMultiFrequency = either(isFrequentMonoTerm, isMultiTerm);
+    const isMultiOrFrequent = either(isFrequentMonoTerm, isMultiTerm);
 
-    const filterMultiFrequency = filter(isMultiFrequency);
-    feed.write(filterMultiFrequency(data));
+    const filterMultiFrequency = filter(isMultiOrFrequent);
+
+    const documents = Array.isArray(data) ? data : [data];
+    const results = documents.map((document) => {
+        const { terms } = document;
+        const filteredTerms = filterMultiFrequency(terms);
+        const res = {
+            ...document,
+            terms: filteredTerms,
+        };
+        return res;
+    });
+    feed.write(results);
     feed.end();
 }

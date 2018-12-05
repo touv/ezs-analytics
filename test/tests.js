@@ -1012,62 +1012,73 @@ describe('compute specificity', () => {
 describe('filter multiterms and frequent monoterms', () => {
     it('should keep frequent monoterms', (done) => {
         let res = [];
-        from([[
+        from([{
+            path: '/path/1',
+            terms: [
             /* eslint-disable object-curly-newline */
-            { frequency: 8, length: 1, token: 'elle', id: 0, tag: ['PRO:per'], lemma: 'elle' },
-            { frequency: 1, length: 1, token: 'semble', id: 1, tag: ['VER'], lemma: 'sembler' },
-            { frequency: 1, length: 1, token: 'se', id: 2, tag: ['PRO:per'], lemma: 'se' },
-            { frequency: 1, length: 1, token: 'nourrir', id: 3, tag: ['VER'], lemma: 'nourrir' },
-            { frequency: 1, length: 1, token: 'essentiellement', id: 4, tag: ['ADV'], lemma: 'essentiellement' },
-            { frequency: 2, length: 1, token: 'de', id: 9, tag: ['PRE', 'ART:def'], lemma: 'de' },
-            { frequency: 1, length: 1, token: 'plancton', id: 6, tag: ['NOM'], lemma: 'plancton' },
-            { frequency: 1, length: 1, token: 'frais', id: 7, tag: ['ADJ'], lemma: 'frais' },
-            { frequency: 1, length: 1, token: 'et', id: 8, tag: ['CON'], lemma: 'et' },
-            { frequency: 1, length: 1, token: 'hotdog', id: 10, tag: ['UNK'], lemma: 'hotdog' },
-            /* eslint-enable object-curly-newline */
-        ]])
+                { frequency: 8, length: 1, term: 'elle', tag: ['PRO:per'], lemma: 'elle' },
+                { frequency: 1, length: 1, term: 'semble', tag: ['VER'], lemma: 'sembler' },
+                { frequency: 1, length: 1, term: 'se', tag: ['PRO:per'], lemma: 'se' },
+                { frequency: 1, length: 1, term: 'nourrir', tag: ['VER'], lemma: 'nourrir' },
+                { frequency: 1, length: 1, term: 'essentiellement', tag: ['ADV'], lemma: 'essentiellement' },
+                { frequency: 2, length: 1, term: 'de', tag: ['PRE', 'ART:def'], lemma: 'de' },
+                { frequency: 1, length: 1, term: 'plancton', tag: ['NOM'], lemma: 'plancton' },
+                { frequency: 1, length: 1, term: 'frais', tag: ['ADJ'], lemma: 'frais' },
+                { frequency: 1, length: 1, term: 'et', tag: ['CON'], lemma: 'et' },
+                { frequency: 1, length: 1, term: 'hotdog', tag: ['UNK'], lemma: 'hotdog' },
+                /* eslint-enable object-curly-newline */
+            ],
+        }])
             .pipe(ezs('TEEFTFilterMonoFreq'))
             // .pipe(ezs('debug'))
             .on('data', (chunk) => {
-                assert(Array.isArray(chunk));
+                assert.ok(Array.isArray(chunk));
                 res = res.concat(chunk);
             })
             .on('end', () => {
                 assert.equal(res.length, 1);
-                assert.equal(res[0].lemma, 'elle');
-                assert.equal(res[0].frequency, 8);
+                const { terms } = res[0];
+                assert.equal(terms.length, 1);
+                assert.ok(terms[0]);
+                assert.equal(terms[0].term, 'elle');
+                assert.equal(terms[0].frequency, 8);
                 done();
             });
     });
 
     it('should keep multiterms', (done) => {
         let res = [];
-        from([[
-            /* eslint-disable object-curly-newline */
-            { frequency: 1, length: 1, token: 'elle', id: 0, tag: ['PRO:per'], lemma: 'elle' },
-            { frequency: 1, length: 1, token: 'semble', id: 1, tag: ['VER'], lemma: 'sembler' },
-            { frequency: 1, length: 1, token: 'se', id: 2, tag: ['PRO:per'], lemma: 'se' },
-            { frequency: 1, length: 1, token: 'nourrir', id: 3, tag: ['VER'], lemma: 'nourrir' },
-            { frequency: 1, length: 1, token: 'essentiellement', id: 4, tag: ['ADV'], lemma: 'essentiellement' },
-            { frequency: 2, length: 1, token: 'de', id: 9, tag: ['PRE', 'ART:def'], lemma: 'de' },
-            { frequency: 1, length: 6, token: 'elle sembler se nourrir essentiellement de' },
-            { frequency: 1, length: 1, token: 'plancton', id: 6, tag: ['NOM'], lemma: 'plancton' },
-            { frequency: 1, length: 1, token: 'frais', id: 7, tag: ['ADJ'], lemma: 'frais' },
-            { frequency: 1, length: 1, token: 'et', id: 8, tag: ['CON'], lemma: 'et' },
-            { frequency: 1, length: 1, token: 'hotdog', id: 10, tag: ['UNK'], lemma: 'hotdog' },
-            { frequency: 1, length: 5, token: 'plancton frais et de hotdog' },
-            /* eslint-enable object-curly-newline */
-        ]])
+        from([{
+            path: '/path/1',
+            terms: [
+                /* eslint-disable object-curly-newline */
+                { frequency: 1, length: 1, term: 'elle', tag: ['PRO:per'], lemma: 'elle' },
+                { frequency: 1, length: 1, term: 'semble', tag: ['VER'], lemma: 'sembler' },
+                { frequency: 1, length: 1, term: 'se', tag: ['PRO:per'], lemma: 'se' },
+                { frequency: 1, length: 1, term: 'nourrir', tag: ['VER'], lemma: 'nourrir' },
+                { frequency: 1, length: 1, term: 'essentiellement', tag: ['ADV'], lemma: 'essentiellement' },
+                { frequency: 2, length: 1, term: 'de', tag: ['PRE', 'ART:def'], lemma: 'de' },
+                { frequency: 1, length: 6, term: 'elle sembler se nourrir essentiellement de' },
+                { frequency: 1, length: 1, term: 'plancton', tag: ['NOM'], lemma: 'plancton' },
+                { frequency: 1, length: 1, term: 'frais', tag: ['ADJ'], lemma: 'frais' },
+                { frequency: 1, length: 1, term: 'et', tag: ['CON'], lemma: 'et' },
+                { frequency: 1, length: 1, term: 'hotdog', tag: ['UNK'], lemma: 'hotdog' },
+                { frequency: 1, length: 5, term: 'plancton frais et de hotdog' },
+                /* eslint-enable object-curly-newline */
+            ],
+        }])
             .pipe(ezs('TEEFTFilterMonoFreq'))
             // .pipe(ezs('debug'))
             .on('data', (chunk) => {
-                assert(Array.isArray(chunk));
+                assert.ok(Array.isArray(chunk));
                 res = res.concat(chunk);
             })
             .on('end', () => {
-                assert.equal(res.length, 2);
-                assert.equal(res[0].token, 'elle sembler se nourrir essentiellement de');
-                assert.equal(res[1].token, 'plancton frais et de hotdog');
+                assert.equal(res.length, 1);
+                const { terms } = res[0];
+                assert.equal(terms.length, 2);
+                assert.equal(terms[0].term, 'elle sembler se nourrir essentiellement de');
+                assert.equal(terms[1].term, 'plancton frais et de hotdog');
                 done();
             });
     });
