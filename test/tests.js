@@ -1015,7 +1015,7 @@ describe('filter multiterms and frequent monoterms', () => {
         from([{
             path: '/path/1',
             terms: [
-            /* eslint-disable object-curly-newline */
+                /* eslint-disable object-curly-newline */
                 { frequency: 8, length: 1, term: 'elle', tag: ['PRO:per'], lemma: 'elle' },
                 { frequency: 1, length: 1, term: 'semble', tag: ['VER'], lemma: 'sembler' },
                 { frequency: 1, length: 1, term: 'se', tag: ['PRO:per'], lemma: 'se' },
@@ -1232,20 +1232,21 @@ describe('natural', () => {
 describe('filter-multi-spec', () => {
     it('should return all monoterms', (done) => {
         let res = [];
-        const input = [
-            /* eslint-disable object-curly-newline */
-            { length: 1, token: 'elle', tag: ['PRO:per'] },
-            { length: 1, token: 'semble', tag: ['VER'] },
-            { length: 1, token: 'se', tag: ['PRO:per'] },
-            { length: 1, token: 'nourrir', tag: ['VER'] },
-            { length: 1, token: 'essentiellement', tag: ['ADV'] },
-            { length: 1, token: 'de', tag: ['PRE', 'ART:def'] },
-            { length: 1, token: 'plancton', tag: ['NOM'] },
-            { length: 1, token: 'frais', tag: ['ADJ'] },
-            { length: 1, token: 'et', tag: ['CON'] },
-            { length: 1, token: 'hotdog', tag: ['UNK'] },
-            /* eslint-enable object-curly-newline */
-        ];
+        const input = {
+            path: '/path/1',
+            terms: [
+                { length: 1, term: 'elle', tag: ['PRO:per'] },
+                { length: 1, term: 'semble', tag: ['VER'] },
+                { length: 1, term: 'se', tag: ['PRO:per'] },
+                { length: 1, term: 'nourrir', tag: ['VER'] },
+                { length: 1, term: 'essentiellement', tag: ['ADV'] },
+                { length: 1, term: 'de', tag: ['PRE', 'ART:def'] },
+                { length: 1, term: 'plancton', tag: ['NOM'] },
+                { length: 1, term: 'frais', tag: ['ADJ'] },
+                { length: 1, term: 'et', tag: ['CON'] },
+                { length: 1, term: 'hotdog', tag: ['UNK'] },
+            ],
+        };
         from([input])
             .pipe(ezs('TEEFTFilterMultiSpec'))
             // .pipe(ezs('debug'))
@@ -1255,21 +1256,24 @@ describe('filter-multi-spec', () => {
                 res = res.concat(chunk);
             })
             .on('end', () => {
-                assert.equal(res.length, input.length);
+                assert.equal(res.length, 1);
+                const { terms } = res[0];
+                assert.equal(terms.length, input.terms.length);
                 done();
             });
     });
 
     it('should return all multiterms above average spec', (done) => {
         let res = [];
-        const input = [
-            /* eslint-disable object-curly-newline */
-            { length: 2, specificity: 0.5, token: 'apprentissage automatique' },
-            { length: 3, specificity: 0.5, token: 'réseau de neurones' },
-            { length: 4, specificity: 0.24, token: 'information scientifique et technique' },
-            { length: 4, specificity: 0.75, token: 'enseignement supérieur et recherche' },
-            /* eslint-enable object-curly-newline */
-        ];
+        const input = {
+            path: '/path/1',
+            terms: [
+                { length: 2, specificity: 0.5, term: 'apprentissage automatique' },
+                { length: 3, specificity: 0.5, term: 'réseau de neurones' },
+                { length: 4, specificity: 0.24, term: 'information scientifique et technique' },
+                { length: 4, specificity: 0.75, term: 'enseignement supérieur et recherche' },
+            ],
+        };
         from([input])
             .pipe(ezs('TEEFTFilterMultiSpec'))
             // .pipe(ezs('debug'))
@@ -1279,27 +1283,30 @@ describe('filter-multi-spec', () => {
                 res = res.concat(chunk);
             })
             .on('end', () => {
-                assert.equal(res.length, 3);
-                assert.equal(res[0].specificity, 0.5);
-                assert.equal(res[0].token, 'apprentissage automatique');
-                assert.equal(res[2].specificity, 0.75);
-                assert.equal(res[2].token, 'enseignement supérieur et recherche');
+                assert.equal(res.length, 1);
+                const { terms } = res[0];
+                assert.equal(terms.length, 3);
+                assert.equal(terms[0].specificity, 0.5);
+                assert.equal(terms[0].term, 'apprentissage automatique');
+                assert.equal(terms[2].specificity, 0.75);
+                assert.equal(terms[2].term, 'enseignement supérieur et recherche');
                 done();
             });
     });
 
     it('should return all multiterms above average spec, and all monoterms', (done) => {
         let res = [];
-        const input = [
-            /* eslint-disable object-curly-newline */
-            { length: 2, specificity: 0.5, token: 'apprentissage automatique' },
-            { length: 3, specificity: 0.5, token: 'réseau de neurones' },
-            { length: 4, specificity: 0.24, token: 'information scientifique et technique' },
-            { length: 4, specificity: 0.75, token: 'enseignement supérieur et recherche' },
-            { length: 1, token: 'elle', tag: ['PRO:per'] },
-            { length: 1, token: 'semble', tag: ['VER'] },
-            /* eslint-enable object-curly-newline */
-        ];
+        const input = {
+            path: '/path/1',
+            terms: [
+                { length: 2, specificity: 0.5, token: 'apprentissage automatique' },
+                { length: 3, specificity: 0.5, token: 'réseau de neurones' },
+                { length: 4, specificity: 0.24, token: 'information scientifique et technique' },
+                { length: 4, specificity: 0.75, token: 'enseignement supérieur et recherche' },
+                { length: 1, token: 'elle', tag: ['PRO:per'] },
+                { length: 1, token: 'semble', tag: ['VER'] },
+            ],
+        };
         from([input])
             .pipe(ezs('TEEFTFilterMultiSpec'))
             // .pipe(ezs('debug'))
@@ -1309,11 +1316,13 @@ describe('filter-multi-spec', () => {
                 res = res.concat(chunk);
             })
             .on('end', () => {
-                assert.equal(res.length, 5);
-                assert.equal(res[0].specificity, 0.5);
-                assert.equal(res[0].token, 'apprentissage automatique');
-                assert.equal(res[2].specificity, 0.75);
-                assert.equal(res[2].token, 'enseignement supérieur et recherche');
+                assert.equal(res.length, 1);
+                const { terms } = res[0];
+                assert.equal(terms.length, 5);
+                assert.equal(terms[0].specificity, 0.5);
+                assert.equal(terms[0].token, 'apprentissage automatique');
+                assert.equal(terms[2].specificity, 0.75);
+                assert.equal(terms[2].token, 'enseignement supérieur et recherche');
                 done();
             });
     });

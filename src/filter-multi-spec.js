@@ -1,19 +1,24 @@
 import { concat } from 'ramda';
 
-let totalSpecificities;
-let terms;
-
 const isMulti = term => !term.tag;
 const isMono = term => term.tag;
 
-
-function initialize() {
-    terms = [];
-    totalSpecificities = 0;
-}
+const filterMultiSpec = (document) => {
+    const { terms } = document;
+    const totalSpecificities = terms
+        .filter(isMulti)
+        .reduce((total, { specificity }) => total + specificity, 0);
+    const averageSpecificity = totalSpecificities / terms.filter(isMulti).length;
+    const filteredTerms = terms.filter(term => term.specificity > averageSpecificity || isMono(term));
+    const result = {
+        ...document,
+        terms: filteredTerms,
+    };
+    return result;
+};
 
 /**
- * Filter multiterm to keep only multiterms which specificity is higher than
+ * Filter multiterms to keep only multiterms which specificity is higher than
  * multiterms' average specificity.
  *
  * @export
@@ -22,25 +27,10 @@ function initialize() {
  */
 export default function TEEFTFilterMultiSpec(data, feed) {
     if (this.isLast()) {
-        // When input is empty (this.isFirst && this.isLast)
-        if (terms.length === 0) {
-            return feed.close();
-        }
-        const averageSpecificity = totalSpecificities / terms.filter(isMulti).length;
-        const result = terms.filter(term => term.specificity > averageSpecificity || isMono(term));
-        feed.write(result);
-
-        initialize(); // Ready for the next document
         return feed.close();
     }
-
-    if (this.isFirst()) {
-        initialize();
-    }
-    const dataArray = Array.isArray(data) ? data : [data];
-    totalSpecificities = dataArray
-        .filter(isMulti)
-        .reduce((total, { specificity }) => total + specificity, totalSpecificities);
-    terms = concat(terms, dataArray);
+    const documents = Array.isArray(data) ? data : [data];
+    const results = documents.map(filterMultiSpec);
+    feed.write(results);
     feed.end();
 }
