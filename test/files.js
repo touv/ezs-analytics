@@ -116,6 +116,21 @@ describe('files', () => {
                     done();
                 });
         });
+
+        it('should return the files with a newline character', (done) => {
+            let res = [];
+            const dirPath = 'examples/data/fr-articles/\n';
+            from([dirPath])
+                .pipe(ezs('ListFiles'))
+                .on('data', (chunk) => {
+                    assert(Array.isArray(chunk));
+                    res = res.concat(chunk);
+                })
+                .on('end', () => {
+                    assert.equal(res.length, 5);
+                    done();
+                });
+        });
     });
 
     describe('get files content', () => {
