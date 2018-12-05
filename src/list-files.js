@@ -1,11 +1,18 @@
+import path from 'path';
 import { glob } from 'glob';
+import { startsWith } from 'ramda';
 
 function ListFiles(data, feed) {
     if (this.isLast()) {
         return feed.close();
     }
     const pattern = this.getParam('pattern', '*');
-    glob(`${data}/${pattern}`, (err, files) => {
+    console.log('process.cwd()', process.cwd())
+    const dirPath = startsWith('.', data)
+        ? path.resolve(process.cwd(), data)
+        : data;
+    glob(`${dirPath}/${pattern}`, (err, files) => {
+        console.log({dirPath, err, files})
         if (err) {
             throw err;
         }
