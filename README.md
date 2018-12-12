@@ -181,10 +181,10 @@ indent = true
 
 To use the example `examples/teeftfr.ezs`, you have to
 
-- install `ezs`
-- install `ezs-teeftr`
-- install `ezs-basics`
-- run the script
+-   install `ezs`
+-   install `ezs-teeftr`
+-   install `ezs-basics`
+-   run the script
 
 That is to say:
 
@@ -212,23 +212,20 @@ You can even use [jq](https://stedolan.github.io/jq/) to beautify the JSON in th
     -   [Parameters](#parameters-2)
 -   [TEEFTFilterTags](#teeftfiltertags)
     -   [Parameters](#parameters-3)
--   [TEEFTFrToTagLem](#teeftfrtotaglem)
-    -   [Parameters](#parameters-4)
-    -   [Examples](#examples-1)
 -   [GetFilesContent](#getfilescontent)
 -   [ListFiles](#listfiles)
-    -   [Parameters](#parameters-5)
+    -   [Parameters](#parameters-4)
 -   [natural-tag](#natural-tag)
-    -   [Examples](#examples-2)
+    -   [Examples](#examples-1)
 -   [profile](#profile)
-    -   [Parameters](#parameters-6)
+    -   [Parameters](#parameters-5)
 -   [TEEFTSentenceTokenize](#teeftsentencetokenize)
 -   [TEEFTSpecificity](#teeftspecificity)
-    -   [Parameters](#parameters-7)
+    -   [Parameters](#parameters-6)
 -   [TEEFTStopWords](#teeftstopwords)
-    -   [Parameters](#parameters-8)
+    -   [Parameters](#parameters-7)
 -   [TEEFTSumUpFrequencies](#teeftsumupfrequencies)
-    -   [Parameters](#parameters-9)
+    -   [Parameters](#parameters-8)
 -   [tokenize](#tokenize)
 
 ### TEEFTExtractTerms
@@ -277,8 +274,8 @@ Filter the `data`, keeping only multiterms and frequent monoterms.
 
 #### Parameters
 
--   `data` **[Stream](https://nodejs.org/api/stream.html)**
--   `feed` **[Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)>**
+-   `data` **[Stream](https://nodejs.org/api/stream.html)** 
+-   `feed` **[Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)>** 
 -   `multiLimit` **[Number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)** threshold for being a multiterm (in tokens number) (optional, default `2`)
 -   `minFrequency` **[Number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)** minimal frequency to be taken as a frequent term (optional, default `7`)
 
@@ -289,8 +286,8 @@ multiterms' average specificity.
 
 #### Parameters
 
--   `data` **any**
--   `feed` **any**
+-   `data` **any** 
+-   `feed` **any** 
 
 ### TEEFTFilterTags
 
@@ -298,43 +295,9 @@ Filter the text in input, by keeping only adjectives and names
 
 #### Parameters
 
--   `data` **[Stream](https://nodejs.org/api/stream.html)**
--   `feed` **[Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)>**
+-   `data` **[Stream](https://nodejs.org/api/stream.html)** 
+-   `feed` **[Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)>** 
 -   `tags` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Tags to keep (optional, default `['ADJ','NOM']`)
-
-### TEEFTFrToTagLem
-
-Tokenize, tag, and lemmatize a French text
-
-#### Parameters
-
--   `data` **[Stream](https://nodejs.org/api/stream.html)**
--   `feed` **[Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)>**
--   `tagTypes` **[Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)>** tag types (optional, default `['adj','adv','art','con','nom','ono','pre','ver','pro']`)
--   `strictness` **[Boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** When false, non-accentuated character are the same as accentuated ones (optional, default `true`)
--   `minimumLength` **[Number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)** Ignore words shorter than this (optional, default `1`)
--   `doTag` **[Boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** return tags if true (optional, default `true`)
--   `doLemmatize` **[Boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** return lems if true (optional, default `true`)
-
-#### Examples
-
-```javascript
-from(['Elle semble se nourrir essentiellement de plancton, et de hotdog.'])
-.pipe(ezs('TEEFTFrToTagLem', { doLemmatize: false }))
-```
-
-```javascript
-[ { id: 0, token: 'elle', tag: [ 'PRO:per' ] },
-{ id: 1, token: 'semble', tag: [ 'VER' ] },
-{ id: 2, token: 'se', tag: [ 'PRO:per' ] },
-{ id: 3, token: 'nourrir', tag: [ 'VER' ] },
-{ id: 4, token: 'essentiellement', tag: [ 'ADV' ] },
-{ id: 5, token: 'de', tag: [ 'PRE', 'NOM', 'ART:def' ] },
-{ id: 6, token: 'plancton', tag: [ 'NOM' ] },
-{ id: 7, token: 'et', tag: [ 'CON' ] },
-{ id: 8, token: 'de', tag: [ 'PRE', 'NOM', 'ART:def' ] },
-{ id: 9, token: 'hotdog', tag: [ 'UNK' ] } ]
-```
 
 ### GetFilesContent
 
@@ -392,8 +355,8 @@ takes.
 
 #### Parameters
 
--   `data` **any**
--   `feed` **any**
+-   `data` **any** 
+-   `feed` **any** 
 
 ### TEEFTSentenceTokenize
 
@@ -415,8 +378,8 @@ Can also sort the objects according to their specificity, when `sort` is
 
 #### Parameters
 
--   `data` **any**
--   `feed` **any**
+-   `data` **any** 
+-   `feed` **any** 
 -   `weightedDictionary` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** name of the weigthed dictionary (optional, default `"Ress_Frantext"`)
 -   `filter` **[Boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** filter below average specificity (optional, default `true`)
 -   `sort` **[Boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** sort objects according to their specificity (optional, default `false`)
@@ -427,8 +390,8 @@ Filter the text in input, by removing stopwords in token
 
 #### Parameters
 
--   `data` **[Stream](https://nodejs.org/api/stream.html)**
--   `feed` **[Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)>**
+-   `data` **[Stream](https://nodejs.org/api/stream.html)** 
+-   `feed` **[Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)>** 
 -   `stopwords` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** name of the stopwords file to use (optional, default `'StopwFrench'`)
 
 ### TEEFTSumUpFrequencies
@@ -437,8 +400,8 @@ Sums up the frequencies of identical lemmas from different chunks.
 
 #### Parameters
 
--   `data` **[Stream](https://nodejs.org/api/stream.html)**
--   `feed` **[Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)>**
+-   `data` **[Stream](https://nodejs.org/api/stream.html)** 
+-   `feed` **[Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)>** 
 
 ### tokenize
 
