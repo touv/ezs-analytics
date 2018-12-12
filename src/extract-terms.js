@@ -123,7 +123,8 @@ export default function TEEFTExtractTerms(data, feed) {
         // Rename `token` property to `term`
         const moveTokenToTerm = R.pipe(
             taggedToken => ({ ...taggedToken, term: taggedToken.token }),
-            // R.dissoc('token'), // FIXME, when uncommenting, test sum up frequencies /1 (test.js:701:24) crashes (disappearing terms)
+            // FIXME, when uncommenting, test sum up frequencies /1 (test.js:701:24) crashes (disappearing terms)
+            // R.dissoc('token'),
         );
 
         // Add tags to terms
