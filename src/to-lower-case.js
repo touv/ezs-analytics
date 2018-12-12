@@ -24,7 +24,8 @@ export default function ToLowerCase(data, feed) {
     if (this.isLast()) {
         return feed.close();
     }
-    const propPath = this.getParam('path', []);
+    const paramPath = this.getParam('path', []);
+    const propPath = Array.isArray(paramPath) ? paramPath : [paramPath];
     let res;
     if (Array.isArray(data)) {
         res = map(objPropLower(propPath), data);

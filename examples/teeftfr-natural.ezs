@@ -17,6 +17,8 @@ plugin = basics
 plugin = teeftfr
 
 [GetFilesContent]
+[ToLowerCase]
+path = content
 [TEEFTSentenceTokenize]
 [TEEFTTokenize]
 [TEEFTNaturalTag]
