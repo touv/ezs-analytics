@@ -173,7 +173,7 @@ sort = true
  ] }, ... ]
 
 [JSONString]
-wrap = false
+wrap = true
 indent = true
 ```
 
@@ -257,8 +257,8 @@ Filter the `data`, keeping only multiterms and frequent monoterms.
 
 #### Parameters
 
--   `data` **[Stream](https://nodejs.org/api/stream.html)** 
--   `feed` **[Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)>** 
+-   `data` **[Stream](https://nodejs.org/api/stream.html)**
+-   `feed` **[Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)>**
 -   `multiLimit` **[Number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)** threshold for being a multiterm (in tokens number) (optional, default `2`)
 -   `minFrequency` **[Number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)** minimal frequency to be taken as a frequent term (optional, default `7`)
 
@@ -269,8 +269,8 @@ multiterms' average specificity.
 
 #### Parameters
 
--   `data` **any** 
--   `feed` **any** 
+-   `data` **any**
+-   `feed` **any**
 
 ### TEEFTFilterTags
 
@@ -278,8 +278,8 @@ Filter the text in input, by keeping only adjectives and names
 
 #### Parameters
 
--   `data` **[Stream](https://nodejs.org/api/stream.html)** 
--   `feed` **[Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)>** 
+-   `data` **[Stream](https://nodejs.org/api/stream.html)**
+-   `feed` **[Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)>**
 -   `tags` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** Tags to keep (optional, default `['ADJ','NOM']`)
 
 ### TEEFTFrToTagLem
@@ -288,8 +288,8 @@ Tokenize, tag, and lemmatize a French text
 
 #### Parameters
 
--   `data` **[Stream](https://nodejs.org/api/stream.html)** 
--   `feed` **[Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)>** 
+-   `data` **[Stream](https://nodejs.org/api/stream.html)**
+-   `feed` **[Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)>**
 -   `tagTypes` **[Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)>** tag types (optional, default `['adj','adv','art','con','nom','ono','pre','ver','pro']`)
 -   `strictness` **[Boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** When false, non-accentuated character are the same as accentuated ones (optional, default `true`)
 -   `minimumLength` **[Number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)** Ignore words shorter than this (optional, default `1`)
@@ -372,8 +372,8 @@ takes.
 
 #### Parameters
 
--   `data` **any** 
--   `feed` **any** 
+-   `data` **any**
+-   `feed` **any**
 
 ### TEEFTSentenceTokenize
 
@@ -395,8 +395,8 @@ Can also sort the objects according to their specificity, when `sort` is
 
 #### Parameters
 
--   `data` **any** 
--   `feed` **any** 
+-   `data` **any**
+-   `feed` **any**
 -   `weightedDictionary` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** name of the weigthed dictionary (optional, default `"Ress_Frantext"`)
 -   `filter` **[Boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** filter below average specificity (optional, default `true`)
 -   `sort` **[Boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** sort objects according to their specificity (optional, default `false`)
@@ -407,8 +407,8 @@ Filter the text in input, by removing stopwords in token
 
 #### Parameters
 
--   `data` **[Stream](https://nodejs.org/api/stream.html)** 
--   `feed` **[Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)>** 
+-   `data` **[Stream](https://nodejs.org/api/stream.html)**
+-   `feed` **[Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)>**
 -   `stopwords` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** name of the stopwords file to use (optional, default `'StopwFrench'`)
 
 ### TEEFTSumUpFrequencies
@@ -417,8 +417,8 @@ Sums up the frequencies of identical lemmas from different chunks.
 
 #### Parameters
 
--   `data` **[Stream](https://nodejs.org/api/stream.html)** 
--   `feed` **[Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)>** 
+-   `data` **[Stream](https://nodejs.org/api/stream.html)**
+-   `feed` **[Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)>**
 
 ### tokenize
 
