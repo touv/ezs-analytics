@@ -2,7 +2,7 @@
 
 # Use teeft on one document
 
-# ezs -v ./examples/teeftfr.ezs < ./examples/data/artificial.txt
+# echo -n ./examples/data/fr-articles/PCU_AC_I2D_V0811.txt | npx ezs ./examples/teeftfr-natural.ezs
 
 # > Note: ezs-basics has to be installed if you want to use JSONString
 
@@ -17,6 +17,7 @@
 plugin = basics
 plugin = teeftfr
 
+[GetFilesContent]
 [TEEFTSentenceTokenize]
 [TEEFTTokenize]
 [TEEFTNaturalTag]
@@ -26,6 +27,7 @@ adjTag = ADJ
 [TEEFTFilterTags]
 tags = NOM
 tags = ADJ
+tags = UNK
 [TEEFTStopWords]
 [TEEFTSumUpFrequencies]
 [TEEFTSpecificity]
@@ -33,5 +35,5 @@ sort = true
 [TEEFTFilterMonoFreq]
 [TEEFTFilterMultiSpec]
 [JSONString]
-wrap = false
+wrap = true
 indent = true
