@@ -25,11 +25,11 @@ export function extractSentenceTerms(taggedTerms,
             if (state === SEARCH && (isNoun(tags) || isAdj(tags))) {
                 state = NOUN;
                 multiterm.push(norm);
-                termSequence.push(taggedTerm.token);
+                termSequence.push(norm);
                 termFrequency[norm] = (termFrequency[norm] || 0) + 1;
             } else if (state === NOUN && (isNoun(tags) || isAdj(tags))) {
                 multiterm.push(norm);
-                termSequence.push(taggedTerm.token);
+                termSequence.push(norm);
                 termFrequency[norm] = (termFrequency[norm] || 0) + 1;
             } else if (state === NOUN && !isNoun(tags) && !isAdj(tags)) {
                 state = SEARCH;
@@ -39,6 +39,11 @@ export function extractSentenceTerms(taggedTerms,
                     termFrequency[word] = (termFrequency[word] || 0) + 1;
                 }
                 multiterm = [];
+                termSequence.push(norm);
+                termFrequency[norm] = (termFrequency[norm] || 0) + 1;
+            } else {
+                termSequence.push(norm);
+                termFrequency[norm] = (termFrequency[norm] || 0) + 1;
             }
         });
     // If a multiterm was in progress, we save it
