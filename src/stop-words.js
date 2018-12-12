@@ -23,8 +23,18 @@ export default function TEEFTStopWords(data, feed) {
     }
     const stopWordsFile = this.getParam('stopwords', 'StopwFrench');
     const stopWords = getResource(stopWordsFile);
-    const res = data
-        .filter(w => !stopWords.includes(w.token && w.token.toLowerCase()));
-    feed.write(res);
+    const documents = Array.isArray(data) ? data : [data];
+
+    const isNotStopWord = w => !stopWords.includes(w.term && w.term.toLowerCase());
+
+    const removeStopWordsFromDocument = ((document) => {
+        const { terms } = document;
+        return {
+            ...document,
+            terms: terms.filter(isNotStopWord),
+        };
+    });
+    const results = documents.map(removeStopWordsFromDocument);
+    feed.write(results);
     feed.end();
 }

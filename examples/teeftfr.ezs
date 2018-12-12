@@ -1,0 +1,39 @@
+#!/usr/bin/env ezs
+
+# Use teeft on one directory of .txt documents
+
+# echo examples/data/fr-articles | npx ezs ./examples/teeftfr.ezs
+
+# > Note: use jq '[limit(10;.[])]' to get only the 10 first documents
+
+# > Note: use jq '.[0][0]' to get only the first document
+# >       and jq '.[4][0]' to get the fifth document
+
+# > Note: use jq '.[][0].terms | length' to get the number of retained terms per document
+
+[use]
+plugin = basics
+plugin = teeftfr
+
+[ListFiles]
+pattern = *.txt
+; [debug]
+[GetFilesContent]
+[TEEFTSentenceTokenize]
+[TEEFTTokenize]
+[TEEFTNaturalTag]
+[TEEFTExtractTerms]
+nounTag = NOM
+adjTag = ADJ
+[TEEFTFilterTags]
+tags = NOM
+tags = ADJ
+[TEEFTStopWords]
+[TEEFTSumUpFrequencies]
+[TEEFTSpecificity]
+sort = true
+[TEEFTFilterMonoFreq]
+[TEEFTFilterMultiSpec]
+[JSONString]
+wrap = true
+indent = true
