@@ -1369,20 +1369,34 @@ describe('to lower case', () => {
     });
 
     it('should use path to select on which part to work', (done) => {
+        const res = [];
         from([{ t: 'This Is My Text' }])
             .pipe(ezs('ToLowerCase', { path: ['t'] }))
-            .on('data', (text) => {
-                assert.equal(text, 'this is my text');
+            .on('data', (chunk) => {
+                res.push(chunk);
+            })
+            .on('end', () => {
+                assert.equal(res.length, 1);
+                const obj = res[0];
+                assert.equal(obj.t, 'this is my text');
                 done();
             })
             .on('error', done);
     });
 
     it('should use path to select in arrays too', (done) => {
+        const res = [];
         from([[{ t: 'This Is My Text' }]])
             .pipe(ezs('ToLowerCase', { path: ['t'] }))
-            .on('data', (text) => {
-                assert.equal(text, 'this is my text');
+            .on('data', (chunk) => {
+                res.push(chunk);
+            })
+            .on('end', () => {
+                assert.equal(res.length, 1);
+                const arr = res[0];
+                assert.equal(arr.length, 1);
+                const obj = arr[0];
+                assert.equal(obj.t, 'this is my text');
                 done();
             })
             .on('error', done);
@@ -1397,8 +1411,33 @@ describe('to lower case', () => {
             })
             .on('end', () => {
                 assert.equal(res.length, 2);
-                assert.equal(res[0].content, 'this is content!');
-                assert.equal(res[1].content, 'this too.');
+                const obj1 = res[0];
+                const obj2 = res[1];
+                assert.equal(obj1.content, 'this is content!');
+                assert.equal(obj2.content, 'this too.');
+                done();
+            })
+            .on('error', done);
+    });
+
+    it('should keep other properties', (done) => {
+        const res = [];
+        from([{
+            content: 'This is Content!',
+            other: 1,
+        }, {
+            content: 'This too.',
+            other: 2,
+        }])
+            .pipe(ezs('ToLowerCase', { path: ['content'] }))
+            .on('data', (chunk) => {
+                res.push(chunk);
+            })
+            .on('end', () => {
+                assert.deepStrictEqual(res, [
+                    { content: 'this is content!', other: 1 },
+                    { content: 'this too.', other: 2 },
+                ]);
                 done();
             })
             .on('error', done);

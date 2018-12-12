@@ -11,6 +11,7 @@ import TEEFTFilterMultiSpec from './filter-multi-spec';
 import profile from './profile';
 import ListFiles from './list-files';
 import GetFilesContent from './get-files-content';
+import ToLowerCase from './to-lower-case';
 
 export default {
     TEEFTTokenize,
@@ -26,4 +27,5 @@ export default {
     TEEFTFilterMultiSpec,
     ListFiles,
     GetFilesContent,
+    ToLowerCase,
 };
