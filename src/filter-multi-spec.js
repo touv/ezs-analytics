@@ -1,5 +1,3 @@
-import { concat } from 'ramda';
-
 const isMulti = term => !term.tag;
 const isMono = term => term.tag;
 
