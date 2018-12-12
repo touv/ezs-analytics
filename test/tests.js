@@ -455,7 +455,6 @@ describe('extract sentence\'s terms', () => {
 describe('extract terms', () => {
     it('should return three terms', (done) => {
         let res = [];
-        /* eslint-disable object-curly-newline */
         from([{
             path: '/path/1',
             sentences:
@@ -476,7 +475,6 @@ describe('extract terms', () => {
                 { token: 'hotdog', tag: ['UNK'] },
             ]],
         }])
-        /* eslint-enable object-curly-newline */
             .pipe(ezs('TEEFTExtractTerms'))
             // .pipe(ezs('debug'))
             .on('data', (chunk) => {
@@ -617,6 +615,48 @@ describe('extract terms', () => {
                 assert.equal(terms2.length, 4);
                 assert.equal(terms2[0].term, 'elle');
                 assert.equal(terms2[0].frequency, 1); // That's the most important
+                done();
+            });
+    });
+
+    it.skip('should transform tokens into terms', (done) => {
+        let res = [];
+        from([{
+            path: '/path/1',
+            sentences:
+            [[
+                { token: 'elle', tag: ['PRO:per'] },
+                { token: 'semble', tag: ['VER'] },
+                { token: 'se', tag: ['PRO:per'] },
+                { token: 'nourrir', tag: ['VER'] },
+                {
+                    token: 'essentiellement',
+                    tag: ['ADV'],
+                },
+                { token: 'de', tag: ['PRE', 'ART:def'] },
+                { token: 'plancton', tag: ['NOM'] },
+                { token: 'frais', tag: ['ADJ'] },
+                { token: 'et', tag: ['CON'] },
+                { token: 'de', tag: ['PRE', 'ART:def'] },
+                { token: 'hotdog', tag: ['UNK'] },
+            ]],
+        }])
+            .pipe(ezs('TEEFTExtractTerms'))
+            // .pipe(ezs('debug'))
+            .on('data', (chunk) => {
+                assert.ok(Array.isArray(chunk));
+                res = res.concat(chunk);
+            })
+            .on('end', () => {
+                assert.equal(res.length, 1);
+                const { terms } = res[0];
+                assert.equal(terms.length, 3);
+                assert.equal(terms[0].term, 'plancton');
+                assert.equal(terms[0].token, undefined);
+                assert.equal(terms[1].term, 'frais');
+                assert.equal(terms[1].token, undefined);
+                assert.equal(terms[2].term, 'plancton frais');
+                assert.equal(terms[2].token, undefined);
                 done();
             });
     });
