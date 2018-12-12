@@ -1356,3 +1356,51 @@ describe('filter-multi-spec', () => {
             });
     });
 });
+
+describe('to lower case', () => {
+    it('should work on input by default', (done) => {
+        from(['ÇA DEVRAIT ÊTRE MIS EN BAS DE CASSE!'])
+            .pipe(ezs('ToLowerCase'))
+            .on('data', (text) => {
+                assert.equal(text, 'ça devrait être mis en bas de casse!');
+                done();
+            })
+            .on('error', done);
+    });
+
+    it('should use path to select on which part to work', (done) => {
+        from([{ t: 'This Is My Text' }])
+            .pipe(ezs('ToLowerCase', { path: ['t'] }))
+            .on('data', (text) => {
+                assert.equal(text, 'this is my text');
+                done();
+            })
+            .on('error', done);
+    });
+
+    it('should use path to select in arrays too', (done) => {
+        from([[{ t: 'This Is My Text' }]])
+            .pipe(ezs('ToLowerCase', { path: ['t'] }))
+            .on('data', (text) => {
+                assert.equal(text, 'this is my text');
+                done();
+            })
+            .on('error', done);
+    });
+
+    it('should work on several items', (done) => {
+        const res = [];
+        from([{ content: 'This is Content!' }, { content: 'This too.' }])
+            .pipe(ezs('ToLowerCase', { path: ['content'] }))
+            .on('data', (chunk) => {
+                res.push(chunk);
+            })
+            .on('end', () => {
+                assert.equal(res.length, 2);
+                assert.equal(res[0].content, 'this is content!');
+                assert.equal(res[1].content, 'this too.');
+                done();
+            })
+            .on('error', done);
+    });
+});
