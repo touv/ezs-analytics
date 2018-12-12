@@ -351,7 +351,7 @@ describe('extract sentence\'s terms', () => {
 });
 
 describe('extract terms', () => {
-    it('should return three terms', (done) => {
+    it('should return 11 terms', (done) => {
         let res = [];
         from([{
             path: '/path/1',
@@ -374,7 +374,7 @@ describe('extract terms', () => {
             ]],
         }])
             .pipe(ezs('TEEFTExtractTerms'))
-            // .pipe(ezs('debug'))
+            .pipe(ezs('debug'))
             .on('data', (chunk) => {
                 assert.ok(Array.isArray(chunk));
                 res = res.concat(chunk);
@@ -382,19 +382,20 @@ describe('extract terms', () => {
             .on('end', () => {
                 assert.equal(res.length, 1);
                 const { terms } = res[0];
-                assert.equal(terms.length, 3);
-                assert.equal(terms[0].term, 'plancton');
-                assert.equal(terms[1].term, 'frais');
-                assert.equal(terms[2].term, 'plancton frais');
-                assert.equal(terms[0].tag[0], 'NOM');
-                assert.equal(terms[1].tag[0], 'ADJ');
-                assert.strictEqual(terms[2].tag, undefined);
-                assert.equal(terms[0].frequency, 1);
-                assert.equal(terms[1].frequency, 1);
-                assert.equal(terms[2].frequency, 1);
-                assert.equal(terms[0].length, 1);
-                assert.equal(terms[1].length, 1);
-                assert.equal(terms[2].length, 2);
+                assert.equal(terms.length, 11);
+                assert.equal(terms[0].term, 'elle');
+                assert.equal(terms[6].term, 'plancton');
+                assert.equal(terms[7].term, 'frais');
+                assert.equal(terms[8].term, 'plancton frais');
+                assert.equal(terms[6].tag[0], 'NOM');
+                assert.equal(terms[7].tag[0], 'ADJ');
+                assert.strictEqual(terms[8].tag, undefined);
+                assert.equal(terms[6].frequency, 1);
+                assert.equal(terms[7].frequency, 1);
+                assert.equal(terms[8].frequency, 1);
+                assert.equal(terms[6].length, 1);
+                assert.equal(terms[7].length, 1);
+                assert.equal(terms[8].length, 2);
                 done();
             });
     });
