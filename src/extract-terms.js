@@ -52,6 +52,7 @@ export function extractSentenceTerms(taggedTerms,
         termSequence.push(word);
         termFrequency[word] = (termFrequency[word] || 0) + 1;
     }
+    termSequence = R.uniq(termSequence);
     return { termSequence, termFrequency };
 }
 

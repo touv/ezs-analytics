@@ -1,7 +1,7 @@
 const assert = require('assert');
 const from = require('from');
 const ezs = require('ezs');
-const { reinitSequenceFrequency, extractSentenceTerms } = require('../lib/term-extractor');
+const { reinitSequenceFrequency, extractSentenceTerms } = require('../lib/extract-terms');
 
 ezs.use(require('../lib'));
 
@@ -286,7 +286,7 @@ describe('filter tags', () => {
 });
 
 describe('extract sentence\'s terms', () => {
-    it('should return three terms', () => {
+    it('should return 11 terms', () => {
         reinitSequenceFrequency();
         const taggedWords = [
             { token: 'elle', tag: ['PRO:per'] },
@@ -305,13 +305,24 @@ describe('extract sentence\'s terms', () => {
             { token: 'hotdog', tag: ['UNK'] },
         ];
         const { termSequence, termFrequency } = extractSentenceTerms(taggedWords);
-        assert.equal(termSequence.length, 3);
-        assert.equal(termSequence[0], 'plancton');
-        assert.equal(termSequence[1], 'frais');
-        assert.equal(termSequence[2], 'plancton frais');
-        assert.equal(termFrequency.plancton, 1);
-        assert.equal(termFrequency.frais, 1);
-        assert.equal(termFrequency['plancton frais'], 1);
+        assert.equal(termSequence.length, 11);
+        assert.deepStrictEqual(termSequence, [
+            'elle', 'semble', 'se', 'nourrir', 'essentiellement',
+            'de', 'plancton', 'frais', 'plancton frais', 'et', 'hotdog',
+        ]);
+        assert.deepStrictEqual(termFrequency, {
+            de: 2,
+            elle: 1,
+            essentiellement: 1,
+            et: 1,
+            frais: 1,
+            hotdog: 1,
+            nourrir: 1,
+            plancton: 1,
+            'plancton frais': 1,
+            se: 1,
+            semble: 1,
+        });
     });
 
     it('should compute correct frequencies', () => {
@@ -339,7 +350,7 @@ describe('extract sentence\'s terms', () => {
     });
 });
 
-describe.only('extract terms', () => {
+describe('extract terms', () => {
     it('should return three terms', (done) => {
         let res = [];
         from([{
@@ -548,7 +559,7 @@ describe.only('extract terms', () => {
             });
     });
 
-    it.only('should return all monoterms', (done) => {
+    it('should return all monoterms', (done) => {
         let res = [];
         from([{
             path: '/path/1',
