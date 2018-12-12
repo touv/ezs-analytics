@@ -11,13 +11,15 @@
 
 # > Note: use jq '.[][0].terms | length' to get the number of retained terms per document
 
+# > Note: remove or comment [ListFiles] and its pattern parameter to call the script on one document:
+# >       echo -n examples/data/fr-articles/PCU_AC_I2D_V0811.txt | npx ezs ./examples/teeftfr.ezs
+
 [use]
 plugin = basics
 plugin = teeftfr
 
 [ListFiles]
 pattern = *.txt
-; [debug]
 [GetFilesContent]
 [TEEFTSentenceTokenize]
 [TEEFTTokenize]
@@ -28,6 +30,7 @@ adjTag = ADJ
 [TEEFTFilterTags]
 tags = NOM
 tags = ADJ
+tags = UNK
 [TEEFTStopWords]
 [TEEFTSumUpFrequencies]
 [TEEFTSpecificity]

@@ -1,7 +1,7 @@
 const assert = require('assert');
 const from = require('from');
 const ezs = require('ezs');
-const { reinitSequenceFrequency, extractSentenceTerms } = require('../lib/term-extractor');
+const { reinitSequenceFrequency, extractSentenceTerms } = require('../lib/extract-terms');
 
 ezs.use(require('../lib'));
 
@@ -286,7 +286,7 @@ describe('filter tags', () => {
 });
 
 describe('extract sentence\'s terms', () => {
-    it('should return three terms', () => {
+    it('should return 11 terms', () => {
         reinitSequenceFrequency();
         const taggedWords = [
             { token: 'elle', tag: ['PRO:per'] },
@@ -305,13 +305,24 @@ describe('extract sentence\'s terms', () => {
             { token: 'hotdog', tag: ['UNK'] },
         ];
         const { termSequence, termFrequency } = extractSentenceTerms(taggedWords);
-        assert.equal(termSequence.length, 3);
-        assert.equal(termSequence[0], 'plancton');
-        assert.equal(termSequence[1], 'frais');
-        assert.equal(termSequence[2], 'plancton frais');
-        assert.equal(termFrequency.plancton, 1);
-        assert.equal(termFrequency.frais, 1);
-        assert.equal(termFrequency['plancton frais'], 1);
+        assert.equal(termSequence.length, 11);
+        assert.deepStrictEqual(termSequence, [
+            'elle', 'semble', 'se', 'nourrir', 'essentiellement',
+            'de', 'plancton', 'frais', 'plancton frais', 'et', 'hotdog',
+        ]);
+        assert.deepStrictEqual(termFrequency, {
+            de: 2,
+            elle: 1,
+            essentiellement: 1,
+            et: 1,
+            frais: 1,
+            hotdog: 1,
+            nourrir: 1,
+            plancton: 1,
+            'plancton frais': 1,
+            se: 1,
+            semble: 1,
+        });
     });
 
     it('should compute correct frequencies', () => {
@@ -340,7 +351,7 @@ describe('extract sentence\'s terms', () => {
 });
 
 describe('extract terms', () => {
-    it('should return three terms', (done) => {
+    it('should return 11 terms', (done) => {
         let res = [];
         from([{
             path: '/path/1',
@@ -363,7 +374,7 @@ describe('extract terms', () => {
             ]],
         }])
             .pipe(ezs('TEEFTExtractTerms'))
-            // .pipe(ezs('debug'))
+            .pipe(ezs('debug'))
             .on('data', (chunk) => {
                 assert.ok(Array.isArray(chunk));
                 res = res.concat(chunk);
@@ -371,19 +382,20 @@ describe('extract terms', () => {
             .on('end', () => {
                 assert.equal(res.length, 1);
                 const { terms } = res[0];
-                assert.equal(terms.length, 3);
-                assert.equal(terms[0].term, 'plancton');
-                assert.equal(terms[1].term, 'frais');
-                assert.equal(terms[2].term, 'plancton frais');
-                assert.equal(terms[0].tag[0], 'NOM');
-                assert.equal(terms[1].tag[0], 'ADJ');
-                assert.strictEqual(terms[2].tag, undefined);
-                assert.equal(terms[0].frequency, 1);
-                assert.equal(terms[1].frequency, 1);
-                assert.equal(terms[2].frequency, 1);
-                assert.equal(terms[0].length, 1);
-                assert.equal(terms[1].length, 1);
-                assert.equal(terms[2].length, 2);
+                assert.equal(terms.length, 11);
+                assert.equal(terms[0].term, 'elle');
+                assert.equal(terms[6].term, 'plancton');
+                assert.equal(terms[7].term, 'frais');
+                assert.equal(terms[8].term, 'plancton frais');
+                assert.equal(terms[6].tag[0], 'NOM');
+                assert.equal(terms[7].tag[0], 'ADJ');
+                assert.strictEqual(terms[8].tag, undefined);
+                assert.equal(terms[6].frequency, 1);
+                assert.equal(terms[7].frequency, 1);
+                assert.equal(terms[8].frequency, 1);
+                assert.equal(terms[6].length, 1);
+                assert.equal(terms[7].length, 1);
+                assert.equal(terms[8].length, 2);
                 done();
             });
     });
@@ -544,6 +556,96 @@ describe('extract terms', () => {
                 assert.equal(terms[1].token, undefined);
                 assert.equal(terms[2].term, 'plancton frais');
                 assert.equal(terms[2].token, undefined);
+                done();
+            });
+    });
+
+    it('should return all monoterms', (done) => {
+        let res = [];
+        from([{
+            path: '/path/1',
+            sentences:
+            [[
+                { token: 'elle', tag: ['PRO:per'] },
+                { token: 'semble', tag: ['VER'] },
+                { token: 'se', tag: ['PRO:per'] },
+                { token: 'nourrir', tag: ['VER'] },
+                {
+                    token: 'essentiellement',
+                    tag: ['ADV'],
+                },
+                { token: 'de', tag: ['PRE', 'ART:def'] },
+                { token: 'plancton', tag: ['NOM'] },
+                { token: 'frais', tag: ['ADJ'] },
+                { token: 'et', tag: ['CON'] },
+                { token: 'de', tag: ['PRE', 'ART:def'] },
+                { token: 'hotdog', tag: ['UNK'] },
+            ]],
+        }])
+            .pipe(ezs('TEEFTExtractTerms'))
+            // .pipe(ezs('debug'))
+            .on('data', (chunk) => {
+                assert.ok(Array.isArray(chunk));
+                res = res.concat(chunk);
+            })
+            .on('end', () => {
+                assert.equal(res.length, 1);
+                const { terms } = res[0];
+                assert.equal(terms.length, 11);
+                assert.deepStrictEqual(terms, [{
+                    frequency: 1,
+                    length: 1,
+                    token: 'elle',
+                    tag: ['PRO:per'],
+                    term: 'elle',
+                }, {
+                    frequency: 1,
+                    length: 1,
+                    token: 'semble',
+                    tag: ['VER'],
+                    term: 'semble',
+                }, {
+                    frequency: 1, length: 1, token: 'se', tag: ['PRO:per'], term: 'se',
+                }, {
+                    frequency: 1,
+                    length: 1,
+                    token: 'nourrir',
+                    tag: ['VER'],
+                    term: 'nourrir',
+                }, {
+                    frequency: 1,
+                    length: 1,
+                    token: 'essentiellement',
+                    tag: ['ADV'],
+                    term: 'essentiellement',
+                }, {
+                    frequency: 2, length: 1, token: 'de', tag: ['PRE', 'ART:def'], term: 'de',
+                }, {
+                    frequency: 1,
+                    length: 1,
+                    token: 'plancton',
+                    tag: ['NOM'],
+                    term: 'plancton',
+                }, {
+                    frequency: 1,
+                    length: 1,
+                    token: 'frais',
+                    tag: ['ADJ'],
+                    term: 'frais',
+                }, {
+                    frequency: 1,
+                    length: 2,
+                    token: 'plancton frais',
+                    term: 'plancton frais',
+                }, {
+                    frequency: 1, length: 1, token: 'et', tag: ['CON'], term: 'et',
+                }, {
+                    frequency: 1,
+                    length: 1,
+                    token: 'hotdog',
+                    tag: ['UNK'],
+                    term: 'hotdog',
+                }]);
                 done();
             });
     });
