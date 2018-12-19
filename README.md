@@ -226,7 +226,9 @@ You can even use [jq](https://stedolan.github.io/jq/) to beautify the JSON in th
     -   [Parameters](#parameters-7)
 -   [TEEFTSumUpFrequencies](#teeftsumupfrequencies)
     -   [Parameters](#parameters-8)
--   [tokenize](#tokenize)
+-   [ToLowerCase](#tolowercase)
+    -   [Parameters](#parameters-9)
+-   [TEEFTTokenize](#teefttokenize)
 
 ### TEEFTExtractTerms
 
@@ -403,10 +405,22 @@ Sums up the frequencies of identical lemmas from different chunks.
 -   `data` **[Stream](https://nodejs.org/api/stream.html)** 
 -   `feed` **[Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;[Object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)>** 
 
-### tokenize
+### ToLowerCase
+
+Transform strings to lower case.
+
+#### Parameters
+
+-   `data` **any** 
+-   `feed` **any** 
+-   `path` **[Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)>** path to the property to modify
+
+### TEEFTTokenize
 
 -   **See: <http://yomguithereal.github.io/talisman/tokenizers/words>**
 
 Extract tokens from an array of documents (objects { path, sentences: \[] }).
 
 Yields an array of documents (objects: { path, sentences: \[\[]] })
+
+> **Warning**: results are surprising on uppercase sentences

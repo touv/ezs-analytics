@@ -104,6 +104,30 @@ describe('tokenize', () => {
                 done();
             });
     });
+
+    it('should not cut on dashes', (done) => {
+        let res = [];
+        from([{
+            path: '/path/1',
+            // WARNING: TEEFTTokenize does not work well on uppercase
+            // sentences: ['Do multi-agent plate-formes use TF-IDF'],
+            sentences: ['do multi-agent plate-formes use tf-idf'],
+        }])
+            .pipe(ezs('TEEFTTokenize'))
+            // .pipe(ezs('debug'))
+            .on('data', (chunk) => {
+                assert(Array.isArray(chunk));
+                res = res.concat(chunk);
+            })
+            .on('end', () => {
+                assert.equal(res.length, 1);
+                assert.equal(res[0].sentences.length, 1);
+                const tokens = res[0].sentences[0];
+                assert.equal(tokens.length, 5);
+                done();
+            })
+            .on('error', done);
+    });
 });
 
 describe('stopwords', () => {
