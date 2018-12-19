@@ -21,6 +21,8 @@ plugin = teeftfr
 [ListFiles]
 pattern = *.txt
 [GetFilesContent]
+[ToLowerCase]
+path = content
 [TEEFTSentenceTokenize]
 [TEEFTTokenize]
 [TEEFTNaturalTag]
