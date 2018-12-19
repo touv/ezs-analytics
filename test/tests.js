@@ -374,7 +374,7 @@ describe('extract terms', () => {
             ]],
         }])
             .pipe(ezs('TEEFTExtractTerms'))
-            .pipe(ezs('debug'))
+            // .pipe(ezs('debug'))
             .on('data', (chunk) => {
                 assert.ok(Array.isArray(chunk));
                 res = res.concat(chunk);
